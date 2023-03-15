@@ -50,6 +50,7 @@ def postprocess(
         input_size (int): number of sentences in the input file.
         lang (str): language code of the output language.
         transliterate (bool, optional): whether to transliterate the output text to devanagari (default: False).
+        spm_model_path (str): path of the sentence piece model.
     """
     if spm_model_path is None:
         raise Exception("Please provide sentence piece model path for decoding")

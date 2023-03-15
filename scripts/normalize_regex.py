@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 import re
 import sys
@@ -9,17 +9,41 @@ from indic_num_map import INDIC_NUM_MAP
 
 URL_PATTERN = r'\b(?<![\w/.])(?:(?:https?|ftp)://)?(?:(?:[\w-]+\.)+(?!\.))(?:[\w/\-?=%.]+)+(?!\.\w+)\b'
 EMAIL_PATTERN = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}'
-# handles dates, time, percentages, proportion, ratio, etc
+# Handles dates, time, percentages, proportion, ratio, etc
 NUMERAL_PATTERN = r"(~?\d+\.?\d*\s?%?\s?-?\s?~?\d+\.?\d*\s?%|~?\d+%|\d+[-\/.,:']\d+[-\/.,:'+]\d+(?:\.\d+)?|\d+[-\/.:'+]\d+(?:\.\d+)?)"
-# handles upi, social media handles and hashtags
+# Handles Payment IDs, social media handles and hashtags
 OTHER_PATTERN = r'[A-Za-z0-9]*[#|@]\w+'
 
 
 def normalize_indic_numerals(line: str):
+    """
+    Normalize the numerals in Indic languages from native script to Roman script (if present).
+    
+    Args:
+        line (str): an input string to be normalized.
+    
+    Returns:
+        str: an input string with the all Indic numerals normalized to Roman script.
+    """
     return "".join([INDIC_NUM_MAP.get(c, c) for c in line])
 
 
 def wrap_with_dnt_tag(src: str, tgt: str, pattern: str) -> Tuple[str, str]:
+    """
+    Wraps all occurences of a given pattern match that are present in both source and target sentences
+    with a do not translate tags (`<dnt>` {input string} `</dnt>`). This will be particularly useful 
+    when some span of input string needs to be forwarded as it is and not translated.
+    
+    Args:
+        src (str): source sentence.
+        tgt (str): target sentence.
+        pattern (str): pattern to search for in the source and target sentence.
+    
+    Returns:
+        Tuple[str, str]: A tuple containing source and target sentences where source sentences 
+            are wrapped in `<dnt>` and `</dnt>` tags in case of pattern matches.
+    """
+    
     # find matches in src and tgt sentence
     src_matches = set(re.findall(pattern, src))
     tgt_matches = set(re.findall(pattern, tgt))
@@ -38,7 +62,22 @@ def wrap_with_dnt_tag(src: str, tgt: str, pattern: str) -> Tuple[str, str]:
     return src, tgt
 
 
-def normalize(src_line, tgt_line, patterns):
+def normalize(src_line: str, tgt_line: str, patterns: List[str]) -> Tuple[str, str]:
+    """
+    Normalizes and wraps the spans of text that are present in both source and target sentence 
+    with `<dnt>` and `</dnt>` tags. It first normalizes the Indic numerals in the input string to 
+    Roman script. Later, it uses the source and target sentence with normalized Indic numerals to 
+    wrap the spans of source sentence matching the pattern with `<dnt>` and `</dnt>` tags.
+    
+    Args:
+        src_line (str): source sentence.
+        tgt_line (str): source sentence.
+        pattern (List[str]): list of patterns to search for in the input string.
+    
+    Returns:
+        Tuple[str, str]: A tuple containing source and target sentences where source sentences 
+            are wrapped in `<dnt>` and `</dnt>` tags in case of pattern matches.
+    """
     src_line = normalize_indic_numerals(src_line.strip("\n"))
     tgt_line = normalize_indic_numerals(tgt_line.strip("\n"))
     for pattern in patterns:

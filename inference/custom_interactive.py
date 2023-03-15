@@ -81,6 +81,10 @@ def make_batches(
 
 
 class Translator:
+    """
+    Wrapper class to handle the interaction with fairseq model class for translation
+    """
+    
     def __init__(
         self, data_dir, checkpoint_path, batch_size=25, constrained_decoding=False
     ):

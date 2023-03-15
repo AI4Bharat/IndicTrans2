@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List
 
 import re
 import sys
@@ -15,11 +15,32 @@ NUMERAL_PATTERN = r"(~?\d+\.?\d*\s?%?\s?-?\s?~?\d+\.?\d*\s?%|~?\d+%|\d+[-\/.,:']
 OTHER_PATTERN = r'[A-Za-z0-9]*[#|@]\w+'
 
 
-def normalize_indic_numerals(line: str):
+def normalize_indic_numerals(line: str) -> str:
+    """
+    Normalize the numerals in Indic languages from native script to Roman script (if present).
+    
+    Args:
+        line (str): an input string with Indic numerals to be normalized.
+    
+    Returns:
+        str: an input string with the all Indic numerals normalized to Roman script.
+    """
     return "".join([INDIC_NUM_MAP.get(c, c) for c in line])
 
 
-def wrap_with_dnt_tag(text: str, pattern: str) -> Tuple[str, str]:
+def wrap_with_dnt_tag(text: str, pattern: str) -> str:
+    """
+    Wraps all occurences of a given pattern match in the input string with a do not translate
+    tags (`<dnt>` {input string} `</dnt>`). This will be particularly useful when some span of 
+    input string needs to be forwarded as it and not translated.
+    
+    Args:
+        text (str): input string.
+        pattern (str): pattern to search for in the input string.
+    
+    Returns:
+        str: input string with spans wrapped in `<dnt>` and `</dnt>` tags in case of pattern matches.
+    """
     # find matches in input text
     matches = set(re.findall(pattern, text))
     
@@ -32,7 +53,19 @@ def wrap_with_dnt_tag(text: str, pattern: str) -> Tuple[str, str]:
     return text
 
 
-def normalize(text, patterns):
+def normalize(text: str, patterns: List[str]) -> str:
+    """
+    Normalizes and wraps the spans of input string with `<dnt>` and `</dnt>` tags. It first normalizes
+    the Indic numerals in the input string to Roman script. Later, it uses the input string with normalized
+    Indic numerals to wrap the spans of text matching the pattern with `<dnt>` and `</dnt>` tags.
+    
+    Args:
+        text (str): input string.
+        pattern (List[str]): list of patterns to search for in the input string.
+    
+    Returns:
+        str: normalized input string wrapped with `<dnt>` and `</dnt>` tags.
+    """
     text = normalize_indic_numerals(text.strip("\n"))
     for pattern in patterns:
         text = wrap_with_dnt_tag(text, pattern)

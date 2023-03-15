@@ -4,7 +4,17 @@ import sys
 from collections import defaultdict
 from tqdm import tqdm
 
-def remove_overlaps(in_data_dir, out_data_dir, benchmark_dir):
+def remove_overlaps(in_data_dir: str, out_data_dir: str, benchmark_dir: str):
+    """
+    Removes overlapping sentences between train dataset and dev/test dataset from the 
+    input directory and writes de-duplicated train data to the specified output directory.
+    
+    Args:
+        in_data_dir (str): path of the directory containing train data for each language pair.
+        out_data_dir (str): path of the directory where the de-duplicated train data will be written for each language pair.
+        benchmark_dir (str): path of the directory containing the language-wise monolingual side of dev/test set.
+    """
+    # load dev/test dataset for each language
     devtest_normalized = defaultdict(set)
     for lang in os.listdir(benchmark_dir):
         fname = os.path.join(benchmark_dir, lang)
@@ -14,13 +24,10 @@ def remove_overlaps(in_data_dir, out_data_dir, benchmark_dir):
             sents = [re.sub(" +", " ", sent).replace("\n", "").strip() for sent in sents]
         devtest_normalized[lang] = set(sents)
     
+    # process each language pair train dataset to remove overlapping sentences
     pairs = sorted(os.listdir(in_data_dir))
-    
     for pair in pairs:
         print(pair)
-        if pair != "eng_Latn-snd_Deva":
-            continue
-        
         src_lang, tgt_lang = pair.split("-")
         
         src_infname = os.path.join(in_data_dir, pair, f"train.{src_lang}")
@@ -31,6 +38,7 @@ def remove_overlaps(in_data_dir, out_data_dir, benchmark_dir):
         
         os.makedirs(os.path.join(out_data_dir, pair), exist_ok=True)
         
+        # remove overlapping sentences and write de-duplicated train data to output directory
         with open(src_infname, 'r', encoding='utf-8') as src_infile, \
             open(tgt_infname, 'r', encoding='utf-8') as tgt_infile, \
             open(src_outfname, 'w', encoding='utf-8') as src_outfile, \

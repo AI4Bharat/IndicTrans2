@@ -45,6 +45,7 @@ def preprocess_line(
         normalizer (Union[MosesPunctNormalizer, indic_normalize.IndicNormalizerFactory]): an object that performs normalization on the text.
         lang (str): the language of the line of text
         transliterate (bool, optional): whether to transliterate the line of text to devanagari (default: False).
+        remove_tag (bool, optional): whether to remove the do not translate tags (`<dnt>` and `</dnt>`) from the line of text (default: True).
 
     Returns:
         str: preprocessed line of text.
@@ -85,7 +86,13 @@ def preprocess_line(
     return processed_line
     
 
-def preprocess(infname: str, outfname: str, lang: str, transliterate: bool = False, remove_tag: bool= True) -> int:
+def preprocess(
+    infname: str,
+    outfname: str, 
+    lang: str, 
+    transliterate: bool = False, 
+    remove_tag: bool= True
+) -> int:
     """
     Preprocess the text in the input file by normalizing, tokenizing and
     script conversation and write the output to a new file.
@@ -95,6 +102,7 @@ def preprocess(infname: str, outfname: str, lang: str, transliterate: bool = Fal
         outfname (str): path of the output file.
         lang (str): language of the text in the input file.
         transliterate (bool, optional): whether to transliterate the text in input file to devanagari (default: False).
+        remove_tag (bool, optional): whether to remove the do not translate tags (`<dnt>` and `</dnt>`) from the text in input file (default: True).
 
     Returns:
         int: number of sentences in the input file
