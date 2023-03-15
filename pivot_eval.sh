@@ -42,7 +42,7 @@ for pair in ${pairs[@]}; do
     bash joint_translate.sh $pivot_fname.pred.itv2 $tgt_fname.pred.itv2 $pivot_lang $tgt_lang $pivot2target_ckpt_dir
     
     # Purge the intermediate files to declutter the directory.
-    rm $tgt_fname.pred.itv1.*
+    rm $tgt_fname.pred.itv2.*
 
     echo "Computing Metrics"
 
