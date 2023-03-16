@@ -18,7 +18,7 @@ def convert_iso_to_flores(data_dir: str):
 
     for pair in pairs:
         print(pair)
-        path = os.path.join(exp_dir, pair)
+        path = os.path.join(data_dir, pair)
         src_lang_iso, tgt_lang_iso = pair.split('-')
         
         src_lang = iso_to_flores[src_lang_iso]
