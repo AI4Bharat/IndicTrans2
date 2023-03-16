@@ -335,7 +335,7 @@ class Model:
         else:
             for sent in sents:
                 outstr = indic_detokenize.trivial_detokenize(
-                    self.xliterator.transliterate(sent, flores_codes[common_lang], lang), lang
+                    self.xliterator.transliterate(sent, flores_codes[common_lang], flores_codes[lang]), flores_codes[lang]
                 )
                 postprocessed_sents.append(outstr)
         
