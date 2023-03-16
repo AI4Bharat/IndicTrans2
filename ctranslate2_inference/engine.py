@@ -113,13 +113,13 @@ class Model:
     Model class to run the IndicTransv2 models using python interface.
     """
     
-    def __init__(self, ckpt_dir: str, device: str = "cuda:0"):
+    def __init__(self, ckpt_dir: str, device: str = "cuda"):
         """
         Initialize the model class.
         
         Args:
             ckpt_dir (str): path of the model checkpoint directory.
-            device (str): where to load the model.
+            device (str, optional): where to load the model (defaults: cuda).
         """
         self.ckpt_dir = ckpt_dir
         self.en_tok = MosesTokenizer(lang="en")
