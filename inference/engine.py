@@ -258,7 +258,11 @@ class Model:
         raw_matches = re.findall(pattern, sent)
         
         if iso_lang == "en":
-            processed_sent = " ".join(en_tok.tokenize(en_normalizer.normalize(sent.strip()), escape=False))
+            processed_sent = " ".join(
+                self.en_tok.tokenize(
+                    self.en_normalizer.normalize(sent.strip()), escape=False
+                )
+            )
         elif transliterate:
             # transliterates from the any specific language to devanagari
             # which is why we specify lang2_code as "hi".
