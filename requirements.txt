@@ -1,0 +1,10 @@
+git+https://github.com/anoopkunchukuttan/indic_nlp_library
+git+https://github.com/pytorch/fairseq
+sacremoses
+pandas
+mock
+sacrebleu
+urduhack[tf]
+mosestokenizer
+ctranslate2==3.9.0
+sentencepiece
