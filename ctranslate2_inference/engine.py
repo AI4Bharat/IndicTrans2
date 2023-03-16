@@ -113,12 +113,13 @@ class Model:
     Model class to run the IndicTransv2 models using python interface.
     """
     
-    def __init__(self, ckpt_dir: str):
+    def __init__(self, ckpt_dir: str, device: str = "cuda:0"):
         """
         Initialize the model class.
         
         Args:
             ckpt_dir (str): path of the model checkpoint directory.
+            device (str): where to load the model.
         """
         self.ckpt_dir = ckpt_dir
         self.en_tok = MosesTokenizer(lang="en")
@@ -132,7 +133,7 @@ class Model:
         
         print("Initializing model for translation")
         # initialize the model
-        self.translator = ctranslate2.Translator(os.path.join(self.ckpt_dir, "ct2_model"), device="cuda")
+        self.translator = ctranslate2.Translator(os.path.join(self.ckpt_dir, "ct2_model"), device=device)
     
     # translate a batch of sentences from src_lang to tgt_lang
     def batch_translate(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:

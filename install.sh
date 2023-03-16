@@ -24,7 +24,7 @@ python3 -m pip install ./
 
 
 # additional packages for utilies
-python3 -m pip install sacremoses pandas mock sacrebleu urduhack[tf] mosestokenizer
+python3 -m pip install sacremoses pandas mock sacrebleu urduhack[tf] mosestokenizer ctranslate2==3.9.0 gradio
 python3 -c "import urduhack; urduhack.download()"
 
 # install sentence piece for tokenization
