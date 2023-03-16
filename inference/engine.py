@@ -160,7 +160,8 @@ class Model:
         with open("tmp.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(batch))
         
-        os.system(f"bash normalize_punctuation.sh {src_lang} < tmp.txt > tmp.txt._norm")
+        PWD = os.path.dirname(__file__)
+        os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < tmp.txt > tmp.txt._norm")
         
         with open("tmp.txt._norm", "r", encoding="utf-8") as f:
             batch = f.read().split("\n")
