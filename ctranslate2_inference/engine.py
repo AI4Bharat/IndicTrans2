@@ -17,10 +17,11 @@ from indicnlp.tokenize import sentence_tokenize
 import re
 import ctranslate2
 import sentencepiece as spm
+from nltk.tokenize import sent_tokenize
 
-from inference.normalize_regex_inference import normalize
-from inference.flores_codes_map_indic import flores_codes
-from inference.normalize_regex_inference import EMAIL_PATTERN
+from ctranslate2_inference.normalize_regex_inference import normalize
+from ctranslate2_inference.flores_codes_map_indic import flores_codes
+from ctranslate2_inference.normalize_regex_inference import EMAIL_PATTERN
 
 PWD = os.path.dirname(__file__)
 
@@ -37,8 +38,10 @@ def split_sentences(paragraph: str, lang: str) -> List[str]:
         List[str] -> list of sentences.
     """
     if lang == "eng_Latn":
-        with MosesSentenceSplitter(lang) as splitter:
-            return splitter([paragraph])
+        # fails to handle sentence splitting in case of
+        # with MosesSentenceSplitter(lang) as splitter:
+        #     return splitter([paragraph])
+        return sent_tokenize(paragraph)
     else:
         return sentence_tokenize.sentence_split(paragraph, lang=lang)
 

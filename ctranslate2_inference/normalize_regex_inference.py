@@ -4,7 +4,7 @@ import re
 import sys
 from tqdm import tqdm
 from joblib import Parallel, delayed
-from inference.indic_num_map import INDIC_NUM_MAP
+from ctranslate2_inference.indic_num_map import INDIC_NUM_MAP
 
 
 URL_PATTERN = r'\b(?<![\w/.])(?:(?:https?|ftp)://)?(?:(?:[\w-]+\.)+(?!\.))(?:[\w/\-?=%.]+)+(?!\.\w+)\b'
@@ -49,6 +49,8 @@ def wrap_with_dnt_tag(text: str, pattern: str) -> Tuple[str, str]:
         text = text.replace(match, f' <dnt> {match} </dnt> ')
     
     text = re.sub("\s+", " ", text)
+    text = re.sub(" <dnt> <dnt> ", " <dnt> ", text)
+    text = re.sub(" </dnt> </dnt> ", " </dnt> ", text)
     
     return text
 

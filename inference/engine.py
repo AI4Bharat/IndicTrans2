@@ -16,6 +16,7 @@ from indicnlp.tokenize import sentence_tokenize
 
 import re
 import sentencepiece as spm
+from nltk.tokenize import sent_tokenize
 
 from inference.custom_interactive import Translator
 from inference.normalize_regex_inference import normalize
@@ -37,8 +38,10 @@ def split_sentences(paragraph: str, lang: str) -> List[str]:
         List[str] -> list of sentences.
     """
     if lang == "eng_Latn":
-        with MosesSentenceSplitter(lang) as splitter:
-            return splitter([paragraph])
+        # fails to handle sentence splitting in case of
+        # with MosesSentenceSplitter(lang) as splitter:
+        #     return splitter([paragraph])
+        return sent_tokenize(paragraph)
     else:
         return sentence_tokenize.sentence_split(paragraph, lang=lang)
 

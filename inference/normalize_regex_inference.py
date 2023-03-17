@@ -49,6 +49,8 @@ def wrap_with_dnt_tag(text: str, pattern: str) -> Tuple[str, str]:
         text = text.replace(match, f' <dnt> {match} </dnt> ')
     
     text = re.sub("\s+", " ", text)
+    text = re.sub(" <dnt> <dnt> ", " <dnt> ", text)
+    text = re.sub(" </dnt> </dnt> ", " </dnt> ", text)
     
     return text
 

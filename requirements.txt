@@ -3,6 +3,7 @@ git+https://github.com/pytorch/fairseq
 sacremoses
 pandas
 mock
+nltk
 sacrebleu
 urduhack[tf]
 mosestokenizer
