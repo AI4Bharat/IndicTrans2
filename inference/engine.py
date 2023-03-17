@@ -22,6 +22,7 @@ from inference.normalize_regex_inference import normalize
 from inference.flores_codes_map_indic import flores_codes
 from inference.normalize_regex_inference import EMAIL_PATTERN
 
+PWD = os.path.dirname(__file__)
 
 def split_sentences(paragraph: str, lang: str) -> List[str]:
     """
@@ -160,7 +161,6 @@ class Model:
         with open("tmp.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(batch))
         
-        PWD = os.path.dirname(__file__)
         os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < tmp.txt > tmp.txt._norm")
         
         with open("tmp.txt._norm", "r", encoding="utf-8") as f:
