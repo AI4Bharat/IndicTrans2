@@ -177,7 +177,7 @@ class Model:
         
         tagged_sents = [x.strip().split(" ") for x in tagged_sents]
         
-        translations = self.translator.translate_batch(tagged_sents, beam_size=5)
+        translations = self.translator.translate_batch(tagged_sents, max_batch_size=1024, beam_size=5)
         translations = [x.hypotheses[0] for x in translations]
         translations = [" ".join(x) for x in translations]
         
