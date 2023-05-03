@@ -21,15 +21,10 @@ if [ $tgt_lang == 'eng_Latn' ]; then
     sacrebleu $ref_fname < $pred_fname -m bleu chrf
     sacrebleu $ref_fname < $pred_fname -m chrf --chrf-word-order 2
 else
-    tgt_transliterate="true"
-    if [[ $tgt_lang == *"Arab"* ]] || [[ $tgt_lang == *"Olck"* ]] || \
-        [[ $tgt_lang == *"Mtei"* ]] || [[ $tgt_lang == *"Latn"* ]]; then
-        tgt_transliterate="false"
-    fi
 
     # indicnlp tokenize predictions and reference files before evaluation
-    input_size=`python scripts/preprocess_translate.py $ref_fname $ref_fname.tok $tgt_lang $tgt_transliterate false`
-    input_size=`python scripts/preprocess_translate.py $pred_fname $pred_fname.tok $tgt_lang $tgt_transliterate false`
+    input_size=`python scripts/preprocess_translate.py $ref_fname $ref_fname.tok $tgt_lang false false`
+    input_size=`python scripts/preprocess_translate.py $pred_fname $pred_fname.tok $tgt_lang false false`
 
     # since we are tokenizing with indicnlp separately, we are setting tokenize to none here
     sacrebleu --tokenize none $ref_fname.tok < $pred_fname.tok -m bleu chrf
