@@ -160,17 +160,19 @@ class Model:
         assert isinstance(batch, list)
         
         # -------------------------------------------------------
+        fname = str(uuid.uuid4())
+        
         # normalize punctuations
-        with open("tmp.txt", "w", encoding="utf-8") as f:
+        with open(f"{fname}.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(batch))
         
-        os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < tmp.txt > tmp.txt._norm")
+        os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < {fname}.txt > {fname}.txt._norm")
         
-        with open("tmp.txt._norm", "r", encoding="utf-8") as f:
+        with open(f"{fname}.txt._norm", "r", encoding="utf-8") as f:
             batch = f.read().split("\n")
             
-        os.unlink("tmp.txt")
-        os.unlink("tmp.txt._norm")
+        os.unlink(f"{fname}.txt")
+        os.unlink(f"{fname}.txt._norm")
         # -------------------------------------------------------
         
         preprocessed_sents = self.preprocess(batch, lang=src_lang)
