@@ -5,19 +5,15 @@ devtest_data_dir=$1
 ckpt_dir=$2
 system=${3:-"itv2"}
 
-pairs=$(ls -d $devtest_data_dir/*)
+pairs=$(ls -d $devtest_data_dir/* | sort)
 
 for pair in ${pairs[@]}; do
     pair=$(basename $pair)
     src_lang=$(echo "$pair" | cut -d "-" -f 1)
     tgt_lang=$(echo "$pair" | cut -d "-" -f 2)
 
-    if [[ -f "$devtest_data_dir/$src_lang-$tgt_lang/${src_lang}_${tgt_lang}_${system}_scores.txt" ]]; then
-        continue
-    fi
-
-    src_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$src_lang
-    tgt_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$tgt_lang
+    src_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$tgt_lang
+    tgt_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$src_lang
 
     if [ -f "$src_fname" ] && [ -f "$tgt_fname" ]; then
         echo "Evaluating $src_lang-$tgt_lang ..."
@@ -28,12 +24,12 @@ for pair in ${pairs[@]}; do
 
     if [[ $system == *"itv2"* ]]; then
         echo "Generating Translations"
-        bash joint_translate.sh $src_fname $tgt_fname.pred.$system $src_lang $tgt_lang $ckpt_dir
+        bash joint_translate.sh $src_fname $tgt_fname.pred.$system $tgt_lang $src_lang $ckpt_dir
     fi
 
     if [[ -f "${tgt_fname}.pred.${system}" ]]; then
         echo "Computing Metrics"
-        bash compute_metrics.sh $tgt_fname.pred.$system $tgt_fname $tgt_lang > $devtest_data_dir/$src_lang-$tgt_lang/${src_lang}_${tgt_lang}_${system}_scores.txt
+        bash compute_metrics.sh $tgt_fname.pred.$system $tgt_fname $src_lang > $devtest_data_dir/$src_lang-$tgt_lang/${tgt_lang}_${src_lang}_${system}_scores.txt
     fi
 
     # Purge the intermediate files to declutter the directory.
