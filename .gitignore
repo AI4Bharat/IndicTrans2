@@ -4,6 +4,7 @@ indic_nlp_resources
 fairseq
 devtest
 checkpoints
+eval_benchmarks
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

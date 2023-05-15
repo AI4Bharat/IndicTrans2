@@ -25,7 +25,7 @@ python3 -m pip install ./
 
 
 # additional packages for utilies
-python3 -m pip install nltk sacremoses pandas mock sacrebleu urduhack[tf] mosestokenizer ctranslate2==3.9.0 gradio
+python3 -m pip install nltk sacremoses pandas mock sacrebleu==2.3.1 urduhack[tf] mosestokenizer ctranslate2==3.9.0 gradio
 python3 -c "import urduhack; urduhack.download()"
 python3 -c "import nltk; nltk.download('punkt')"
 

@@ -28,12 +28,12 @@ TGT_PREFIX='TGT'
 echo "Applying normalization and script conversion"
 
 bash normalize_punctuation.sh $src_lang < $infname > $outfname._norm
-rm -rf $outfname._norm && mv $outfname.norm $outfname._norm
 
 echo "Applying do not translate tags for dev"
 python3 scripts/normalize_regex_inference.py $outfname._norm $outfname.norm
+rm -rf $outfname._norm && mv $outfname.norm $outfname._norm
 
-input_size=`python scripts/preprocess_translate.py $infname $outfname.norm $src_lang $src_transliterate false`
+input_size=`python scripts/preprocess_translate.py $outfname._norm $outfname.norm $src_lang $src_transliterate false`
 echo "Number of sentences in input: $input_size"
 
 
