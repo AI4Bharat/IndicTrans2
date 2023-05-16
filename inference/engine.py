@@ -15,6 +15,8 @@ from mosestokenizer import MosesSentenceSplitter
 from indicnlp.tokenize import sentence_tokenize
 
 import re
+import uuid
+import hashlib
 import sentencepiece as spm
 from nltk.tokenize import sent_tokenize
 

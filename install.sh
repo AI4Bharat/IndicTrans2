@@ -13,7 +13,7 @@ conda install pip
 python3 -m pip install --upgrade pip
 
 # install pytorch (latest)
-python3 -m pip install torch --extra-index-url https://download.pytorch.org/whl/cu116
+python3 -m pip install torch --extra-index-url https://download.pytorch.org/whl/cu118
 
 # install indic-nlp-library and necessary resources
 git clone https://github.com/anoopkunchukuttan/indic_nlp_resources.git
@@ -22,7 +22,7 @@ export INDIC_RESOURCES_PATH=$root_dir/indic_nlp_resources
 git clone https://github.com/anoopkunchukuttan/indic_nlp_library.git
 cd indic_nlp_library
 python3 -m pip install ./
-
+cd $root_dir
 
 # additional packages for utilies
 python3 -m pip install nltk sacremoses pandas mock sacrebleu==2.3.1 urduhack[tf] mosestokenizer ctranslate2==3.9.0 gradio
@@ -38,6 +38,6 @@ python3 -m pip install sentencepiece
 git clone https://github.com/pytorch/fairseq.git
 cd fairseq
 python3 -m pip install ./
-
 cd $root_dir
+
 echo "Setup completed!"
