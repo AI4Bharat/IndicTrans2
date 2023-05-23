@@ -45,7 +45,7 @@ def split_sentences(paragraph: str, lang: str) -> List[str]:
         #     return splitter([paragraph])
         return sent_tokenize(paragraph)
     else:
-        return sentence_tokenize.sentence_split(paragraph, lang=lang)
+        return sentence_tokenize.sentence_split(paragraph, lang=flores_codes[lang])
 
 
 def add_token(sent: str, src_lang: str, tgt_lang: str, delimiter: str = " ") -> str:
