@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# This script normalizes the punctuations and strips the extra spaces in the input text
+# Directly sourced from https://github.com/pluiez/NLLB-inference
+
+
 set -euo pipefail
 
 root=$(dirname $0)
