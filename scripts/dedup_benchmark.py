@@ -22,6 +22,7 @@ def remove_overlaps(in_data_dir: str, out_data_dir: str, benchmark_dir: str):
         with open(fname, "r") as f:
             sents = [sent for sent in f.read().split("\n") if sent.strip()]
             sents = [re.sub(" +", " ", sent).replace("\n", "").strip() for sent in sents]
+            sents = [re.sub(" +", " ", re.sub(r"[^\w\s]", "", x)).lower() for x in sents]
         devtest_normalized[lang] = set(sents)
     
     # process each language pair train dataset to remove overlapping sentences
@@ -48,7 +49,9 @@ def remove_overlaps(in_data_dir: str, out_data_dir: str, benchmark_dir: str):
                 src_line = re.sub(" +", " ", src_line).replace("\n", "").strip()
                 tgt_line = re.sub(" +", " ", tgt_line).replace("\n", "").strip()
                 
-                if src_line in devtest_normalized[src_lang] or tgt_line in devtest_normalized[tgt_lang]:
+                src_line_normalized = re.sub(" +", " ", re.sub(r"[^\w\s]", "", src_line)).lower()
+                tgt_line_normalized = re.sub(" +", " ", re.sub(r"[^\w\s]", "", tgt_line)).lower()
+                if src_line_normalized in devtest_normalized[src_lang] or tgt_line_normalized in devtest_normalized[tgt_lang]:
                     continue
                 
                 src_outfile.write(src_line + "\n")

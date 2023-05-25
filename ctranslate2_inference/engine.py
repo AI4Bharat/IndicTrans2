@@ -139,7 +139,7 @@ class Model:
         
         print("Initializing model for translation")
         # initialize the model
-        self.translator = ctranslate2.Translator(os.path.join(self.ckpt_dir, "ct2_model"), device=device)
+        self.translator = ctranslate2.Translator(self.ckpt_dir, device=device)
     
     # translate a batch of sentences from src_lang to tgt_lang
     def batch_translate(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
