@@ -13,7 +13,7 @@ devtest_data_dir=$1                 # path to the evaluation set
 pivot_lang=${2:-"eng_Latn"}         # pivot language of choice
 src2pivot_ckpt_dir=$3               # path to the Indic-En checkpoint directory
 pivot2tgt_ckpt_dir=$4               # path of the En-Indic checkpoint directory
-system=${3:-"itv2"}                 # name of the machine translation system
+system=${3:-"it2"}                  # name of the machine translation system
 
 
 # get a list of language pairs in the `devtest_data_dir`
@@ -39,8 +39,8 @@ for pair in ${pairs[@]}; do
         continue
     fi
 
-    # generate translations if the system name contains "itv2"
-    if [[ $system == *"itv2"* ]]; then
+    # generate translations if the system name contains "it2"
+    if [[ $system == *"it2"* ]]; then
         # source to pivot translation
         echo "Generating Source to Pivot Translations"
         bash joint_translate.sh $src_fname $pivot_fname.pred.$system $src_lang $pivot_lang $src2pivot_ckpt_dir
@@ -57,8 +57,8 @@ for pair in ${pairs[@]}; do
     fi
 
     # remove the intermediate files
-    rm $pivot_fname.pred.itv2.*
-    rm $tgt_fname.pred.itv2.*
+    rm $pivot_fname.pred.${system}.*
+    rm $tgt_fname.pred.${system}.*
     rm -rf $devtest_data_dir/$src_lang-$tgt_lang/*.tok
 
 done

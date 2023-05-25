@@ -1,7 +1,9 @@
+import os
 import sys
 import glob
 import requests
 from urllib.parse import urlencode
+from dotenv import dotenv_values
 import traceback
 import time
 
@@ -103,13 +105,9 @@ class AzureTranslator:
 
 
 if __name__ == "__main__":
-    import os
-    from dotenv import dotenv_values
-
     root_dir = sys.argv[1]
     
     # Expects a .env file containing the API credentials.
-
     config = dotenv_values(os.path.join(os.path.dirname(__file__), ".env"))
 
     t = AzureTranslator(

@@ -13,7 +13,7 @@ langs=(asm_Beng ben_Beng guj_Gujr hin_Deva kan_Knda mal_Mlym mar_Deva ory_Orya p
 
 # we predefine a set of systems which we consider for evaluation
 # feel free to change the below line in case you want to add or remove any system
-system=(google azure nllb mbart50 m2m100 itv1 itv2)
+system=(google azure nllb mbart50 m2m100 it1 it2)
 
 
 # iterate over the list of predefined languages
