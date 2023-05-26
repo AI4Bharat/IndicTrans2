@@ -486,17 +486,22 @@ You can download the translation outputs released as a part of this work from th
 
 ## LICENSE
 
-To the extent possible under law, [AI4Bharat](https://ai4bharat.iitm.ac.in) has waived all copyright and related or neighboring rights to IndicTrans2. The following table lists the licenses associated with the different artifacts released as a part of this work:
+The following table lists the licenses associated with the different artifacts released as a part of this work:
 
 | Artifact                                              | LICENSE   |
 |-------------------------------------------------------|-----------|
 | Existing Mined Corpora (NLLB & Samanantar)            | [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)       |
-| Existing Seed Corpora (NLLB, ILCI, MASSIVE)           | [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)       |
+| Existing Seed Corpora (NLLB-Seed, ILCI, MASSIVE)           | [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)       |
 | Newly Added Mined Corpora (Samanantar++ & Comparable) | [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)       |
-| Newly Added Seed Corpora (Wiki & Daily)               | [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) |
-| Newly Created IN-22 test set                          | [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Newly Added Seed Corpora (BPCC-H-Wiki & BPCC-H-Daily)               | [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Newly Created IN-22 test set (IN22-Gen & IN22-Conv)                          | [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) |
 | Back-translation data (BPCC-BT)                       | [CC0](https://creativecommons.org/share-your-work/public-domain/cc0/)       |
 | Model checkpoints                                     | [MIT](https://github.com/ai4bharat/IndicTrans2/blob/main/LICENSE)       |
+
+The mined corpora collection (BPCC-Mined), existing seed corpora (NLLB-Seed, ILCI, MASSIVE), Backtranslation data (BPCC-BT), are released under the following licensing scheme:
+* We do not own any of the text from which this data has been extracted.
+* We license the actual packaging of this data under the Creative Commons [CC0 license (“no rights reserved”)](https://creativecommons.org/share-your-work/public-domain/cc0/).
+* To the extent possible under law, [AI4Bharat](https://ai4bharat.iitm.ac.in/) has waived all copyright and related or neighboring rights to BPCC-Mined, existing seed corpora (NLLB-Seed, ILCI, MASSIVE) and BPCC-BT.
 
 ## Citation
 
