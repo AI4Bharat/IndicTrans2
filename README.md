@@ -1,6 +1,6 @@
 # IndicTrans2
 
-[Preprint is available here](https://arxiv.org/abs/2305.16307)
+[Paper](https://arxiv.org/abs/2305.16307) | [Website](https://ai4bharat.org/indic-trans2) | [Demo](https://models.ai4bharat.org/#/nmt/v2)
 
 IndicTrans2 is the first open-source transformer-based multilingual NMT model that supports high-quality translations across all the 22 scheduled Indic languages — including multiple scripts for low-resouce languages like Kashmiri, Manipuri and Sindhi. It adopts script unification wherever feasible to leverage transfer learning by lexical sharing between languages. Overall, the model supports five scripts Perso-Arabic (Kashmiri, Sindhi, Urdu), Ol Chiki (Santali), Meitei (Manipuri), Latin (English), and Devanagari (used for all the remaining languages).
 
