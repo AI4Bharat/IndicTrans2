@@ -1,5 +1,6 @@
 # IndicTrans2
 
+[Preprint is available here](https://arxiv.org/abs/2305.16307)
 
 IndicTrans2 is the first open-source transformer-based multilingual NMT model that supports high-quality translations across all the 22 scheduled Indic languages — including multiple scripts for low-resouce languages like Kashmiri, Manipuri and Sindhi. It adopts script unification wherever feasible to leverage transfer learning by lexical sharing between languages. Overall, the model supports five scripts Perso-Arabic (Kashmiri, Sindhi, Urdu), Ol Chiki (Santali), Meitei (Manipuri), Latin (English), and Devanagari (used for all the remaining languages).
 
@@ -79,7 +80,7 @@ Here is the list of languages supported by the IndicTrans2 models:
   - [CT2 Inference](#ct2-inference)
 - [Evaluations](#evaluations)
   - [Baseline Evaluation](#baseline-evaluation)
-  - [LICENSE](#license)
+- [LICENSE](#license)
 - [Citation](#citation)
 
 
@@ -141,7 +142,7 @@ You can find the contribution from different sources in the following table:
     <td rowspan="4">BPCC-Mined</th>
     <td rowspan="2">Existing</th>
     <td>Samanantar</th>
-    <td>194.M</th>
+    <td>19.4M</th>
   </tr>
   <tr>
     <td>NLLB</th>
@@ -374,7 +375,7 @@ model.batch_translate(sents, src_lang, tgt_lang)
 model.translate_paragraph(text, src_lang, tgt_lang)
 ```
 
-## CT2 Inference
+### CT2 Inference
 
 In order to run inference on CT2-ported model using python inference then please execute the following block of code from the root directory:
 
@@ -485,7 +486,7 @@ You can download the translation outputs released as a part of this work from th
 
 ## LICENSE
 
-The following table lists the licenses associated with the different artifacts released as a part of this work:
+To the extent possible under law, [AI4Bharat](https://ai4bharat.iitm.ac.in) has waived all copyright and related or neighboring rights to IndicTrans2. The following table lists the licenses associated with the different artifacts released as a part of this work:
 
 | Artifact                                              | LICENSE   |
 |-------------------------------------------------------|-----------|
@@ -499,5 +500,11 @@ The following table lists the licenses associated with the different artifacts r
 
 ## Citation
 
-Coming soon ...
-
+```bash
+@article{ai4bharat2023indictrans2,
+  title   = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
+  author  = {AI4Bharat and Jay Gala and Pranjal A. Chitale and Raghavan AK and Sumanth Doddapaneni and Varun Gumma and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
+  year    = {2023},
+  journal = {arXiv preprint arXiv: 2305.16307}
+}
+```
