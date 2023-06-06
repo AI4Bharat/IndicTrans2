@@ -165,6 +165,52 @@ class Model:
         )
         translations = [" ".join(x.hypotheses[0]) for x in translations]
         return translations
+    
+    def paragraphs_batch_translate__multilingual(self, batch_payloads: List[tuple]) -> List[str]:
+        """
+        Translates a batch of input paragraphs (including pre/post processing) 
+        from any language to any language.
+        
+        Args:
+            batch_payloads (List[tuple]): batch of long input-texts to be translated, each in format: (paragraph, src_lang, tgt_lang)
+        
+        Returns:
+            List[str]: batch of paragraph-translations in the respective languages.
+        """
+        paragraph_id_to_sentence_range = []
+        global__sents = []
+        global__preprocessed_sents = []
+        for i in range(len(batch_payloads)):
+            paragraph, src_lang, tgt_lang = batch_payloads[i]
+            if self.input_lang_code_format == "iso":
+                src_lang, tgt_lang = iso_to_flores[src_lang], iso_to_flores[tgt_lang]
+            
+            batch = split_sentences(paragraph, src_lang)
+            global__sents.extend(batch)
+
+            preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
+
+            global_sentence_start_index = len(global__preprocessed_sents)
+            global__preprocessed_sents.extend(preprocessed_sents)
+            paragraph_id_to_sentence_range.append((global_sentence_start_index, len(global__preprocessed_sents)))
+        
+        translations = self.translate_lines(global__preprocessed_sents)
+
+        translated_paragraphs = []
+        for paragraph_id, sentence_range in enumerate(paragraph_id_to_sentence_range):
+            tgt_lang = batch_payloads[paragraph_id][2]
+            if self.input_lang_code_format == "iso":
+                tgt_lang = iso_to_flores[tgt_lang]
+            
+            postprocessed_sents = self.postprocess_batch(
+                translations[sentence_range[0]:sentence_range[1]],
+                tgt_lang,
+                input_sents=global__sents[sentence_range[0]:sentence_range[1]]
+            )
+            translated_paragraph = " ".join(postprocessed_sents)
+            translated_paragraphs.append(translated_paragraph)
+        
+        return translated_paragraphs
 
     # translate a batch of sentences from src_lang to tgt_lang
     def batch_translate(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
