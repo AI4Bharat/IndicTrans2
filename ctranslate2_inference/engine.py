@@ -150,6 +150,14 @@ class Model:
             import ctranslate2
             self.translator = ctranslate2.Translator(self.ckpt_dir, device=device)#, compute_type="auto")
             self.translate_lines = self.ctranslate2_translate_lines
+        elif model_type == "fairseq":
+            from .custom_interactive import Translator
+            self.translator = Translator(
+                data_dir=os.path.join(self.ckpt_dir, "final_bin"), 
+                checkpoint_path=os.path.join(self.ckpt_dir, "model", "checkpoint_best.pt"), 
+                batch_size=100
+            )
+            self.translate_lines = self.fairseq_translate_lines
         else:
             raise NotImplementedError(f"Unknown model_type: {model_type}")
     
@@ -165,6 +173,9 @@ class Model:
         )
         translations = [" ".join(x.hypotheses[0]) for x in translations]
         return translations
+    
+    def fairseq_translate_lines(self, lines: List[str]) -> List[str]:
+        return self.translator.translate(lines)
     
     def paragraphs_batch_translate__multilingual(self, batch_payloads: List[tuple]) -> List[str]:
         """
