@@ -364,7 +364,7 @@ If you want to run the inference using python interface then please execute the 
 ```python3
 from inference.engine import Model
 
-model = Model(ckpt_dir)
+model = Model(ckpt_dir, model_type="fairseq")
 
 sents = [sent1, sent2,...]
 
@@ -380,9 +380,9 @@ model.translate_paragraph(text, src_lang, tgt_lang)
 In order to run inference on CT2-ported model using python inference then please execute the following block of code from the root directory:
 
 ```python3
-from ctranslate2_inference.engine import Model
+from inference.engine import Model
 
-model = Model(ckpt_dir)
+model = Model(ckpt_dir, model_type="ctranslate2")
 
 sents = [sent1, sent2,...]
 
