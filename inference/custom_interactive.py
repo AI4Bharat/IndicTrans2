@@ -9,6 +9,7 @@
 Translate raw text with a trained model. Batches data on-the-fly.
 """
 
+import os
 import ast
 from collections import namedtuple
 
@@ -20,7 +21,7 @@ from fairseq_cli.generate import get_symbols_to_strip_from_output
 
 import codecs
 
-
+PWD = os.path.dirname(__file__)
 Batch = namedtuple("Batch", "ids src_tokens src_lengths constraints")
 Translation = namedtuple("Translation", "src_str hypos pos_scores alignments")
 
@@ -121,7 +122,7 @@ class Translator:
 
         # we have custom architechtures in this folder and we will let fairseq
         # import this
-        args.user_dir = "model_configs"
+        args.user_dir = os.path.join(PWD, "model_configs")
         self.cfg = convert_namespace_to_omegaconf(args)
 
         utils.import_user_module(self.cfg.common)

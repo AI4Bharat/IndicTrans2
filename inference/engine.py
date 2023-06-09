@@ -1,7 +1,6 @@
 from typing import List, Union
 
 import os
-from os import truncate
 from sacremoses import MosesPunctNormalizer
 from sacremoses import MosesTokenizer
 from sacremoses import MosesDetokenizer
@@ -12,7 +11,7 @@ from indicnlp.tokenize import indic_detokenize
 from indicnlp.normalize import indic_normalize
 from indicnlp.transliterate import unicode_transliterate
 from mosestokenizer import MosesSentenceSplitter
-from indicnlp.tokenize import sentence_tokenize
+from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
 
 import re
 import uuid
@@ -20,12 +19,12 @@ import hashlib
 import sentencepiece as spm
 from nltk.tokenize import sent_tokenize
 
-from inference.custom_interactive import Translator
-from inference.normalize_regex_inference import normalize
-from inference.flores_codes_map_indic import flores_codes
-from inference.normalize_regex_inference import EMAIL_PATTERN
+from .normalize_regex_inference import normalize
+from .flores_codes_map_indic import flores_codes, iso_to_flores
+from .normalize_regex_inference import EMAIL_PATTERN
+from .normalize_punctuation import punc_norm
 
-PWD = os.path.dirname(__file__)
+# PWD = os.path.dirname(__file__)
 
 def split_sentences(paragraph: str, lang: str) -> List[str]:
     """
@@ -45,7 +44,7 @@ def split_sentences(paragraph: str, lang: str) -> List[str]:
         #     return splitter([paragraph])
         return sent_tokenize(paragraph)
     else:
-        return sentence_tokenize.sentence_split(paragraph, lang=flores_codes[lang])
+        return sentence_split(paragraph, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA)
 
 
 def add_token(sent: str, src_lang: str, tgt_lang: str, delimiter: str = " ") -> str:
@@ -55,8 +54,8 @@ def add_token(sent: str, src_lang: str, tgt_lang: str, delimiter: str = " ") -> 
 
     Args:
         sent (str): input sentence to be translated.
-        src_lang (str): language of the input sentence.
-        tgt_lang (str): language in which the input sentence will be translated.
+        src_lang (str): flores lang code of the input sentence.
+        tgt_lang (str): flores lang code in which the input sentence will be translated.
         delimiter (str): separator to add between language tags and input sentence (default: " ").
 
     Returns:
@@ -72,8 +71,8 @@ def apply_lang_tags(sents: List[str], src_lang: str, tgt_lang: str) -> List[str]
     
     Args:
         sent (str): input sentence to be translated.
-        src_lang (str): language of the input sentence.
-        tgt_lang (str): language in which the input sentence will be translated.
+        src_lang (str): flores lang code of the input sentence.
+        tgt_lang (str): flores lang code in which the input sentence will be translated.
 
     Returns:
         List[str]: list of input sentences with the special tokens added to the start.
@@ -119,12 +118,19 @@ class Model:
     Model class to run the IndicTransv2 models using python interface.
     """
     
-    def __init__(self, ckpt_dir: str):
+    def __init__(
+        self,
+        ckpt_dir: str,
+        device: str = "cuda",
+        input_lang_code_format: str = "flores",
+        model_type: str = "ctranslate2"
+    ):
         """
         Initialize the model class.
         
         Args:
             ckpt_dir (str): path of the model checkpoint directory.
+            device (str, optional): where to load the model (defaults: cuda).
         """
         self.ckpt_dir = ckpt_dir
         self.en_tok = MosesTokenizer(lang="en")
@@ -135,15 +141,88 @@ class Model:
         print("Initializing sentencepiece model for SRC and TGT")
         self.sp_src = spm.SentencePieceProcessor(model_file=os.path.join(ckpt_dir, "vocab", "model.SRC"))
         self.sp_tgt = spm.SentencePieceProcessor(model_file=os.path.join(ckpt_dir, "vocab", "model.TGT"))
+
+        self.input_lang_code_format = input_lang_code_format
         
         print("Initializing model for translation")
         # initialize the model
-        self.translator = Translator(
-            data_dir=os.path.join(self.ckpt_dir, "final_bin"), 
-            checkpoint_path=os.path.join(self.ckpt_dir, "model", "checkpoint_best.pt"), 
-            batch_size=100
-        )
+        if model_type == "ctranslate2":
+            import ctranslate2
+            self.translator = ctranslate2.Translator(self.ckpt_dir, device=device)#, compute_type="auto")
+            self.translate_lines = self.ctranslate2_translate_lines
+        elif model_type == "fairseq":
+            from .custom_interactive import Translator
+            self.translator = Translator(
+                data_dir=os.path.join(self.ckpt_dir, "final_bin"), 
+                checkpoint_path=os.path.join(self.ckpt_dir, "model", "checkpoint_best.pt"), 
+                batch_size=100
+            )
+            self.translate_lines = self.fairseq_translate_lines
+        else:
+            raise NotImplementedError(f"Unknown model_type: {model_type}")
     
+    def ctranslate2_translate_lines(self, lines: List[str]) -> List[str]:
+        tokenized_sents = [x.strip().split(" ") for x in lines]
+        translations = self.translator.translate_batch(
+            tokenized_sents,
+            max_batch_size=9216,
+            batch_type="tokens",
+            max_input_length=160,
+            max_decoding_length=256,
+            beam_size=5,
+        )
+        translations = [" ".join(x.hypotheses[0]) for x in translations]
+        return translations
+    
+    def fairseq_translate_lines(self, lines: List[str]) -> List[str]:
+        return self.translator.translate(lines)
+    
+    def paragraphs_batch_translate__multilingual(self, batch_payloads: List[tuple]) -> List[str]:
+        """
+        Translates a batch of input paragraphs (including pre/post processing) 
+        from any language to any language.
+        
+        Args:
+            batch_payloads (List[tuple]): batch of long input-texts to be translated, each in format: (paragraph, src_lang, tgt_lang)
+        
+        Returns:
+            List[str]: batch of paragraph-translations in the respective languages.
+        """
+        paragraph_id_to_sentence_range = []
+        global__sents = []
+        global__preprocessed_sents = []
+        for i in range(len(batch_payloads)):
+            paragraph, src_lang, tgt_lang = batch_payloads[i]
+            if self.input_lang_code_format == "iso":
+                src_lang, tgt_lang = iso_to_flores[src_lang], iso_to_flores[tgt_lang]
+            
+            batch = split_sentences(paragraph, src_lang)
+            global__sents.extend(batch)
+
+            preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
+
+            global_sentence_start_index = len(global__preprocessed_sents)
+            global__preprocessed_sents.extend(preprocessed_sents)
+            paragraph_id_to_sentence_range.append((global_sentence_start_index, len(global__preprocessed_sents)))
+        
+        translations = self.translate_lines(global__preprocessed_sents)
+
+        translated_paragraphs = []
+        for paragraph_id, sentence_range in enumerate(paragraph_id_to_sentence_range):
+            tgt_lang = batch_payloads[paragraph_id][2]
+            if self.input_lang_code_format == "iso":
+                tgt_lang = iso_to_flores[tgt_lang]
+            
+            postprocessed_sents = self.postprocess_batch(
+                translations[sentence_range[0]:sentence_range[1]],
+                tgt_lang,
+                input_sents=global__sents[sentence_range[0]:sentence_range[1]]
+            )
+            translated_paragraph = " ".join(postprocessed_sents)
+            translated_paragraphs.append(translated_paragraph)
+        
+        return translated_paragraphs
+
     # translate a batch of sentences from src_lang to tgt_lang
     def batch_translate(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
         """
@@ -156,49 +235,17 @@ class Model:
             tgt_lang (str): flores target language code.
         
         Returns:
-            List[str]: batch of translations generated by the model.
+            List[str]: batch of translated-sentences generated by the model.
         """
         
         assert isinstance(batch, list)
-        
-        # -------------------------------------------------------
-        fname = str(uuid.uuid4())
-        
-        # normalize punctuations
-        with open(f"{fname}.txt", "w", encoding="utf-8") as f:
-            f.write("\n".join(batch))
-        
-        os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < {fname}.txt > {fname}.txt._norm")
-        
-        with open(f"{fname}.txt._norm", "r", encoding="utf-8") as f:
-            batch = f.read().split("\n")
-            
-        os.unlink(f"{fname}.txt")
-        os.unlink(f"{fname}.txt._norm")
-        # -------------------------------------------------------
-        
-        preprocessed_sents = self.preprocess(batch, lang=src_lang)
-        tokenized_sents = self.apply_spm(preprocessed_sents)
-        tagged_sents = apply_lang_tags(tokenized_sents, src_lang, tgt_lang)
-        tagged_sents = truncate_long_sentences(tagged_sents)
-        
-        translations = self.translator.translate(tagged_sents)
-        postprocessed_sents_ = self.postprocess(translations, tgt_lang)
-        
-        # find the emails in the input sentences and then 
-        # trim the additional spaces in the generated translations
-        matches = [re.findall(EMAIL_PATTERN, x) for x in batch]
-        
-        postprocessed_sents = []
-        for i in range(len(postprocessed_sents_)):
-            sent = postprocessed_sents_[i]
-            for match in matches[i]:
-                potential_match = match.replace("@", "@ ")
-                sent = sent.replace(potential_match, match)
-            postprocessed_sents.append(sent)
-        
-        return postprocessed_sents
-    
+
+        if self.input_lang_code_format == "iso":
+            src_lang, tgt_lang = iso_to_flores[src_lang], iso_to_flores[tgt_lang]
+
+        preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
+        translations = self.translate_lines(preprocessed_sents)
+        return postprocess_batch(translations, tgt_lang, input_sents=batch)
     
     # translate a paragraph from src_lang to tgt_lang
     def translate_paragraph(self, paragraph: str, src_lang: str, tgt_lang: str) -> str:
@@ -217,12 +264,35 @@ class Model:
         
         assert isinstance(paragraph, str)
         
-        sents = split_sentences(paragraph, src_lang)
+        if self.input_lang_code_format == "iso":
+            flores_src_lang = iso_to_flores[src_lang]
+        else:
+            flores_src_lang = src_lang
+
+        sents = split_sentences(paragraph, flores_src_lang)
         postprocessed_sents = self.batch_translate(sents, src_lang, tgt_lang)
         translated_paragraph = " ".join(postprocessed_sents)
 
         return translated_paragraph
+    
+    def preprocess_batch(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
+        """
+        Preprocess an array of sentences by normalizing, tokenization, and possibly transliterating it.
+
+        Args:
+            batch (List[str]): input list of sentences to preprocess.
+            src_lang (str): flores language code of the input text sentences.
+            tgt_lang (str): flores language code of the output text sentences.
+            
+        Returns:
+            str: preprocessed input text sentence.
+        """
+        preprocessed_sents = self.preprocess(batch, lang=src_lang)
+        tokenized_sents = self.apply_spm(preprocessed_sents)
+        tagged_sents = apply_lang_tags(tokenized_sents, src_lang, tgt_lang)
+        tagged_sents = truncate_long_sentences(tagged_sents)
         
+        return tagged_sents
         
     def apply_spm(self, sents: List[str]) -> List[str]:
         """
@@ -254,9 +324,9 @@ class Model:
         Returns:
             str: preprocessed input text sentence.
         """
-        sent = normalize(sent)
-        
         iso_lang = flores_codes[lang]
+        sent = punc_norm(sent, iso_lang)
+        sent = normalize(sent)
         
         transliterate = True
         if lang.split("_")[1] in ["Arab", "Olck", "Mtei", "Latn"]:
@@ -306,19 +376,52 @@ class Model:
         Returns:
             List[str]: preprocessed batch of input sentences.
         """
+
+        # -------------------------------------------------------
+        # Moved inside `preprocess_sent()`
+        # normalize punctuations
+        
+        # fname = str(uuid.uuid4())
+        # with open(f"{fname}.txt", "w", encoding="utf-8") as f:
+        #     f.write("\n".join(batch))
+        
+        # os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < {fname}.txt > {fname}.txt._norm")
+        
+        # with open(f"{fname}.txt._norm", "r", encoding="utf-8") as f:
+        #     batch = f.read().split("\n")
+            
+        # os.unlink(f"{fname}.txt")
+        # os.unlink(f"{fname}.txt._norm")
+        # -------------------------------------------------------
+
         if lang == "eng_Latn":
             processed_sents = [
-                self.preprocess_sent(sent, None, lang) for sent in tqdm(sents)
+                self.preprocess_sent(sent, None, lang) for sent in sents
             ]
         else:
             normfactory = indic_normalize.IndicNormalizerFactory()
             normalizer = normfactory.get_normalizer(flores_codes[lang])
 
             processed_sents = [
-                self.preprocess_sent(sent, normalizer, lang) for sent in tqdm(sents)
+                self.preprocess_sent(sent, normalizer, lang) for sent in sents
             ]
         
         return processed_sents
+    
+    def postprocess_batch(self, translations: List[str], lang: str, input_sents: List[str] = None) -> List[str]:
+        postprocessed_sents = self.postprocess(translations, lang)
+        
+        if input_sents:
+            # find the emails in the input sentences and then 
+            # trim the additional spaces in the generated translations
+            matches = [re.findall(EMAIL_PATTERN, x) for x in input_sents]
+            
+            for i in range(len(postprocessed_sents)):
+                for match in matches[i]:
+                    potential_match = match.replace("@", "@ ")
+                    postprocessed_sents[i] = postprocessed_sents[i].replace(potential_match, match)
+        
+        return postprocessed_sents
 
     def postprocess(self, sents: List[str], lang: str, common_lang: str = "hin_Deva") -> List[str]:
         """

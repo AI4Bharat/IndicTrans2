@@ -4,7 +4,7 @@ import re
 import sys
 from tqdm import tqdm
 from joblib import Parallel, delayed
-from inference.indic_num_map import INDIC_NUM_MAP
+from .indic_num_map import INDIC_NUM_MAP
 
 
 URL_PATTERN = r'\b(?<![\w/.])(?:(?:https?|ftp)://)?(?:(?:[\w-]+\.)+(?!\.))(?:[\w/\-?=%.]+)+(?!\.\w+)\b'

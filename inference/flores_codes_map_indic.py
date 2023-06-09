@@ -72,3 +72,12 @@ flores_to_iso = {
     "tel_Telu": "te",
     "urd_Arab": "ur",
 }
+
+iso_to_flores = {iso_code: flores_code for flores_code, iso_code in flores_to_iso.items()}
+# Patch for digraphic langs.
+iso_to_flores["ks"] = "kas_Arab"
+iso_to_flores["ks_Deva"] = "kas_Deva"
+iso_to_flores["mni"] = "mni_Mtei"
+iso_to_flores["mni_Beng"] = "mni_Beng"
+iso_to_flores["sd"] = "snd_Arab"
+iso_to_flores["sd_Deva"] = "snd_Deva"
