@@ -245,7 +245,7 @@ class Model:
 
         preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
         translations = self.translate_lines(preprocessed_sents)
-        return postprocess_batch(translations, tgt_lang, input_sents=batch)
+        return self.postprocess_batch(translations, tgt_lang, input_sents=batch)
     
     # translate a paragraph from src_lang to tgt_lang
     def translate_paragraph(self, paragraph: str, src_lang: str, tgt_lang: str) -> str:
