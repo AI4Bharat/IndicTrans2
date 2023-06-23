@@ -7,7 +7,7 @@ from joblib import Parallel, delayed
 from .indic_num_map import INDIC_NUM_MAP
 
 
-URL_PATTERN = r'\b(?<![\w/.])(?:(?:https?|ftp)://)?(?:(?:[\w-]+\.)+(?!\.))(?:[\w/\-?=%.]+)+(?!\.\w+)\b'
+URL_PATTERN = r'\b(?<![\w/.])(?:(?:https?|ftp)://)?(?:(?:[\w-]+\.)+(?!\.))(?:[\w/\-?#&=%.]+)+(?!\.\w+)\b'
 EMAIL_PATTERN = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}'
 # handles dates, time, percentages, proportion, ratio, etc
 NUMERAL_PATTERN = r"(~?\d+\.?\d*\s?%?\s?-?\s?~?\d+\.?\d*\s?%|~?\d+%|\d+[-\/.,:']\d+[-\/.,:'+]\d+(?:\.\d+)?|\d+[-\/.:'+]\d+(?:\.\d+)?)"
@@ -28,63 +28,53 @@ def normalize_indic_numerals(line: str):
     return "".join([INDIC_NUM_MAP.get(c, c) for c in line])
 
 
-def wrap_with_dnt_tag(text: str, pattern: str) -> Tuple[str, str]:
+def wrap_with_placeholders(text: str, patterns: list) -> Tuple[str, dict]:
     """
-    Wraps all occurences of a given pattern match in the input string with a do not translate
-    tags (`<dnt>` {input string} `</dnt>`). This will be particularly useful when some span of 
-    input string needs to be forwarded as it and not translated.
+    Wraps substrings with matched patterns in the given text with placeholders and returns
+    the modified text along with a mapping of the placeholders to their original value.
     
     Args:
-        text (str): input string.
-        pattern (str): pattern to search for in the input string.
+        text (str): an input string which needs to be wrapped with the placeholders.
+        pattern (list): list of patterns to search for in the input string.
     
     Returns:
-        str: input string with spans wrapped in `<dnt>` and `</dnt>` tags in case of pattern matches.
+        Tuple[str, dict]: a tuple containing the modified text and a dictionary mapping 
+            placeholders to their original values.
     """
-    # find matches in input text
-    matches = set(re.findall(pattern, text))
+    serial_no = 1
     
-    # wrap common match with <dnt> and </dnt> tag
-    for match in matches:
-        text = text.replace(match, f' <dnt> {match} </dnt> ')
+    placeholder_entity_map = dict()
     
-    text = re.sub("\s+", " ", text)
-    text = re.sub(" <dnt> <dnt> ", " <dnt> ", text)
-    text = re.sub(" </dnt> </dnt> ", " </dnt> ", text)
+    for pattern in patterns:
+        matches = set(re.findall(pattern, text))
+        
+        # wrap common match with placeholder tags
+        for match in matches:
+            placeholder = "<ID{}>".format(serial_no)
+            alternate_placeholder = "< ID{} >".format(serial_no)
+            placeholder_entity_map[placeholder] = match
+            placeholder_entity_map[alternate_placeholder] = match
+            text = text.replace(match, placeholder)
+            serial_no+=1
     
-    return text
+    text = re.sub("\s+", " ", text)    
+    return text, placeholder_entity_map
 
 
-def normalize(text, patterns=[EMAIL_PATTERN, URL_PATTERN, NUMERAL_PATTERN, OTHER_PATTERN]):
+def normalize(text: str, patterns: list = [EMAIL_PATTERN, URL_PATTERN, NUMERAL_PATTERN, OTHER_PATTERN]) -> Tuple[str, dict]:
     """
-    Normalizes and wraps the spans of input string with `<dnt>` and `</dnt>` tags. It first normalizes
+    Normalizes and wraps the spans of input string with placeholder tags. It first normalizes
     the Indic numerals in the input string to Roman script. Later, it uses the input string with normalized
-    Indic numerals to wrap the spans of text matching the pattern with `<dnt>` and `</dnt>` tags.
+    Indic numerals to wrap the spans of text matching the pattern with placeholder tags.
     
     Args:
         text (str): input string.
-        pattern (List[str]): list of patterns to search for in the input string.
+        pattern (list): list of patterns to search for in the input string.
     
     Returns:
-        str: normalized input string wrapped with `<dnt>` and `</dnt>` tags.
+        Tuple[str, dict]: a tuple containing the modified text and a dictionary mapping 
+            placeholders to their original values.
     """
     text = normalize_indic_numerals(text.strip("\n"))
-    for pattern in patterns:
-        text = wrap_with_dnt_tag(text, pattern)
-    return text
-
-
-if __name__ == "__main__":
-
-    src_infname = sys.argv[1]
-    src_outfname = sys.argv[2]
-    
-    num_lines = sum(1 for line in open(src_infname, "r"))
-    patterns = [EMAIL_PATTERN, URL_PATTERN, NUMERAL_PATTERN, OTHER_PATTERN]
-
-    with open(src_infname, "r", encoding="utf-8") as src_infile, \
-        open(src_outfname, "w", encoding="utf-8") as src_outfile:
-        
-        for src_line in tqdm(src_infile):
-            src_line = normalize(src_line, patterns)
-            src_outfile.write(src_line.strip() + "\n")
+    text, placeholder_entity_map  = wrap_with_placeholders(text, patterns)
+    return text, placeholder_entity_map

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Union, Tuple
 
 import os
 from sacremoses import MosesPunctNormalizer
@@ -191,6 +191,8 @@ class Model:
         paragraph_id_to_sentence_range = []
         global__sents = []
         global__preprocessed_sents = []
+        global__preprocessed_sents_placeholder_entity_map = []
+        
         for i in range(len(batch_payloads)):
             paragraph, src_lang, tgt_lang = batch_payloads[i]
             if self.input_lang_code_format == "iso":
@@ -199,10 +201,11 @@ class Model:
             batch = split_sentences(paragraph, src_lang)
             global__sents.extend(batch)
 
-            preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
+            preprocessed_sents, placeholder_entity_map_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
 
             global_sentence_start_index = len(global__preprocessed_sents)
             global__preprocessed_sents.extend(preprocessed_sents)
+            global__preprocessed_sents_placeholder_entity_map.extend(placeholder_entity_map_sents)
             paragraph_id_to_sentence_range.append((global_sentence_start_index, len(global__preprocessed_sents)))
         
         translations = self.translate_lines(global__preprocessed_sents)
@@ -216,7 +219,8 @@ class Model:
             postprocessed_sents = self.postprocess_batch(
                 translations[sentence_range[0]:sentence_range[1]],
                 tgt_lang,
-                input_sents=global__sents[sentence_range[0]:sentence_range[1]]
+                input_sents = global__sents[sentence_range[0]:sentence_range[1]],
+                placeholder_entity_map = global__preprocessed_sents_placeholder_entity_map[sentence_range[0]:sentence_range[1]]
             )
             translated_paragraph = " ".join(postprocessed_sents)
             translated_paragraphs.append(translated_paragraph)
@@ -243,9 +247,9 @@ class Model:
         if self.input_lang_code_format == "iso":
             src_lang, tgt_lang = iso_to_flores[src_lang], iso_to_flores[tgt_lang]
 
-        preprocessed_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
+        preprocessed_sents, placeholder_entity_map_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
         translations = self.translate_lines(preprocessed_sents)
-        return self.postprocess_batch(translations, tgt_lang, input_sents=batch)
+        return self.postprocess_batch(translations, tgt_lang, input_sents=batch, placeholder_entity_map=placeholder_entity_map_sents)
     
     # translate a paragraph from src_lang to tgt_lang
     def translate_paragraph(self, paragraph: str, src_lang: str, tgt_lang: str) -> str:
@@ -277,7 +281,8 @@ class Model:
     
     def preprocess_batch(self, batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
         """
-        Preprocess an array of sentences by normalizing, tokenization, and possibly transliterating it.
+        Preprocess an array of sentences by normalizing, tokenization, and possibly transliterating it. It also tokenizes the 
+        normalized text sequences using sentence piece tokenizer and also adds language tags.
 
         Args:
             batch (List[str]): input list of sentences to preprocess.
@@ -285,14 +290,15 @@ class Model:
             tgt_lang (str): flores language code of the output text sentences.
             
         Returns:
-            str: preprocessed input text sentence.
+            Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary 
+                mapping placeholders to their original values.
         """
-        preprocessed_sents = self.preprocess(batch, lang=src_lang)
+        preprocessed_sents, placeholder_entity_map_sents = self.preprocess(batch, lang=src_lang)
         tokenized_sents = self.apply_spm(preprocessed_sents)
         tagged_sents = apply_lang_tags(tokenized_sents, src_lang, tgt_lang)
         tagged_sents = truncate_long_sentences(tagged_sents)
         
-        return tagged_sents
+        return tagged_sents, placeholder_entity_map_sents
         
     def apply_spm(self, sents: List[str]) -> List[str]:
         """
@@ -322,18 +328,16 @@ class Model:
             lang (str): flores language code of the input text sentence.
             
         Returns:
-            str: preprocessed input text sentence.
+            Tuple[str, dict]: a tuple of preprocessed input text sentence and also a corresponding dictionary 
+                mapping placeholders to their original values.
         """
         iso_lang = flores_codes[lang]
         sent = punc_norm(sent, iso_lang)
-        sent = normalize(sent)
+        sent, placeholder_entity_map = normalize(sent)
         
         transliterate = True
         if lang.split("_")[1] in ["Arab", "Olck", "Mtei", "Latn"]:
             transliterate = False
-        
-        pattern = r'<dnt>(.*?)</dnt>'
-        raw_matches = re.findall(pattern, sent)
         
         if iso_lang == "en":
             processed_sent = " ".join(
@@ -354,81 +358,60 @@ class Model:
             processed_sent = " ".join(
                 indic_tokenize.trivial_tokenize(normalizer.normalize(sent.strip()), iso_lang)
             )
-
-        processed_sent = processed_sent.replace("< dnt >", "<dnt>")
-        processed_sent = processed_sent.replace("< / dnt >", "</dnt>")
-        
-        processed_sent_matches = re.findall(pattern, processed_sent)
-        for raw_match, processed_sent_match in zip(raw_matches, processed_sent_matches):
-            processed_sent = processed_sent.replace(processed_sent_match, raw_match)
     
-        return processed_sent
+        return processed_sent, placeholder_entity_map
     
     
-    def preprocess(self, sents: List[str], lang: str) -> List[str]:
+    def preprocess(self, sents: List[str], lang: str):
         """
-        Preprocess a batch of input sentences for the translation.
-        
+        Preprocess an array of sentences by normalizing, tokenization, and possibly transliterating it.
+
         Args:
-            sents (List[str]): batch of input sentences to preprocess.
-            lang (str): flores language code of the input sentences.
+            batch (List[str]): input list of sentences to preprocess.
+            lang (str): flores language code of the input text sentences.
             
         Returns:
-            List[str]: preprocessed batch of input sentences.
+            Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary 
+                mapping placeholders to their original values.
         """
-
-        # -------------------------------------------------------
-        # Moved inside `preprocess_sent()`
-        # normalize punctuations
-        
-        # fname = str(uuid.uuid4())
-        # with open(f"{fname}.txt", "w", encoding="utf-8") as f:
-        #     f.write("\n".join(batch))
-        
-        # os.system(f"bash {PWD}/normalize_punctuation.sh {src_lang} < {fname}.txt > {fname}.txt._norm")
-        
-        # with open(f"{fname}.txt._norm", "r", encoding="utf-8") as f:
-        #     batch = f.read().split("\n")
-            
-        # os.unlink(f"{fname}.txt")
-        # os.unlink(f"{fname}.txt._norm")
-        # -------------------------------------------------------
+        processed_sents, placeholder_entity_map_sents = [], []
 
         if lang == "eng_Latn":
-            processed_sents = [
-                self.preprocess_sent(sent, None, lang) for sent in sents
-            ]
+            normalizer = None
         else:
             normfactory = indic_normalize.IndicNormalizerFactory()
             normalizer = normfactory.get_normalizer(flores_codes[lang])
-
-            processed_sents = [
-                self.preprocess_sent(sent, normalizer, lang) for sent in sents
-            ]
         
-        return processed_sents
+        for sent in sents:
+            sent, placeholder_entity_map = self.preprocess_sent(sent, normalizer, lang)
+            processed_sents.append(sent)
+            placeholder_entity_map_sents.append(placeholder_entity_map)
+                        
+        return processed_sents, placeholder_entity_map_sents
     
-    def postprocess_batch(self, translations: List[str], lang: str, input_sents: List[str] = None) -> List[str]:
-        postprocessed_sents = self.postprocess(translations, lang)
+    def postprocess_batch(self, translations: List[str], lang: str, input_sents: List[str] = None, placeholder_entity_map: List[dict] = None) -> List[str]:
+        """
+        Wrapper function over `postprocess` that postprocesses a batch of translations.
         
-        if input_sents:
-            # find the emails in the input sentences and then 
-            # trim the additional spaces in the generated translations
-            matches = [re.findall(EMAIL_PATTERN, x) for x in input_sents]
-            
-            for i in range(len(postprocessed_sents)):
-                for match in matches[i]:
-                    potential_match = match.replace("@", "@ ")
-                    postprocessed_sents[i] = postprocessed_sents[i].replace(potential_match, match)
+        Args:
+            translations (List[str]): batch of translated sentences to postprocess.
+            lang (str): flores language code of the input sentences.
+            input_sents (List[str]): list of input text sentences that are translated (defaults: None).
+            placeholder_entity_map (List[dict]): dictionary mapping placeholders to the original entity values (defaults: None).
         
+        Returns:
+            List[str]: postprocessed batch of input sentences.
+        """
+        postprocessed_sents = self.postprocess(translations, placeholder_entity_map, lang)
         return postprocessed_sents
 
-    def postprocess(self, sents: List[str], lang: str, common_lang: str = "hin_Deva") -> List[str]:
+    def postprocess(self, sents: List[str], placeholder_entity_map: List[dict], lang: str, common_lang: str = "hin_Deva") -> List[str]:
         """
         Postprocesses a batch of input sentences after the translation generations.
         
         Args:
             sents (List[str]): batch of translated sentences to postprocess.
+            placeholder_entity_map (List[dict]): dictionary mapping placeholders to the original entity values.
             lang (str): flores language code of the input sentences.
             common_lang (str, optional): flores language code of the transliterated language (defaults: hin_Deva).
             
@@ -450,4 +433,9 @@ class Model:
                 )
                 postprocessed_sents.append(outstr)
         
+        assert len(postprocessed_sents) == len(placeholder_entity_map)
+            
+        for i in range(0, len(postprocessed_sents)):
+            for key in placeholder_entity_map[i].keys():
+                postprocessed_sents[i] = postprocessed_sents[i].replace(key, placeholder_entity_map[i][key])
         return postprocessed_sents
