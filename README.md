@@ -92,8 +92,9 @@ Here is the list of languages supported by the IndicTrans2 models:
 | Model                                     | En-Indic | Indic-En | Evaluations           |
 |-------------------------------------------|----------|----------|-----------------------|
 | Preprint (used for benchmarking)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip) | [translations](https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
-| Deployment (recommend for commercial use) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/en-indic-deploy.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/indic-en-deploy.zip) |                       |
+| Deployment (~~recommend for commercial use~~)* | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/en-indic-deploy.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/indic-en-deploy.zip) |                       |
 
+> **Note** :- We have updated our inference pipelines on 23 June 2023, and now the preprint models are robust enough to handle all the special cases like URLs and emails and we recommend using the Preprint models for all use cases.
 
 ### Training Data
 
