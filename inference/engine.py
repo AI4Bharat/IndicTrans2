@@ -336,7 +336,7 @@ class Model:
         sent, placeholder_entity_map = normalize(sent)
         
         transliterate = True
-        if lang.split("_")[1] in ["Arab", "Olck", "Mtei", "Latn"]:
+        if lang.split("_")[1] in ["Arab", "Aran", "Olck", "Mtei", "Latn"]:
             transliterate = False
         
         if iso_lang == "en":
@@ -348,7 +348,7 @@ class Model:
         elif transliterate:
             # transliterates from the any specific language to devanagari
             # which is why we specify lang2_code as "hi".
-            processed_sent = unicode_transliterate.UnicodeIndicTransliterator.transliterate(
+            processed_sent = self.xliterator.transliterate(
                 " ".join(indic_tokenize.trivial_tokenize(normalizer.normalize(sent.strip()), iso_lang)),
                 iso_lang,
                 "hi",
@@ -392,6 +392,7 @@ class Model:
     def postprocess_batch(self, translations: List[str], lang: str, input_sents: List[str] = None, placeholder_entity_map: List[dict] = None) -> List[str]:
         """
         Wrapper function over `postprocess` that postprocesses a batch of translations.
+        FIXME: Do we really need this method?
         
         Args:
             translations (List[str]): batch of translated sentences to postprocess.
@@ -418,13 +419,25 @@ class Model:
         Returns:
             List[str]: postprocessed batch of input sentences.
         """
-        sents = [self.sp_tgt.decode(x.split(" ")) for x in sents]
         
+        lang_code, script_code = lang.split('_')
+        # SPM decode
+        for i in range(len(sents)):
+            # sent_tokens = sents[i].split(" ")
+            # sents[i] = self.sp_tgt.decode(sent_tokens)
+
+            sents[i] = sents[i].replace(" ", '').replace("▁", " ").strip()
+            
+            # UrduHack adds space before punctuations. Since the model was trained fixing this issue, let's fix it now
+            # TODO: Move this inside indic-nlp-library
+            if script_code in {"Arab", "Aran"}:
+                sents[i] = sents[i].replace(" ؟", "؟").replace(" ۔", "۔").replace(" ،", "،")
+        
+        # Detokenize and transliterate to native scripts if applicable
         postprocessed_sents = []
         
         if lang == "eng_Latn":
             for sent in sents:
-                # outfile.write(en_detok.detokenize(sent.split(" ")) + "\n")
                 postprocessed_sents.append(self.en_detok.detokenize(sent.split(" ")))
         else:
             for sent in sents:
