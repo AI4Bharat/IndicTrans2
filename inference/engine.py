@@ -427,11 +427,14 @@ class Model:
             # sents[i] = self.sp_tgt.decode(sent_tokens)
 
             sents[i] = sents[i].replace(" ", '').replace("▁", " ").strip()
-            
-            # UrduHack adds space before punctuations. Since the model was trained fixing this issue, let's fix it now
-            # TODO: Move this inside indic-nlp-library
+
+            # Fixes for Perso-Arabic scripts
+            # TODO: Move these normalizations inside indic-nlp-library
             if script_code in {"Arab", "Aran"}:
+                # UrduHack adds space before punctuations. Since the model was trained without fixing this issue, let's fix it now
                 sents[i] = sents[i].replace(" ؟", "؟").replace(" ۔", "۔").replace(" ،", "،")
+                # Kashmiri bugfix for palatalization: https://github.com/AI4Bharat/IndicTrans2/issues/11
+                sents[i] = sents[i].replace("ٮ۪", 'ؠ')
         
         # Detokenize and transliterate to native scripts if applicable
         postprocessed_sents = []
