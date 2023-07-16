@@ -1,0 +1,3949 @@
+{
+    "modelId": "ai4bharat/indictrans-v2-all-gpu",
+    "version": "v1",
+    "submittedOn": 1684249537000,
+    "updatedOn": 1684249537000,
+    "name": "AI4Bharat Translation (IndicTrans2) -- All directions on GPU",
+    "description": "IndicTranslate-v2 is a Transformer-based (~1.1B params) multilingual NMT model trained on datasets covering all 22 scheduled langauges of the Indian Republic.",
+    "refUrl": "https://github.com/AI4Bharat/indicTrans2",
+    "task": {
+        "type": "translation"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "en",
+            "sourceScriptCode": "Latn",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "en",
+            "targetScriptCode": "Latn"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "as",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "bn",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "brx",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "doi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "gom",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "gu",
+            "sourceScriptCode": "Gujr",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "hi",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "kn",
+            "sourceScriptCode": "Knda",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "ks",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "mai",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "ml",
+            "sourceScriptCode": "Mlym",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Mtei",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "mni",
+            "sourceScriptCode": "Beng",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "mr",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "ne",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "or",
+            "sourceScriptCode": "Orya",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "pa",
+            "sourceScriptCode": "Guru",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "sa",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "sat",
+            "sourceScriptCode": "Olck",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Arab",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "sd",
+            "sourceScriptCode": "Deva",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        },
+        {
+            "sourceLanguage": "ta",
+            "sourceScriptCode": "Taml",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "te",
+            "sourceScriptCode": "Telu",
+            "targetLanguage": "ur",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "as",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "bn",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "brx",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "doi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "gom",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "gu",
+            "targetScriptCode": "Gujr"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "hi",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "kn",
+            "targetScriptCode": "Knda"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Aran"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ks",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mai",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ml",
+            "targetScriptCode": "Mlym"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Mtei"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mni",
+            "targetScriptCode": "Beng"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "mr",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ne",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "or",
+            "targetScriptCode": "Orya"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "pa",
+            "targetScriptCode": "Guru"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sa",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sat",
+            "targetScriptCode": "Olck"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Arab"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "sd",
+            "targetScriptCode": "Deva"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "ta",
+            "targetScriptCode": "Taml"
+        },
+        {
+            "sourceLanguage": "ur",
+            "sourceScriptCode": "Aran",
+            "targetLanguage": "te",
+            "targetScriptCode": "Telu"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "inferenceEndPoint": {
+        "schema": {
+            "request": {
+                "input": [
+                    {
+                        "source": "कैसे हैं आप?"
+                    }
+                ],
+                "config": {
+                    "language": {
+                        "sourceLanguage": "hi",
+                        "targetLanguage": "en"
+                    }
+                }
+            },
+            "response": {
+                "output": [
+                    {
+                        "source": "कैसे हैं आप?",
+                        "target": "How are you?"
+                    }
+                ]
+            }
+        }
+    },
+    "submitter": {
+        "name": "AI4Bharat",
+        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+        "team": [
+            {
+                "name": "Jay Gala",
+                "aboutMe": "AI Resident, AI4Bharat"
+            },
+            {
+                "name": "Pranjal Agadh Chitale",
+                "aboutMe": "MS Student, IITM"
+            },
+            {
+                "name": "Kumar Deepak",
+                "aboutMe": "Tarento, EkStep"
+            },
+            {
+                "name": "Raghavan AK",
+                "aboutMe": "IIT-Madras"
+            },
+            {
+                "name": "Sumanth Doddapaneni",
+                "aboutMe": "RBCDSAI, IITM"
+            },
+            {
+                "name": "Anoop Kunchukuttan",
+                "aboutMe": "IIT-Madras"
+            },
+            {
+                "name": "Mitesh Khapra",
+                "aboutMe": "IIT-Madras"
+            },
+            {
+                "name": "Pratyush Kumar",
+                "aboutMe": "AI4Bharat"
+            },
+            {
+                "name": "Raj Dabre",
+                "aboutMe": "NICT Japan"
+            }
+        ]
+    }
+}
