@@ -435,6 +435,11 @@ class Model:
                 sents[i] = sents[i].replace(" ؟", "؟").replace(" ۔", "۔").replace(" ،", "،")
                 # Kashmiri bugfix for palatalization: https://github.com/AI4Bharat/IndicTrans2/issues/11
                 sents[i] = sents[i].replace("ٮ۪", 'ؠ')
+            
+            # Oriya bug: indic-nlp-library produces ଯ଼ instead of ୟ when converting from Devanagari to Odia
+            # TODO: Find out what's the issue with unicode transliterator for Oriya and fix it
+            if lang_code == "or":
+                sents[i] = sents[i].replace("ଯ଼", 'ୟ')
         
         # Detokenize and transliterate to native scripts if applicable
         postprocessed_sents = []

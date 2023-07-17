@@ -18,5 +18,5 @@ docker run --shm-size=256m --gpus=1 --rm -v ${PWD}/../checkpoints/:/models/check
 
 ## Sample client
 
-- Do `pip install tritonclient gevent` first.
-- Then `python3 client.py`
+- Do `pip install tritonclient[all] gevent` first.
+- Then `python3 triton_server/client.py`

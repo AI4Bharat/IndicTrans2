@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/model.schema.json
 name: indictrans-v2--models
 version: 1
-path: ../../checkpoints
+path: ../../../checkpoints
 type: triton_model

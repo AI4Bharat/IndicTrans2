@@ -4,7 +4,7 @@ import numpy as np
 
 ENABLE_SSL = False
 ENDPOINT_URL = 'localhost:8000'
-HTTP_HEADERS = {"Authorization": ""}
+HTTP_HEADERS = {"Authorization": "Bearer __PASTE_KEY_HERE__"}
 
 # Connect to the server
 if ENABLE_SSL:
