@@ -50,14 +50,41 @@ def wrap_with_placeholders(text: str, patterns: list) -> Tuple[str, dict]:
         
         # wrap common match with placeholder tags
         for match in matches:
+            if pattern==URL_PATTERN :
+                #Avoids false positive URL matches for names with initials.
+                temp = match.replace(".",'')
+                if len(temp)<4:
+                    continue
+            if pattern==NUMERAL_PATTERN :
+                #Short numeral patterns do not need placeholder based handling.
+                temp = match.replace(" ",'').replace(".",'').replace(":",'')
+                if len(temp)<4:
+                    continue
+            
+            #Set of Translations of "ID" in all the suppported languages have been collated.            
+            #This has been added to deal with edge cases where placeholders might get translated. 
+            indic_failure_cases = ['آی ڈی ', 'ꯑꯥꯏꯗꯤ', 'आईडी', 'आई . डी . ', 'ऐटि', 'آئی ڈی ', 'ᱟᱭᱰᱤ ᱾', 'आयडी', 'ऐडि', 'आइडि']         
             placeholder = "<ID{}>".format(serial_no)
-            alternate_placeholder = "< ID{} >".format(serial_no)
+            alternate_placeholder = "< ID{} >".format(serial_no)                    
             placeholder_entity_map[placeholder] = match
             placeholder_entity_map[alternate_placeholder] = match
+            
+            for i in indic_failure_cases:
+                placeholder_temp = "<{}{}>".format(i,serial_no)
+                placeholder_entity_map[placeholder_temp] = match
+                placeholder_temp = "< {}{} >".format(i, serial_no)
+                placeholder_entity_map[placeholder_temp] = match
+                placeholder_temp = "< {} {} >".format(i, serial_no)
+                placeholder_entity_map[placeholder_temp] = match
+            
             text = text.replace(match, placeholder)
             serial_no+=1
     
-    text = re.sub("\s+", " ", text)    
+    text = re.sub("\s+", " ", text)
+    
+    #Regex has failure cases in trailing "/" in URLs, so this is a workaround. 
+    text = text.replace(">/",">")
+        
     return text, placeholder_entity_map
 
 

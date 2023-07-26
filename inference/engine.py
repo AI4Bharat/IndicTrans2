@@ -4,7 +4,6 @@ import os
 from sacremoses import MosesPunctNormalizer
 from sacremoses import MosesTokenizer
 from sacremoses import MosesDetokenizer
-import codecs
 from tqdm import tqdm
 from indicnlp.tokenize import indic_tokenize
 from indicnlp.tokenize import indic_detokenize
@@ -24,8 +23,6 @@ from .flores_codes_map_indic import flores_codes, iso_to_flores
 from .normalize_regex_inference import EMAIL_PATTERN
 from .normalize_punctuation import punc_norm
 
-# PWD = os.path.dirname(__file__)
-
 def split_sentences(paragraph: str, lang: str) -> List[str]:
     """
     Splits the input text paragraph into sentences. It uses `moses` for English and 
@@ -39,10 +36,14 @@ def split_sentences(paragraph: str, lang: str) -> List[str]:
         List[str] -> list of sentences.
     """
     if lang == "eng_Latn":
-        # fails to handle sentence splitting in case of
-        # with MosesSentenceSplitter(lang) as splitter:
-        #     return splitter([paragraph])
-        return sent_tokenize(paragraph)
+        with MosesSentenceSplitter(flores_codes[lang]) as splitter:
+            sents_moses = splitter([paragraph])
+        sents_nltk = sent_tokenize(paragraph)
+        if len(sents_nltk) < len(sents_moses):
+            sents = sents_nltk
+        else:
+            sents =  sents_moses
+        return [sent.replace("\xad", "") for sent in sents]
     else:
         return sentence_split(paragraph, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA)
 
@@ -216,11 +217,10 @@ class Model:
             if self.input_lang_code_format == "iso":
                 tgt_lang = iso_to_flores[tgt_lang]
             
-            postprocessed_sents = self.postprocess_batch(
+            postprocessed_sents = self.postprocess(
                 translations[sentence_range[0]:sentence_range[1]],
+                global__preprocessed_sents_placeholder_entity_map[sentence_range[0]:sentence_range[1]],
                 tgt_lang,
-                input_sents = global__sents[sentence_range[0]:sentence_range[1]],
-                placeholder_entity_map = global__preprocessed_sents_placeholder_entity_map[sentence_range[0]:sentence_range[1]]
             )
             translated_paragraph = " ".join(postprocessed_sents)
             translated_paragraphs.append(translated_paragraph)
@@ -249,7 +249,7 @@ class Model:
 
         preprocessed_sents, placeholder_entity_map_sents = self.preprocess_batch(batch, src_lang, tgt_lang)
         translations = self.translate_lines(preprocessed_sents)
-        return self.postprocess_batch(translations, tgt_lang, input_sents=batch, placeholder_entity_map=placeholder_entity_map_sents)
+        return self.postprocess(translations, placeholder_entity_map_sents, tgt_lang)
     
     # translate a paragraph from src_lang to tgt_lang
     def translate_paragraph(self, paragraph: str, src_lang: str, tgt_lang: str) -> str:
@@ -389,23 +389,6 @@ class Model:
                         
         return processed_sents, placeholder_entity_map_sents
     
-    def postprocess_batch(self, translations: List[str], lang: str, input_sents: List[str] = None, placeholder_entity_map: List[dict] = None) -> List[str]:
-        """
-        Wrapper function over `postprocess` that postprocesses a batch of translations.
-        FIXME: Do we really need this method?
-        
-        Args:
-            translations (List[str]): batch of translated sentences to postprocess.
-            lang (str): flores language code of the input sentences.
-            input_sents (List[str]): list of input text sentences that are translated (defaults: None).
-            placeholder_entity_map (List[dict]): dictionary mapping placeholders to the original entity values (defaults: None).
-        
-        Returns:
-            List[str]: postprocessed batch of input sentences.
-        """
-        postprocessed_sents = self.postprocess(translations, placeholder_entity_map, lang)
-        return postprocessed_sents
-
     def postprocess(self, sents: List[str], placeholder_entity_map: List[dict], lang: str, common_lang: str = "hin_Deva") -> List[str]:
         """
         Postprocesses a batch of input sentences after the translation generations.
@@ -441,7 +424,13 @@ class Model:
             if lang_code == "or":
                 sents[i] = sents[i].replace("ଯ଼", 'ୟ')
         
-        # Detokenize and transliterate to native scripts if applicable
+        assert len(sents) == len(placeholder_entity_map)
+            
+        for i in range(0, len(sents)):
+            for key in placeholder_entity_map[i].keys():
+                sents[i] = sents[i].replace(key, placeholder_entity_map[i][key])
+                
+        # Detokenize and transliterate to native scripts if applicable        
         postprocessed_sents = []
         
         if lang == "eng_Latn":
@@ -453,10 +442,5 @@ class Model:
                     self.xliterator.transliterate(sent, flores_codes[common_lang], flores_codes[lang]), flores_codes[lang]
                 )
                 postprocessed_sents.append(outstr)
-        
-        assert len(postprocessed_sents) == len(placeholder_entity_map)
-            
-        for i in range(0, len(postprocessed_sents)):
-            for key in placeholder_entity_map[i].keys():
-                postprocessed_sents[i] = postprocessed_sents[i].replace(key, placeholder_entity_map[i][key])
+
         return postprocessed_sents
