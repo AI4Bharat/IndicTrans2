@@ -92,16 +92,15 @@ if __name__ == "__main__":
     src_outfname = sys.argv[3]
     tgt_outfname = sys.argv[4]
     
-    num_lines = sum(1 for line in open(src_infname, "r"))
     patterns = [EMAIL_PATTERN, URL_PATTERN, NUMERAL_PATTERN, OTHER_PATTERN]
 
     with open(src_infname, "r", encoding="utf-8") as src_infile, \
-        open(tgt_infname, "r", encoding="utf-8") as tgt_infile, \
-        open(src_outfname, "w", encoding="utf-8") as src_outfile, \
-        open(tgt_outfname, "w", encoding="utf-8") as tgt_outfile:
+         open(tgt_infname, "r", encoding="utf-8") as tgt_infile, \
+         open(src_outfname, "w", encoding="utf-8") as src_outfile, \
+         open(tgt_outfname, "w", encoding="utf-8") as tgt_outfile:
         
-        out_lines = Parallel(n_jobs=-1, backend="multiprocessing")(
-            delayed(normalize)(src_line, tgt_line, patterns) for src_line, tgt_line in tqdm(zip(src_infile, tgt_infile), total=num_lines)
+        out_lines = Parallel(n_jobs=-1)(
+            delayed(normalize)(src_line, tgt_line, patterns) for src_line, tgt_line in tqdm(zip(src_infile, tgt_infile))
         )
         
         for src_line, tgt_line in tqdm(out_lines):

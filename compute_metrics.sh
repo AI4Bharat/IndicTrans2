@@ -18,15 +18,12 @@ tgt_lang=$3
 # Hence we tokenize both preds and target files with IndicNLP tokenizer and then run: sacrebleu --tokenize none reffile < outputfile
 if [ $tgt_lang == 'eng_Latn' ]; then
     # indic to en models
-    sacrebleu $ref_fname < $pred_fname -m bleu chrf
-    sacrebleu $ref_fname < $pred_fname -m chrf --chrf-word-order 2
+    sacrebleu $ref_fname < $pred_fname -m bleu chrf --chrf-word-order 2
 else
-
     # indicnlp tokenize predictions and reference files before evaluation
-    input_size=`python scripts/preprocess_translate.py $ref_fname $ref_fname.tok $tgt_lang false false`
-    input_size=`python scripts/preprocess_translate.py $pred_fname $pred_fname.tok $tgt_lang false false`
+    parallel --pipe --keep-order python scripts/preprocess_translate.py $tgt_lang false false < $ref_fname > $ref_fname.tok 
+    parallel --pipe --keep-order python scripts/preprocess_translate.py $tgt_lang false false < $pred_fname > $pred_fname.tok 
 
     # since we are tokenizing with indicnlp separately, we are setting tokenize to none here
-    sacrebleu --tokenize none $ref_fname.tok < $pred_fname.tok -m bleu chrf
-    sacrebleu --tokenize none $ref_fname.tok < $pred_fname.tok -m bleu chrf -m chrf --chrf-word-order 2
+    sacrebleu --tokenize none $ref_fname.tok < $pred_fname.tok -m bleu chrf --chrf-word-order 2
 fi

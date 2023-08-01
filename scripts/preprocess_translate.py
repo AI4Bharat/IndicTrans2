@@ -4,6 +4,7 @@ import sys
 
 sys.path.append(r"{}".format(INDIC_NLP_LIB_HOME))
 from indicnlp import common
+import multiprocessing
 
 common.set_resources_path(INDIC_NLP_RESOURCES)
 from indicnlp import loader
@@ -11,14 +12,10 @@ from indicnlp import loader
 loader.load()
 from sacremoses import MosesPunctNormalizer
 from sacremoses import MosesTokenizer
-from sacremoses import MosesDetokenizer
-from collections import defaultdict
 
 from tqdm import tqdm
-from joblib import Parallel, delayed
 
 from indicnlp.tokenize import indic_tokenize
-from indicnlp.tokenize import indic_detokenize
 from indicnlp.normalize import indic_normalize
 from indicnlp.transliterate import unicode_transliterate
 
@@ -76,8 +73,11 @@ def preprocess_line(
     processed_line = processed_line.replace("< / dnt >", "</dnt>")
     
     processed_line_matches = re.findall(pattern, processed_line)
-    for raw_match, processed_line_match in zip(raw_matches, processed_line_matches):
-        processed_line = processed_line.replace(processed_line_match, raw_match)
+
+    processed_line_matches = [
+        processed_line.replace(processed_line_match, raw_match) 
+        for (raw_match, processed_line_match) in zip(raw_matches, processed_line_matches)
+    ]
     
     if remove_tag:
         processed_line = re.sub("\s+", " ", processed_line.replace("<dnt>", " ")).strip()
@@ -87,8 +87,6 @@ def preprocess_line(
     
 
 def preprocess(
-    infname: str,
-    outfname: str, 
     lang: str, 
     transliterate: bool = False, 
     remove_tag: bool= True
@@ -98,8 +96,6 @@ def preprocess(
     script conversation and write the output to a new file.
 
     Args:
-        infname (str): path of the input file.
-        outfname (str): path of the output file.
         lang (str): language of the text in the input file.
         transliterate (bool, optional): whether to transliterate the text in input file to devanagari (default: False).
         remove_tag (bool, optional): whether to remove the do not translate tags (`<dnt>` and `</dnt>`) from the text in input file (default: True).
@@ -108,57 +104,19 @@ def preprocess(
         int: number of sentences in the input file
     """
     iso_lang = flores_codes[lang]
+    normalizer = indic_normalize.IndicNormalizerFactory().get_normalizer(iso_lang) if iso_lang != 'en' else None
 
-    n = 0
-    num_lines = sum(1 for line in open(infname, "r"))
+    for line in sys.stdin:
+        print(preprocess_line(line, normalizer, lang, transliterate, remove_tag))
 
-    if iso_lang == "en":
-        with open(infname, "r", encoding="utf-8") as infile, open(
-            outfname, "w", encoding="utf-8"
-        ) as outfile:
-
-            out_lines = Parallel(n_jobs=-1, backend="multiprocessing")(
-                delayed(preprocess_line)(line, None, lang, transliterate, remove_tag) for line in tqdm(infile, total=num_lines)
-            )
-
-            for line in out_lines:
-                outfile.write(line + "\n")
-                n += 1
-    else:
-        normfactory = indic_normalize.IndicNormalizerFactory()
-        normalizer = normfactory.get_normalizer(iso_lang)
-        # reading
-        with open(infname, "r", encoding="utf-8") as infile, open(
-            outfname, "w", encoding="utf-8"
-        ) as outfile:
-
-            out_lines = Parallel(n_jobs=-1, backend="multiprocessing")(
-                delayed(preprocess_line)(line, normalizer, lang, transliterate, remove_tag)
-                for line in tqdm(infile, total=num_lines)
-            )
-
-            for line in out_lines:
-                outfile.write(line + "\n")
-                n += 1
-
-    return n
 
 
 if __name__ == "__main__":
-    infname = sys.argv[1]
-    outfname = sys.argv[2]
-    lang = sys.argv[3]
-    transliterate = sys.argv[4]
-    remove_tag = sys.argv[5]
+    lang = sys.argv[1]
+    transliterate = sys.argv[2]
+    remove_tag = sys.argv[3]
     
-    if transliterate.lower() == "true":
-        transliterate = True
-    else:
-        transliterate = False
-    
-    if remove_tag.lower() == "true":
-        remove_tag = True
-    else:
-        remove_tag = False
+    transliterate = transliterate.lower() == "true"
+    remove_tag = remove_tag.lower() == "true"
 
-    print(preprocess(infname, outfname, lang, transliterate, remove_tag))
+    preprocess(lang, transliterate, remove_tag)

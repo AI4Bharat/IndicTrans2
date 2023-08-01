@@ -1,5 +1,9 @@
 INDIC_NLP_LIB_HOME = "indic_nlp_library"
 INDIC_NLP_RESOURCES = "indic_nlp_resources"
+
+# Somehow I cannot use parallel --pipe --keep-order with this,
+# like with preprocess_translate.py. It seems to mess up everything!
+
 import sys
 
 from indicnlp import transliterate
@@ -11,23 +15,19 @@ common.set_resources_path(INDIC_NLP_RESOURCES)
 from indicnlp import loader
 
 loader.load()
-from sacremoses import MosesPunctNormalizer
-from sacremoses import MosesTokenizer
 from sacremoses import MosesDetokenizer
-from collections import defaultdict
+import sentencepiece as spm
 
-import indicnlp
-from indicnlp.tokenize import indic_tokenize
 from indicnlp.tokenize import indic_detokenize
-from indicnlp.normalize import indic_normalize
 from indicnlp.transliterate import unicode_transliterate
 
 from flores_codes_map_indic import flores_codes
-import sentencepiece as spm
 
-import re
+from joblib import Parallel, delayed
+
 
 en_detok = MosesDetokenizer(lang="en")
+xliterator = unicode_transliterate.UnicodeIndicTransliterator()
 
 
 def postprocess(
@@ -59,10 +59,8 @@ def postprocess(
     
     iso_lang = flores_codes[lang]
 
-    consolidated_testoutput = []
     consolidated_testoutput = [(x, 0.0, "") for x in range(input_size)]
 
-    temp_testoutput = []
     with open(infname, "r", encoding="utf-8") as infile:
         temp_testoutput = list(
             map(
@@ -70,29 +68,28 @@ def postprocess(
                 filter(lambda x: x.startswith("H-"), infile),
             )
         )
-        temp_testoutput = list(
-            map(lambda x: (int(x[0].split("-")[1]), float(x[1]), x[2]), temp_testoutput)
+
+    temp_testoutput = list(
+        map(
+            lambda x: (int(x[0].split("-")[1]), float(x[1]), x[2]), temp_testoutput
         )
-        for sid, score, hyp in temp_testoutput:
-            consolidated_testoutput[sid] = (sid, score, hyp)
-        consolidated_testoutput = [x[2] for x in consolidated_testoutput]
-        consolidated_testoutput = [sp.decode(x.split(" ")) for x in consolidated_testoutput]
+    )
+    
+    for sid, score, hyp in temp_testoutput:
+        consolidated_testoutput[sid] = (sid, score, hyp)
+
+    consolidated_testoutput = [x[2] for x in consolidated_testoutput]
+    consolidated_testoutput = Parallel(n_jobs=-1)([delayed(sp.decode)(x.split(' ')) for x in consolidated_testoutput])
 
     if iso_lang == "en":
-        with open(outfname, "w", encoding="utf-8") as outfile:
-            for sent in consolidated_testoutput:
-                outfile.write(en_detok.detokenize(sent.split(" ")) + "\n")
+        consolidated_testoutput = Parallel(n_jobs=-1)([delayed(en_detok.detokenize)(x.split(' ')) for x in consolidated_testoutput])
     else:
-        xliterator = unicode_transliterate.UnicodeIndicTransliterator()
-        with open(outfname, "w", encoding="utf-8") as outfile:
-            for sent in consolidated_testoutput:
-                if transliterate:
-                    outstr = indic_detokenize.trivial_detokenize(
-                        xliterator.transliterate(sent, "hi", iso_lang), iso_lang
-                    )
-                else:
-                    outstr = indic_detokenize.trivial_detokenize(sent, iso_lang)
-                outfile.write(outstr + "\n")
+        f = lambda sent: xliterator.transliterate(sent, "hi", iso_lang) if transliterate else sent
+        consolidated_testoutput = Parallel(n_jobs=-1)([delayed(indic_detokenize.trivial_detokenize)(f(x), iso_lang) for x in consolidated_testoutput])
+
+    with open(outfname, "w", encoding="utf-8") as outfile:
+        outfile.write('\n'.join(consolidated_testoutput))
+
 
 
 if __name__ == "__main__":
@@ -102,5 +99,7 @@ if __name__ == "__main__":
     lang = sys.argv[4]
     transliterate = sys.argv[5]
     spm_model_path = sys.argv[6]
+
+    transliterate = transliterate.lower() == "true"
 
     postprocess(infname, outfname, input_size, lang, transliterate, spm_model_path)

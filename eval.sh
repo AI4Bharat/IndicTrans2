@@ -3,18 +3,15 @@
 echo `date`
 devtest_data_dir=$1
 ckpt_dir=$2
-system=${3:-"itv2"}
+model=$3
+system=$4
 
-pairs=$(ls -d $devtest_data_dir/*)
+pairs=$(ls -rd $devtest_data_dir/*)
 
 for pair in ${pairs[@]}; do
     pair=$(basename $pair)
     src_lang=$(echo "$pair" | cut -d "-" -f 1)
     tgt_lang=$(echo "$pair" | cut -d "-" -f 2)
-
-    if [[ -f "$devtest_data_dir/$src_lang-$tgt_lang/${src_lang}_${tgt_lang}_${system}_scores.txt" ]]; then
-        continue
-    fi
 
     src_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$src_lang
     tgt_fname=$devtest_data_dir/$src_lang-$tgt_lang/test.$tgt_lang
@@ -26,10 +23,8 @@ for pair in ${pairs[@]}; do
         continue
     fi
 
-    if [[ $system == *"itv2"* ]]; then
-        echo "Generating Translations"
-        bash joint_translate.sh $src_fname $tgt_fname.pred.$system $src_lang $tgt_lang $ckpt_dir
-    fi
+    echo "Generating Translations"
+    bash joint_translate.sh $src_fname $tgt_fname.pred.$system $src_lang $tgt_lang $ckpt_dir $model
 
     if [[ -f "${tgt_fname}.pred.${system}" ]]; then
         echo "Computing Metrics"
@@ -37,7 +32,12 @@ for pair in ${pairs[@]}; do
     fi
 
     # Purge the intermediate files to declutter the directory.
+    echo "Purging intermediate files"
+    rm -rf $tgt_fname.pred.*
+    rm -rf $src_fname.pred.*
     rm -rf $tgt_fname.pred.$system.*
     rm -rf $devtest_data_dir/$src_lang-$tgt_lang/*.tok
-
 done
+
+echo "Collating Metrics"
+python collate_metrics.py $devtest_data_dir $system

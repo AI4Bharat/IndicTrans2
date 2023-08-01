@@ -2,8 +2,6 @@ from typing import List
 
 import re
 import sys
-from tqdm import tqdm
-from joblib import Parallel, delayed
 from indic_num_map import INDIC_NUM_MAP
 
 
@@ -49,7 +47,6 @@ def wrap_with_dnt_tag(text: str, pattern: str) -> str:
         text = text.replace(match, f' <dnt> {match} </dnt> ')
     
     text = re.sub("\s+", " ", text)
-    
     return text
 
 
@@ -74,15 +71,7 @@ def normalize(text: str, patterns: List[str]) -> str:
 
 if __name__ == "__main__":
 
-    src_infname = sys.argv[1]
-    src_outfname = sys.argv[2]
-    
-    num_lines = sum(1 for line in open(src_infname, "r"))
     patterns = [EMAIL_PATTERN, URL_PATTERN, NUMERAL_PATTERN, OTHER_PATTERN]
-
-    with open(src_infname, "r", encoding="utf-8") as src_infile, \
-        open(src_outfname, "w", encoding="utf-8") as src_outfile:
         
-        for src_line in tqdm(src_infile):
-            src_line = normalize(src_line, patterns)
-            src_outfile.write(src_line.strip() + "\n")
+    for src_line in sys.stdin:
+        print(normalize(src_line, patterns).strip())

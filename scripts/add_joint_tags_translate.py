@@ -2,7 +2,22 @@ import os
 import sys
 from tqdm import tqdm
 from typing import Iterator, Tuple
-from add_tags_translate import add_token
+
+def add_token(sent: str, src_lang: str, tgt_lang: str, delimiter: str = " ") -> str:
+    """
+    Add special tokens indicating source and target language to the start of the input sentence.
+    The resulting string will have the format: "`{src_lang} {tgt_lang} {input_sentence}`".
+
+    Args:
+        sent (str): input sentence to be translated.
+        src_lang (str): language of the input sentence.
+        tgt_lang (str): language in which the input sentence will be translated.
+        delimiter (str): separator to add between language tags and input sentence (default: " ").
+
+    Returns:
+        str: input sentence with the special tokens added to the start.
+    """
+    return f"{src_lang}{delimiter}{tgt_lang}{delimiter}{sent}"
 
 
 def generate_lang_tag_iterator(infname: str) -> Iterator[Tuple[str, str]]:

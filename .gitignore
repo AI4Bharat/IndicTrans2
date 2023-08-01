@@ -145,3 +145,7 @@ dmypy.json
 cython_debug/
 
 .DS_Store
+wandb/
+
+# some temporary scripts
+temp_scripts/
