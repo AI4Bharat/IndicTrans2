@@ -56,4 +56,8 @@ echo "Extracting translations, script conversion and detokenization"
 # this part reverses the transliteration from devnagiri script to target lang and then detokenizes it.
 python scripts/postprocess_translate.py $outfname.log $outfname $input_size $tgt_lang $tgt_transliterate $ckpt_dir/vocab/model.TGT
 
+# Purge the intermediate files to declutter the directory.
+echo "Purging intermediate files"
+rm $outfname.*
+
 echo "Translation completed"

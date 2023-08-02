@@ -149,3 +149,4 @@ wandb/
 
 # some temporary scripts
 temp_scripts/
+logs/

@@ -26,4 +26,7 @@ else
 
     # since we are tokenizing with indicnlp separately, we are setting tokenize to none here
     sacrebleu --tokenize none $ref_fname.tok < $pred_fname.tok -m bleu chrf --chrf-word-order 2
+
+    # purge intermediate files
+    rm $ref_fname.tok $pred_fname.tok
 fi

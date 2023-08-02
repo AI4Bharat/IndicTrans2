@@ -30,13 +30,6 @@ for pair in ${pairs[@]}; do
         echo "Computing Metrics"
         bash compute_metrics.sh $tgt_fname.pred.$system $tgt_fname $tgt_lang > $devtest_data_dir/$src_lang-$tgt_lang/${src_lang}_${tgt_lang}_${system}_scores.txt
     fi
-
-    # Purge the intermediate files to declutter the directory.
-    echo "Purging intermediate files"
-    rm -rf $tgt_fname.pred.*
-    rm -rf $src_fname.pred.*
-    rm -rf $tgt_fname.pred.$system.*
-    rm -rf $devtest_data_dir/$src_lang-$tgt_lang/*.tok
 done
 
 echo "Collating Metrics"
