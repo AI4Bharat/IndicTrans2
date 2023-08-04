@@ -72,8 +72,8 @@ for pair in ${pairs[@]}; do
 
     # normalize punctuations
     echo "Normalizing punctuations for train"
-    parallel --pipe --keep-order bash normalize_punctuation.sh $src_lang < $train_infname_src > $train_outfname_src._norm
-    parallel --pipe --keep-order bash normalize_punctuation.sh $tgt_lang < $train_infname_tgt > $train_outfname_tgt._norm
+    parallel --pipe --keep-order bash scripts/normalize_punctuation.sh $src_lang < $train_infname_src > $train_outfname_src._norm
+    parallel --pipe --keep-order bash scripts/normalize_punctuation.sh $tgt_lang < $train_infname_tgt > $train_outfname_tgt._norm
 
 	# add do not translate tags to handle special failure cases
     # echo "Applying do not translate tags for train"
@@ -96,8 +96,8 @@ for pair in ${pairs[@]}; do
 
     # normalize punctuations
     echo "Normalizing punctuations for dev"
-    parallel --pipe --keep-order bash normalize_punctuation.sh $src_lang < $dev_infname_src > $dev_outfname_src._norm
-    parallel --pipe --keep-order bash normalize_punctuation.sh $tgt_lang < $dev_infname_tgt > $dev_outfname_tgt._norm
+    parallel --pipe --keep-order bash scripts/normalize_punctuation.sh $src_lang < $dev_infname_src > $dev_outfname_src._norm
+    parallel --pipe --keep-order bash scripts/normalize_punctuation.sh $tgt_lang < $dev_infname_tgt > $dev_outfname_tgt._norm
 
 	# add do not translate tags to handle special failure cases
     # echo "Applying do not translate tags for dev"

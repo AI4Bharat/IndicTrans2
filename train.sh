@@ -36,5 +36,4 @@ data_dir=$1
     --eval-bleu-remove-bpe sentencepiece \
     --eval-bleu-print-samples \
     --best-checkpoint-metric bleu \
-    --maximize-best-checkpoint-metric \
-    --wandb-project AACL-runs
+    --maximize-best-checkpoint-metric

@@ -21,7 +21,7 @@ if [[ $tgt_lang == *"Arab"* ]] || [[ $tgt_lang == *"Olck"* ]] || \
 fi
 
 echo "Applying normalization and script conversion"
-parallel --pipe --keep-order bash normalize_punctuation.sh $src_lang < $infname > $outfname._norm
+parallel --pipe --keep-order bash scripts/normalize_punctuation.sh $src_lang < $infname > $outfname._norm
 
 input_size=$(grep -c '.' $outfname._norm)
 echo "Input size: ${input_size}"

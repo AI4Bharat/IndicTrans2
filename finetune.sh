@@ -1,6 +1,5 @@
 data_dir=$1
 restore_from_dir=$2
-model_name=$3
 
 /nlsasfs/home/ai4bharat/yashkm/miniconda3/envs/itd/bin/fairseq-train ${data_dir}/final_bin \
     --task translation \
@@ -9,7 +8,7 @@ model_name=$3
     --max-update 1000000 \
     --save-interval 1 \
     --save-interval-updates 1000 \
-    --arch transformer_${model_name} \
+    --arch transformer_base18L \
     --criterion label_smoothed_cross_entropy \
     --share-decoder-input-output-embed \
     --source-lang SRC \
@@ -22,8 +21,8 @@ model_name=$3
     --warmup-init-lr 1e-07 \
     --warmup-updates 2000 \
     --dropout 0.2 \
-    --restore-file ${restore_from_dir}/${model_name}_dec_shared_embed/checkpoint_best.pt \
-    --save-dir ${restore_from_dir}/${model_name}_dec_shared_embed_seed_ft \
+    --restore-file ${restore_from_dir}/base18L_dec_shared_embed/checkpoint_best.pt \
+    --save-dir ${restore_from_dir}/base18L_dec_shared_embed_seed_ft \
     --patience 10 \
     --skip-invalid-size-inputs-valid-test \
     --no-epoch-checkpoints \

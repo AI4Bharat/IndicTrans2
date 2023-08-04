@@ -2,7 +2,7 @@ set -euo pipefail
 
 root=$(dirname $0)
 
-lang_map_path=$root/utils.map_token_lang.tsv
+lang_map_path=$root/map_token_lang.tsv
 
 usage () {
     echo "usage: $0 lang" >&2

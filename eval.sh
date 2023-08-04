@@ -33,4 +33,4 @@ for pair in ${pairs[@]}; do
 done
 
 echo "Collating Metrics"
-python collate_metrics.py $devtest_data_dir $system
+python scripts/collate_metrics.py $devtest_data_dir $system
