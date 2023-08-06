@@ -31,7 +31,7 @@ data_dir=$1
     --patience 10 \
     --skip-invalid-size-inputs-valid-test \
     --memory-efficient-fp16 \
-    --update-freq 8 \
+    --update-freq 1 \
     --distributed-world-size 8 \
     --num-workers 32 \
     --max-tokens 4096 \
