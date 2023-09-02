@@ -122,7 +122,7 @@ git clone https://github.com/AI4Bharat/IndicTrans2
 cd IndicTrans2
 
 # Install all the dependencies and requirements associated with the project.
-bash install.sh
+source install.sh
 ```
 
 Note: We recommend creating a virtual environment with python>=3.7.
