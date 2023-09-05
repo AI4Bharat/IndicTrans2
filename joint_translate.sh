@@ -40,11 +40,11 @@ parallel --pipe --keep-order bash scripts/add_tags_translate.sh $src_lang $tgt_l
 
 
 echo "Decoding"
-/nlsasfs/home/ai4bharat/yashkm/miniconda3/envs/itd/bin/fairseq-interactive $ckpt_dir/final_bin \
+fairseq-interactive ${ckpt_dir}/final_bin \
     --source-lang SRC \
     --target-lang TGT \
     --memory-efficient-fp16 \
-    --path $ckpt_dir/$model/checkpoint_best.pt \
+    --path ${ckpt_dir}/$model/checkpoint_best.pt \
     --skip-invalid-size-inputs-valid-test \
     --batch-size 128 \
     --buffer-size 2500 \

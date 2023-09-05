@@ -148,5 +148,5 @@ cython_debug/
 wandb/
 
 # some temporary scripts
-temp_scripts/
+flip_names.sh
 logs/

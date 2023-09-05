@@ -1,7 +1,7 @@
 data_dir=$1
 restore_from_dir=$2
 
-/nlsasfs/home/ai4bharat/yashkm/miniconda3/envs/itd/bin/fairseq-train ${data_dir}/final_bin \
+fairseq-train ${data_dir}/final_bin \
     --task translation \
     --max-source-positions 256 \
     --max-target-positions 256 \

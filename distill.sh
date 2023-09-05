@@ -2,7 +2,7 @@
 
 data_dir=$1
 
-/nlsasfs/home/ai4bharat/yashkm/miniconda3/envs/itd/bin/fairseq-train ${data_dir}/final_bin \
+fairseq-train ${data_dir}/final_bin \
     --max-source-positions 256 \
     --max-target-positions 256 \
     --max-update 1000000 \
@@ -31,7 +31,7 @@ data_dir=$1
     --patience 10 \
     --skip-invalid-size-inputs-valid-test \
     --memory-efficient-fp16 \
-    --update-freq 1 \
+    --update-freq 8 \
     --distributed-world-size 8 \
     --num-workers 32 \
     --max-tokens 4096 \

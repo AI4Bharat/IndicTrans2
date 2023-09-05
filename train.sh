@@ -1,6 +1,6 @@
 data_dir=$1
 
-/nlsasfs/home/ai4bharat/yashkm/miniconda3/envs/itd/bin/fairseq-train ${data_dir}/final_bin \
+fairseq-train ${data_dir}/final_bin \
     --task translation \
     --max-source-positions 256 \
     --max-target-positions 256 \
@@ -26,10 +26,10 @@ data_dir=$1
     --patience 10 \
     --skip-invalid-size-inputs-valid-test \
     --memory-efficient-fp16 \
-    --update-freq 4 \
+    --update-freq 8 \
     --distributed-world-size 8 \
     --num-workers 24 \
-    --max-tokens 8192 \
+    --max-tokens 4096 \
     --eval-bleu \
     --eval-bleu-args "{\"beam\": 5, \"lenpen\": 1.0, \"max_len_a\": 1.2, \"max_len_b\": 10}" \
     --eval-bleu-detok moses \
