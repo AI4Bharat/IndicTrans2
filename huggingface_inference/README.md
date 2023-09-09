@@ -1,4 +1,4 @@
-# IndicTrans HF Compatible Models
+# IndicTrans2 HF Compatible Models
 
 In this section, we provide details on how to use our [IndicTrans2](https://github.com/AI4Bharat/IndicTrans2) models which were originally trained with the [fairseq](https://github.com/facebookresearch/fairseq) to [HuggingFace transformers](https://huggingface.co/docs/transformers/index) for inference purpose. Our scripts for HuggingFace compatible models are adapted from [M2M100 repository](https://github.com/huggingface/transformers/tree/main/src/transformers/models/m2m_100).
 
@@ -28,6 +28,14 @@ python3 convert_indictrans_checkpoint_to_pytorch.py --fairseq_path <fairseq_chec
 ```
 - `<fairseq_checkpoint_best.pt>`: path to the fairseq `checkpoint_best.pt` that needs to be converted to HF compatible models
 - `<hf_output_dir>`: path to the output directory where the HF compatible models will be saved
+
+
+### Models
+
+| Model    | 🤗 HuggingFace Checkpoints        |
+|----------|-----------------------------------|
+| Preprint En-Indic | [ai4bharat/indictrans2-en-indic-1B](https://huggingface.co/ai4bharat/indictrans2-en-indic-1B) |
+| Preprint Indic-En | [ai4bharat/indictrans2-indic-en-1B](https://huggingface.co/ai4bharat/indictrans2-indic-en-1B) |
 
 
 ### Inference
