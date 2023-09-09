@@ -61,6 +61,11 @@ Here is the list of languages supported by the IndicTrans2 models:
 </table>
 
 
+## Updates
+
+- 🚨 Sep 9, 2023 - Added HF compatible IndicTrans2 models. Please refer to the [README](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_inference) for detailed example usage.
+
+
 ## Tables of Contents
 
 - [Download Models and Other Artifacts](#download-models-and-other-artifacts)

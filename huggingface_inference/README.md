@@ -37,7 +37,7 @@ With the conversion complete, you can now perform inference using the HuggingFac
 You can start with the provided `example.py` script and customize it for your specific translation use case:
 
 ```bash
-python3 example.py <en_indic_ckpt_dir> <indic_en_ckpt_dir>
+python3 example.py
 ```
 
 Feel free to modify the `example.py` script to suit your translation needs.

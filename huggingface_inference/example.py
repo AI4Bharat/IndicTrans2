@@ -1,21 +1,19 @@
 import sys
 import torch
-from modeling_indictrans import IndicTransForConditionalGeneration
+from transformers import AutoModelForSeq2SeqLM
 from IndicTransTokenizer.utils import preprocess_batch, postprocess_batch
 from IndicTransTokenizer.tokenizer import IndicTransTokenizer
 
 
-en_indic_ckpt_dir = sys.argv[1]
-indic_en_ckpt_dir = sys.argv[2]
+en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"
+indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-indictrans2-indic-en-1.1b
-
 def initialize_model_and_tokenizer(ckpt_dir, direction):
     tokenizer = IndicTransTokenizer(direction=direction, device=DEVICE)
-    model = IndicTransForConditionalGeneration.from_pretrained(ckpt_dir).to(DEVICE)
+    model = AutoModelForSeq2SeqLM.from_pretrained(ckpt_dir, trust_remote_code=True).to(DEVICE)
     model.half()
     model.eval()
     return tokenizer, model
