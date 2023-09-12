@@ -215,12 +215,12 @@ IN22 test set is a newly created comprehensive benchmark for evaluating machine 
   <tr>
     <td>IN22-Gen (IN22-Wiki + IN22-Web)</td>
     <td>1024 sentences</td>
-    <td><a href="https://huggingface.co/datasets/ai4bharat/IN22-Gen">🤗</td>
+    <td>🤗 <a href="https://huggingface.co/datasets/ai4bharat/IN22-Gen">ai4bharat/IN22-Gen</td>
   </tr>
   <tr>
     <td>IN22-Conv</td>
     <td>1503 sentences</td>
-    <td><a href="https://huggingface.co/datasets/ai4bharat/IN22-Conv">🤗</td>
+    <td>🤗 <a href="https://huggingface.co/datasets/ai4bharat/IN22-Conv">ai4bharat/IN22-Conv</td>
   </tr>
 </tbody>
 </table>
