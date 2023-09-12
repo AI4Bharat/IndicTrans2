@@ -13,7 +13,9 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 def initialize_model_and_tokenizer(ckpt_dir, direction):
     tokenizer = IndicTransTokenizer(direction=direction, device=DEVICE)
-    model = AutoModelForSeq2SeqLM.from_pretrained(ckpt_dir, trust_remote_code=True).to(DEVICE)
+    model = AutoModelForSeq2SeqLM.from_pretrained(ckpt_dir, trust_remote_code=True).to(
+        DEVICE
+    )
     model.half()
     model.eval()
     return tokenizer, model
@@ -22,14 +24,18 @@ def initialize_model_and_tokenizer(ckpt_dir, direction):
 def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
     translations = []
     for i in range(0, len(input_sentences), BATCH_SIZE):
-        batch = input_sentences[i:i+BATCH_SIZE]
+        batch = input_sentences[i : i + BATCH_SIZE]
 
         # Preprocess the batch and extract entity mappings
-        batch, entity_map = preprocess_batch(batch, src_lang=src_lang, tgt_lang=tgt_lang)
+        batch, entity_map = preprocess_batch(
+            batch, src_lang=src_lang, tgt_lang=tgt_lang
+        )
 
         # Tokenize the batch and generate input encodings
-        encodings = tokenizer(batch, src=True, truncation=True, padding='longest', return_tensors=True)
-        input_ids, attention_mask = encodings['input_ids'], encodings['attention_mask']
+        encodings = tokenizer(
+            batch, src=True, truncation=True, padding="longest", return_tensors="pt"
+        )
+        input_ids, attention_mask = encodings["input_ids"], encodings["attention_mask"]
 
         # Generate translations using the model
         generated_tokens = model.generate(
@@ -38,14 +44,18 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
             num_return_sequences=1,
             num_beams=5,
             max_length=256,
-            min_length=0
+            min_length=0,
         )
 
         # Decode the generated tokens into text
-        generated_tokens = tokenizer.batch_decode(generated_tokens.detach().cpu().tolist(), src=False)
+        generated_tokens = tokenizer.batch_decode(
+            generated_tokens.detach().cpu().tolist(), src=False
+        )
 
         # Postprocess the translations, including entity replacement
-        translations += postprocess_batch(generated_tokens, lang=tgt_lang, placeholder_entity_map=entity_map)
+        translations += postprocess_batch(
+            generated_tokens, lang=tgt_lang, placeholder_entity_map=entity_map
+        )
 
         del input_ids, attention_mask
         torch.cuda.empty_cache()
@@ -53,8 +63,12 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
     return translations
 
 
-en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, "en-indic")
-indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, "indic-en")
+en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(
+    en_indic_ckpt_dir, "en-indic"
+)
+indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(
+    indic_en_ckpt_dir, "indic-en"
+)
 
 
 # ---------------------------------------------------------------------------
@@ -69,11 +83,13 @@ hi_sents = [
     "अगर तुम मुझे उस समय पास मिलते, तो हम बाहर खाना खाने चलते।",
     "वह अपनी दीदी के साथ बाजार गयी थी ताकि वह नई साड़ी खरीद सके।",
     "राज ने मुझसे कहा कि वह अगले महीने अपनी नानी के घर जा रहा है।",
-    "सभी बच्चे पार्टी में मज़ा कर रहे थे और खूब सारी मिठाइयाँ खा रहे थे।",    
-    "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।"
+    "सभी बच्चे पार्टी में मज़ा कर रहे थे और खूब सारी मिठाइयाँ खा रहे थे।",
+    "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
 ]
 src_lang, tgt_lang = "hin_Deva", "eng_Latn"
-en_translations = batch_translate(hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer)
+en_translations = batch_translate(
+    hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer
+)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, en_translations):
@@ -94,13 +110,14 @@ en_sents = [
     "She went to the market with her sister to buy a new sari.",
     "Raj told me that he is going to his grandmother's house next month.",
     "All the kids were having fun at the party and were eating lots of sweets.",
-    "My friend has invited me to his birthday party, and I will give him a gift."
+    "My friend has invited me to his birthday party, and I will give him a gift.",
 ]
 src_lang, tgt_lang = "eng_Latn", "hin_Deva"
-hi_translations = batch_translate(en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer)
+hi_translations = batch_translate(
+    en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer
+)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(en_sents, hi_translations):
     print(f"{src_lang}: {input_sentence}")
     print(f"{tgt_lang}: {translation}")
-

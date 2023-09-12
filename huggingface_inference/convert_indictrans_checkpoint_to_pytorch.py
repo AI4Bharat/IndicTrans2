@@ -79,7 +79,9 @@ def convert_fairseq_IT2_checkpoint_from_disk(checkpoint_path):
     model = IndicTransForConditionalGeneration(config)
     model.model.load_state_dict(state_dict, strict=False)
     if not args.share_decoder_input_output_embed:
-        model.lm_head = make_linear_from_emb(state_dict["decoder.output_projection.weight"])
+        model.lm_head = make_linear_from_emb(
+            state_dict["decoder.output_projection.weight"]
+        )
     print(model)
     return model
 

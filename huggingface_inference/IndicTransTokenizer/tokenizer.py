@@ -1,6 +1,7 @@
 import os
 import json
 import torch
+import numpy as np
 import sentencepiece
 from typing import Dict, List, Tuple, Union
 
@@ -88,7 +89,7 @@ class IndicTransTokenizer:
         self.encoder_rev = {v: k for k, v in self.encoder.items()}
 
         self.decoder = self._load_json(self.tgt_vocab_fp)
-        if self.unk_token not in self.encoder:
+        if self.unk_token not in self.decoder:
             raise KeyError("<unk> token must be in vocab")
         assert self.pad_token in self.encoder
         self.decoder_rev = {v: k for k, v in self.decoder.items()}
@@ -96,6 +97,9 @@ class IndicTransTokenizer:
         # load SentencePiece model for pre-processing
         self.src_spm = self._load_spm(self.src_spm_fp)
         self.tgt_spm = self._load_spm(self.tgt_spm_fp)
+
+    def is_special_token(self, x: str):
+        return (x == self.pad_token) or (x == self.bos_token) or (x == self.eos_token)
 
     def get_vocab_size(self, src: bool) -> int:
         """Returns the size of the vocabulary"""
@@ -140,8 +144,7 @@ class IndicTransTokenizer:
     def _remove_translation_tags(self, text: str) -> Tuple[List, str]:
         """Removes the translation tags before text normalization and tokenization."""
         tokens = text.split(" ")
-        tags = tokens[:2]
-        return tags, " ".join(tokens[2:])
+        return tokens[:2], " ".join(tokens[2:])
 
     def _tokenize_src_line(self, line: str) -> List[str]:
         """Tokenizes a source line."""
@@ -160,8 +163,52 @@ class IndicTransTokenizer:
     def batch_tokenize(self, batch: List[str], src: bool) -> List[List[str]]:
         """Tokenizes a list of strings into tokens using the source/target vocabulary."""
         if not isinstance(batch, list):
-            assert f"batch should be a list of strings but was given {type(batch)}"
+            raise TypeError(
+                f"batch must be a list, but current batch is of type {type(batch)}"
+            )
         return [self.tokenize(line, src) for line in batch]
+
+    def _create_attention_mask(self, ids: List[int], max_seq_len: int) -> List[int]:
+        """Creates a attention mask for the input sequence."""
+        return ([0] * (max_seq_len - len(ids))) + ([1] * (len(ids) + 1))
+
+    def _pad_batch(self, tokens: List[str], max_seq_len: int) -> List[str]:
+        """Pads a batch of tokens and adds BOS/EOS tokens."""
+        return (
+            ([self.pad_token] * (max_seq_len - len(tokens))) + tokens + [self.eos_token]
+        )
+
+    def _decode_line(self, ids: List[int], src: bool) -> List[str]:
+        return [self._convert_id_to_token(_id, src) for _id in ids]
+
+    def _encode_line(self, tokens: List[str], src: bool) -> List[int]:
+        return [self._convert_token_to_id(token, src) for token in tokens]
+
+    def _strip_special_tokens(self, tokens: List[str]) -> List[str]:
+        return [token for token in tokens if not self.is_special_token(token)]
+
+    def _single_input_preprocessing(
+        self,
+        tokens: List[str],
+        src: bool,
+        max_seq_len: int,
+        return_attention_mask: bool,
+    ) -> Tuple[List[int], List[int], int]:
+        """Tokenizes a string into tokens and also converts them into integers using source/target vocabulary map."""
+        attention_mask = (
+            self._create_attention_mask(tokens, max_seq_len)
+            if return_attention_mask
+            else None
+        )
+        padded_tokens = self._pad_batch(tokens, max_seq_len)
+        input_ids = self._encode_line(padded_tokens, src)
+        return input_ids, attention_mask
+
+    def _single_output_postprocessing(self, ids: List[int], src: bool) -> str:
+        """Detokenizes a list of integer ids into a string using the source/target vocabulary."""
+        tokens = self._decode_line(ids, src)
+        tokens = self._strip_special_tokens(tokens)
+        return self._convert_tokens_to_string(tokens, src)
 
     def __call__(
         self,
@@ -170,7 +217,9 @@ class IndicTransTokenizer:
         truncation: bool = False,
         padding: str = "longest",
         max_length: int = None,
-        return_tensors=None,
+        return_tensors: str = "pt",
+        return_attention_mask: bool = True,
+        return_length: bool = False,
     ) -> List[str]:
         """Tokenizes a string into tokens and also converts them into integers using source/target vocabulary map."""
         assert padding in [
@@ -180,62 +229,72 @@ class IndicTransTokenizer:
 
         if isinstance(batch, str):
             batch = [batch]
+        elif not isinstance(batch, list):
+            raise TypeError(
+                f"batch must be either a string or list, but current batch is of type {type(batch)}"
+            )
 
+        # tokenize the source sentences
         batch = self.batch_tokenize(batch, src)
 
+        # truncate the sentences if needed
         if truncation and max_length is not None:
             batch = [ids[:max_length] for ids in batch]
 
-        if padding == "longest":
-            max_seq_len = max([len(ids) for ids in batch])
-        else:
-            max_seq_len = max_length
+        lengths = [len(ids) for ids in batch]
+        max_seq_len = max(lengths) if padding == "longest" else max_length
 
-        attention_mask = [
-            (([0] * (max_seq_len - len(ids))) + ([1] * (len(ids) + 1))) for ids in batch
-        ]
+        input_ids, attention_mask = zip(
+            *[
+                self._single_input_preprocessing(
+                    tokens=tokens,
+                    src=src,
+                    max_seq_len=max_seq_len,
+                    return_attention_mask=return_attention_mask,
+                )
+                for tokens in batch
+            ]
+        )
 
-        batch = [
-            (
-                ([self.pad_token] * (max_seq_len - len(tokens)))
-                + tokens
-                + [self.eos_token]
+        if return_tensors == "pt":
+            # returns pytorch tensors placed on the appropriate device
+            input_ids = torch.tensor(input_ids, dtype=torch.int64, device=self.device)
+            attention_mask = (
+                torch.tensor(attention_mask, dtype=torch.int64, device=self.device)
+                if return_attention_mask
+                else None
             )
-            for tokens in batch
-        ]
+            lengths = (
+                torch.tensor(lengths, dtype=torch.int64, device=self.device)
+                if return_length
+                else None
+            )
+        elif return_tensors == "np":
+            # returns numpy arrays
+            input_ids = np.array(input_ids, dtype=np.int64)
+            attention_mask = (
+                np.array(attention_mask, dtype=np.int64)
+                if return_attention_mask
+                else None
+            )
+            lengths = np.array(lengths, dtype=np.int64) if return_length else None
+        else:
+            raise ValueError(
+                "return_tensors should be either 'pt' (PyTorch tensors) or 'np' (numpy arrays)"
+            )
 
-        input_ids = [
-            [self._convert_token_to_id(token, src) for token in tokens]
-            for tokens in batch
-        ]
-
-        encodings = {"input_ids": input_ids, "attention_mask": attention_mask}
-
-        if return_tensors:
-            # returns tensors placed on the appropriate device
-            encodings = {
-                k: torch.tensor(v, dtype=torch.int64, device=self.device)
-                for (k, v) in encodings.items()
-            }
-
-        return encodings
+        return {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "lengths": lengths,
+        }
 
     def batch_decode(
         self, batch: Union[list, torch.Tensor], src: bool
     ) -> List[List[str]]:
         """Detokenizes a list of integer ids or a tensor into a list of strings using the source/target vocabulary."""
-        is_special_token = lambda x: (
-            (x == self.pad_token) or (x == self.bos_token) or (x == self.eos_token)
-        )
 
         if isinstance(batch, torch.Tensor):
             batch = batch.tolist()
 
-        batch = [[self._convert_id_to_token(_id, src) for _id in ids] for ids in batch]
-        batch = [
-            [token for token in tokens if not is_special_token(token)]
-            for tokens in batch
-        ]
-        batch = [self._convert_tokens_to_string(tokens, src) for tokens in batch]
-
-        return batch
+        return [self._single_output_postprocessing(ids, src) for ids in batch]
