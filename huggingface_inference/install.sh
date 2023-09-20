@@ -37,7 +37,7 @@ cd $root_dir
 # --------------------------------------------------------------
 #               Install additional utility packages
 # --------------------------------------------------------------
-python3 -m pip install sacremoses pandas mock transformers==4.32.1 urduhack[tf] mosestokenizer
+python3 -m pip install sacremoses pandas mock transformers==4.33.2 urduhack[tf] mosestokenizer
 python3 -c "import urduhack; urduhack.download()"
 
 
