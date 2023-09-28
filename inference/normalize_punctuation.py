@@ -2,7 +2,7 @@
 # This file was manually ported from `normalize-punctuation.perl`
 # TODO: Only supports English, add others
 
-import re
+import regex as re
 multispace_regex = re.compile("[ ]{2,}")
 multidots_regex = re.compile(r"\.{2,}")
 end_bracket_space_punc_regex = re.compile(r"\) ([\.!:?;,])")

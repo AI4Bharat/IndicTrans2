@@ -12,7 +12,7 @@ from indicnlp.transliterate import unicode_transliterate
 from mosestokenizer import MosesSentenceSplitter
 from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
 
-import re
+import regex as re
 import uuid
 import hashlib
 import sentencepiece as spm

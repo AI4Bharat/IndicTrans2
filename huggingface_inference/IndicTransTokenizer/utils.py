@@ -1,9 +1,7 @@
-import os
-import re
-from tqdm import tqdm
+import regex as re
 from joblib import Parallel, delayed
 from nltk.tokenize import sent_tokenize
-from typing import Dict, List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 from sacremoses import MosesPunctNormalizer
 from indicnlp.normalize import indic_normalize
@@ -427,9 +425,8 @@ def apply_lang_tags(sents: List[str], src_lang: str, tgt_lang: str) -> List[str]
     Returns:
         List[str]: list of input sentences with the special tokens added to the start.
     """
-    add_token = lambda sent, src_lang, tgt_lang: f"{src_lang} {tgt_lang} {sent}"
     return Parallel(n_jobs=-1)(
-        [delayed(add_token)(x.strip(), src_lang, tgt_lang) for x in sents]
+        delayed(lambda x: f"{src_lang} {tgt_lang} {x.strip()}")(sent) for sent in sents
     )
 
 
@@ -497,7 +494,6 @@ def preprocess(sents: List[str], lang: str):
         Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
             mapping placeholders to their original values.
     """
-    processed_sents, placeholder_entity_map_sents = [], []
 
     normalizer = (
         indic_normalize.IndicNormalizerFactory().get_normalizer(flores_codes[lang])
@@ -505,10 +501,9 @@ def preprocess(sents: List[str], lang: str):
         else None
     )
 
-    for sent in sents:
-        sent, placeholder_entity_map = preprocess_sent(sent, normalizer, lang)
-        placeholder_entity_map_sents.append(placeholder_entity_map)
-        processed_sents.append(sent)
+    processed_sents, placeholder_entity_map_sents = zip(
+        *[preprocess_sent(sent, normalizer, lang) for sent in sents]
+    )
 
     return processed_sents, placeholder_entity_map_sents
 
@@ -577,20 +572,19 @@ def postprocess_batch(
             sents[i] = sents[i].replace(key, placeholder_entity_map[i][key])
 
     # Detokenize and transliterate to native scripts if applicable
-    postprocessed_sents = []
 
     if lang == "eng_Latn":
-        for sent in sents:
-            postprocessed_sents.append(en_detok.detokenize(sent.split(" ")))
+        postprocessed_sents = [en_detok.detokenize(sent.split(" ")) for sent in sents]
     else:
-        for sent in sents:
-            outstr = indic_detokenize.trivial_detokenize(
+        postprocessed_sents = [
+            indic_detokenize.trivial_detokenize(
                 xliterator.transliterate(
-                    sent, flores_codes[common_lang], flores_codes[lang]
+                    s, flores_codes[common_lang], flores_codes[lang]
                 ),
                 flores_codes[lang],
             )
-            postprocessed_sents.append(outstr)
+            for s in sents
+        ]
 
     assert len(postprocessed_sents) == len(placeholder_entity_map)
 

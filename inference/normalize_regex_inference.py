@@ -1,9 +1,7 @@
 from typing import Tuple
-
-import re
+import regex as re
 import sys
 from tqdm import tqdm
-from joblib import Parallel, delayed
 from .indic_num_map import INDIC_NUM_MAP
 
 

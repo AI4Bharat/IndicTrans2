@@ -2,8 +2,9 @@ import os
 import json
 import torch
 import numpy as np
-import sentencepiece
+from transformers import BatchEncoding
 from typing import Dict, List, Tuple, Union
+from sentencepiece import SentencePieceProcessor
 
 _PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -20,7 +21,6 @@ class IndicTransTokenizer:
         eos_token="</s>",
         pad_token="<pad>",
         direction="indic-en",
-        device="cpu",
         model_max_length=256,
     ):
         self.model_max_length = model_max_length
@@ -80,8 +80,6 @@ class IndicTransTokenizer:
         self.eos_token = eos_token
         self.bos_token = bos_token
 
-        self.device = device
-
         self.encoder = self._load_json(self.src_vocab_fp)
         if self.unk_token not in self.encoder:
             raise KeyError("<unk> token must be in vocab")
@@ -89,7 +87,7 @@ class IndicTransTokenizer:
         self.encoder_rev = {v: k for k, v in self.encoder.items()}
 
         self.decoder = self._load_json(self.tgt_vocab_fp)
-        if self.unk_token not in self.decoder:
+        if self.unk_token not in self.encoder:
             raise KeyError("<unk> token must be in vocab")
         assert self.pad_token in self.encoder
         self.decoder_rev = {v: k for k, v in self.decoder.items()}
@@ -105,8 +103,8 @@ class IndicTransTokenizer:
         """Returns the size of the vocabulary"""
         return len(self.encoder) if src else len(self.decoder)
 
-    def _load_spm(self, path: str) -> sentencepiece.SentencePieceProcessor:
-        return sentencepiece.SentencePieceProcessor(model_file=path)
+    def _load_spm(self, path: str) -> SentencePieceProcessor:
+        return SentencePieceProcessor(model_file=path)
 
     def _save_json(self, data, path: str) -> None:
         with open(path, "w", encoding="utf-8") as f:
@@ -162,10 +160,6 @@ class IndicTransTokenizer:
 
     def batch_tokenize(self, batch: List[str], src: bool) -> List[List[str]]:
         """Tokenizes a list of strings into tokens using the source/target vocabulary."""
-        if not isinstance(batch, list):
-            raise TypeError(
-                f"batch must be a list, but current batch is of type {type(batch)}"
-            )
         return [self.tokenize(line, src) for line in batch]
 
     def _create_attention_mask(self, ids: List[int], max_seq_len: int) -> List[int]:
@@ -188,18 +182,10 @@ class IndicTransTokenizer:
         return [token for token in tokens if not self.is_special_token(token)]
 
     def _single_input_preprocessing(
-        self,
-        tokens: List[str],
-        src: bool,
-        max_seq_len: int,
-        return_attention_mask: bool,
+        self, tokens: List[str], src: bool, max_seq_len: int
     ) -> Tuple[List[int], List[int], int]:
         """Tokenizes a string into tokens and also converts them into integers using source/target vocabulary map."""
-        attention_mask = (
-            self._create_attention_mask(tokens, max_seq_len)
-            if return_attention_mask
-            else None
-        )
+        attention_mask = self._create_attention_mask(tokens, max_seq_len)
         padded_tokens = self._pad_batch(tokens, max_seq_len)
         input_ids = self._encode_line(padded_tokens, src)
         return input_ids, attention_mask
@@ -220,18 +206,16 @@ class IndicTransTokenizer:
         return_tensors: str = "pt",
         return_attention_mask: bool = True,
         return_length: bool = False,
-    ) -> List[str]:
+    ) -> BatchEncoding:
         """Tokenizes a string into tokens and also converts them into integers using source/target vocabulary map."""
         assert padding in [
             "longest",
             "max_length",
         ], "padding should be either 'longest' or 'max_length'"
 
-        if isinstance(batch, str):
-            batch = [batch]
-        elif not isinstance(batch, list):
+        if not isinstance(batch, list):
             raise TypeError(
-                f"batch must be either a string or list, but current batch is of type {type(batch)}"
+                f"batch must be a list, but current batch is of type {type(batch)}"
             )
 
         # tokenize the source sentences
@@ -242,52 +226,27 @@ class IndicTransTokenizer:
             batch = [ids[:max_length] for ids in batch]
 
         lengths = [len(ids) for ids in batch]
+
         max_seq_len = max(lengths) if padding == "longest" else max_length
 
         input_ids, attention_mask = zip(
             *[
                 self._single_input_preprocessing(
-                    tokens=tokens,
-                    src=src,
-                    max_seq_len=max_seq_len,
-                    return_attention_mask=return_attention_mask,
+                    tokens=tokens, src=src, max_seq_len=max_seq_len
                 )
                 for tokens in batch
             ]
         )
 
-        if return_tensors == "pt":
-            # returns pytorch tensors placed on the appropriate device
-            input_ids = torch.tensor(input_ids, dtype=torch.int64, device=self.device)
-            attention_mask = (
-                torch.tensor(attention_mask, dtype=torch.int64, device=self.device)
-                if return_attention_mask
-                else None
-            )
-            lengths = (
-                torch.tensor(lengths, dtype=torch.int64, device=self.device)
-                if return_length
-                else None
-            )
-        elif return_tensors == "np":
-            # returns numpy arrays
-            input_ids = np.array(input_ids, dtype=np.int64)
-            attention_mask = (
-                np.array(attention_mask, dtype=np.int64)
-                if return_attention_mask
-                else None
-            )
-            lengths = np.array(lengths, dtype=np.int64) if return_length else None
-        else:
-            raise ValueError(
-                "return_tensors should be either 'pt' (PyTorch tensors) or 'np' (numpy arrays)"
-            )
+        _data = {"input_ids": input_ids}
 
-        return {
-            "input_ids": input_ids,
-            "attention_mask": attention_mask,
-            "lengths": lengths,
-        }
+        if return_attention_mask:
+            _data["attention_mask"] = attention_mask
+            
+        if return_length:
+            _data["lengths"] = lengths
+
+        return BatchEncoding(_data, tensor_type=return_tensors)
 
     def batch_decode(
         self, batch: Union[list, torch.Tensor], src: bool
@@ -295,6 +254,6 @@ class IndicTransTokenizer:
         """Detokenizes a list of integer ids or a tensor into a list of strings using the source/target vocabulary."""
 
         if isinstance(batch, torch.Tensor):
-            batch = batch.tolist()
+            batch = batch.detach().cpu().tolist()
 
-        return [self._single_output_postprocessing(ids, src) for ids in batch]
+        return [self._single_output_postprocessing(ids=ids, src=src) for ids in batch]
