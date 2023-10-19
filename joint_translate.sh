@@ -44,7 +44,7 @@ fairseq-interactive ${ckpt_dir}/final_bin \
     --source-lang SRC \
     --target-lang TGT \
     --memory-efficient-fp16 \
-    --path ${ckpt_dir}/$model/checkpoint_best.pt \
+    --path ${ckpt_dir}/${model}/checkpoint_best.pt \
     --skip-invalid-size-inputs-valid-test \
     --batch-size 128 \
     --buffer-size 2500 \

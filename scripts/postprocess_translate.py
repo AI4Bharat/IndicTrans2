@@ -1,20 +1,7 @@
-INDIC_NLP_LIB_HOME = "indic_nlp_library"
-INDIC_NLP_RESOURCES = "indic_nlp_resources"
-
-# Somehow I cannot use parallel --pipe --keep-order with this,
-# like with preprocess_translate.py. It seems to mess up everything!
-
 import sys
 
 from indicnlp import transliterate
-
-sys.path.append(r"{}".format(INDIC_NLP_LIB_HOME))
-from indicnlp import common
-
-common.set_resources_path(INDIC_NLP_RESOURCES)
 from indicnlp import loader
-
-loader.load()
 from sacremoses import MosesDetokenizer
 import sentencepiece as spm
 
@@ -22,12 +9,13 @@ from indicnlp.tokenize import indic_detokenize
 from indicnlp.transliterate import unicode_transliterate
 
 from flores_codes_map_indic import flores_codes
-
 from joblib import Parallel, delayed
 
-
+loader.load()
 en_detok = MosesDetokenizer(lang="en")
 xliterator = unicode_transliterate.UnicodeIndicTransliterator()
+
+## preferrable use: https://github.com/VarunGumma/indic_nlp_library
 
 
 def postprocess(

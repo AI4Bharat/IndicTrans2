@@ -21,8 +21,8 @@ fairseq-train ${data_dir}/final_bin \
     --warmup-init-lr 1e-07 \
     --warmup-updates 2000 \
     --dropout 0.2 \
-    --restore-file ${restore_from_dir}/base18L_dec_shared_embed/checkpoint_best.pt \
-    --save-dir ${restore_from_dir}/base18L_dec_shared_embed_seed_ft \
+    --restore-file ${restore_from_dir}/checkpoint_best.pt \
+    --save-dir ${restore_from_dir}_seed_ft \
     --patience 10 \
     --skip-invalid-size-inputs-valid-test \
     --no-epoch-checkpoints \
@@ -41,4 +41,5 @@ fairseq-train ${data_dir}/final_bin \
     --best-checkpoint-metric bleu \
     --reset-dataloader \
     --reset-lr-scheduler \
-    --reset-optimizer
+    --reset-optimizer \
+    --wandb-project EAMT-runs

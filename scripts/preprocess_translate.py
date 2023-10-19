@@ -1,19 +1,7 @@
-INDIC_NLP_LIB_HOME = "indic_nlp_library"
-INDIC_NLP_RESOURCES = "indic_nlp_resources"
 import sys
-
-sys.path.append(r"{}".format(INDIC_NLP_LIB_HOME))
-from indicnlp import common
-import multiprocessing
-
-common.set_resources_path(INDIC_NLP_RESOURCES)
 from indicnlp import loader
-
-loader.load()
 from sacremoses import MosesPunctNormalizer
 from sacremoses import MosesTokenizer
-
-from tqdm import tqdm
 
 from indicnlp.tokenize import indic_tokenize
 from indicnlp.normalize import indic_normalize
@@ -23,8 +11,11 @@ import re
 from typing import Union
 from flores_codes_map_indic import flores_codes
 
+loader.load()
 en_tok = MosesTokenizer(lang="en")
 en_normalizer = MosesPunctNormalizer()
+
+## preferrable use: https://github.com/VarunGumma/indic_nlp_library
 
 
 def preprocess_line(
