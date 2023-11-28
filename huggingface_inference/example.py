@@ -4,12 +4,13 @@ from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig
 from IndicTransTokenizer.utils import preprocess_batch, postprocess_batch
 from IndicTransTokenizer.tokenizer import IndicTransTokenizer
 
-en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"
-indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"
+en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B" # ai4bharat/indictrans2-en-indic-dist-200M
+indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B" # ai4bharat/indictrans2-indic-en-dist-200M
+indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-1B"   # ai4bharat/indictrans2-indic-indic-dist-320M
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-if len(sys.argv)>1:
+if len(sys.argv) > 1:
     quantization = sys.argv[1]
 else:
     quantization = ""
@@ -101,7 +102,9 @@ en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(
 indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(
     indic_en_ckpt_dir, "indic-en", quantization
 )
-
+indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
+    indic_indic_ckpt_dir, "indic-indic", quantization
+)
 
 # ---------------------------------------------------------------------------
 #                              Hindi to English
@@ -151,5 +154,31 @@ hi_translations = batch_translate(
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(en_sents, hi_translations):
+    print(f"{src_lang}: {input_sentence}")
+    print(f"{tgt_lang}: {translation}")
+
+
+# ---------------------------------------------------------------------------
+#                              Hindi to Marathi
+# ---------------------------------------------------------------------------
+hi_sents = [
+    "जब मैं छोटा था, मैं हर रोज़ पार्क जाता था।",
+    "उसके पास बहुत सारी पुरानी किताबें हैं, जिन्हें उसने अपने दादा-परदादा से विरासत में पाया।",
+    "मुझे समझ में नहीं आ रहा कि मैं अपनी समस्या का समाधान कैसे ढूंढूं।",
+    "वह बहुत मेहनती और समझदार है, इसलिए उसे सभी अच्छे मार्क्स मिले।",
+    "हमने पिछले सप्ताह एक नई फिल्म देखी जो कि बहुत प्रेरणादायक थी।",
+    "अगर तुम मुझे उस समय पास मिलते, तो हम बाहर खाना खाने चलते।",
+    "वह अपनी दीदी के साथ बाजार गयी थी ताकि वह नई साड़ी खरीद सके।",
+    "राज ने मुझसे कहा कि वह अगले महीने अपनी नानी के घर जा रहा है।",
+    "सभी बच्चे पार्टी में मज़ा कर रहे थे और खूब सारी मिठाइयाँ खा रहे थे।",
+    "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
+]
+src_lang, tgt_lang = "hin_Deva", "mar_Deva"
+mr_translations = batch_translate(
+    hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer
+)
+
+print(f"\n{src_lang} - {tgt_lang}")
+for input_sentence, translation in zip(hi_sents, mr_translations):
     print(f"{src_lang}: {input_sentence}")
     print(f"{tgt_lang}: {translation}")
