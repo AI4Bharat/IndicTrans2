@@ -8,6 +8,9 @@ system=$4
 
 pairs=$(ls -rd $devtest_data_dir/*)
 
+echo "Removing old scores"
+rm $devtest_data_dir/*.csv
+
 for pair in ${pairs[@]}; do
     pair=$(basename $pair)
     src_lang=$(echo "$pair" | cut -d "-" -f 1)

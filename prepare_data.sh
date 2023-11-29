@@ -132,7 +132,7 @@ for split in train dev; do
     #
     # if we are translating lang1 to lang2 then <lang1 line> will become __src__ <lang1> __tgt__ <lang2> <lang1 line>
     echo "Adding language tags"
-    bash scripts/add_joint_tags_translate.py $exp_dir $split
+    python scripts/add_joint_tags_translate.py $exp_dir $split
 done
 
 echo `date`

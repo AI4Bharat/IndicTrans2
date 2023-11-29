@@ -43,12 +43,12 @@ echo "Decoding"
 fairseq-interactive ${ckpt_dir}/final_bin \
     --source-lang SRC \
     --target-lang TGT \
-    --memory-efficient-fp16 \
     --path ${ckpt_dir}/${model}/checkpoint_best.pt \
     --skip-invalid-size-inputs-valid-test \
-    --batch-size 128 \
+    --batch-size 256 \
     --buffer-size 2500 \
     --beam 5 \
+    --fp16 \
     --num-workers 24 \
     --input $outfname.bpe > $outfname.log 2>&1
 
@@ -57,7 +57,9 @@ echo "Extracting translations, script conversion and detokenization"
 python scripts/postprocess_translate.py $outfname.log $outfname $input_size $tgt_lang $tgt_transliterate $ckpt_dir/vocab/model.TGT
 
 # Purge the intermediate files to declutter the directory.
+# But keep the log files for future reference
 echo "Purging intermediate files"
-rm $outfname.*
+rm $outfname.bpe $outfname.norm $outfname._bpe $outfname._norm
 
 echo "Translation completed"
+echo "============================================================="
