@@ -64,7 +64,7 @@ Here is the list of languages supported by the IndicTrans2 models:
 ## Updates
 
 - 🚨 Sep 9, 2023 - Added HF compatible IndicTrans2 models. Please refer to the [README](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_inference) for detailed example usage.
-
+- 🚨 Dec 1, 2023 - Release of Indic-Indic model and corresponding distilled variants for each base model. Please refer to the [Download section](https://github.com/AI4Bharat/IndicTrans2#multilingual-translation-models) for the checkpoints.
 
 ## Tables of Contents
 
@@ -94,12 +94,11 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 ### Multilingual Translation Models
 
-| Model                                     | En-Indic | Indic-En | Evaluations           |
-|-------------------------------------------|----------|----------|-----------------------|
-| Preprint (used for benchmarking)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip) | [translations](https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
-| Deployment (~~recommend for commercial use~~)* | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/en-indic-deploy.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_deployment_ckpts/indic-en-deploy.zip) |                       |
+| Model                                     | En-Indic | Indic-En |  Indic-Indic |Evaluations           |
+|-------------------------------------------|----------|----------|----------|-----------------------|
+| Base (used for benchmarking)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-indic.zip) | [translations](https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
+| Distilled          | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/en-indic.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/en-indic.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-indic.zip)  |
 
-> **Note** :- We have updated our inference pipelines on 23 June 2023, and now the preprint models are robust enough to handle all the special cases like URLs and emails and we recommend using the Preprint models for all use cases.
 
 ### Training Data
 
@@ -514,10 +513,11 @@ The mined corpora collection (BPCC-Mined), existing seed corpora (NLLB-Seed, ILC
 ## Citation
 
 ```bash
-@article{ai4bharat2023indictrans2,
+@article{gala2023indictrans2,
   title   = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
-  author  = {AI4Bharat and Jay Gala and Pranjal A. Chitale and Raghavan AK and Sumanth Doddapaneni and Varun Gumma and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
+  author  = {Jay Gala and Pranjal A. Chitale and Raghavan AK and Varun Gumma Sumanth Doddapaneni and and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
   year    = {2023},
-  journal = {arXiv preprint arXiv: 2305.16307}
+  journal = {Transactions on Machine Learning Research},
+  url     = {https://openreview.net/forum?id=vfT4YuzAYA}
 }
 ```

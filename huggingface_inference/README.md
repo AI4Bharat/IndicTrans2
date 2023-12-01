@@ -57,10 +57,11 @@ Feel free to modify the `example.py` script to suit your translation needs.
 ### Citation
 
 ```
-@article{ai4bharat2023indictrans2,
+@article{gala2023indictrans2,
   title   = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
-  author  = {AI4Bharat and Jay Gala and Pranjal A. Chitale and Raghavan AK and Sumanth Doddapaneni and Varun Gumma and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
+  author  = {Jay Gala and Pranjal A. Chitale and Raghavan AK and Varun Gumma Sumanth Doddapaneni and and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
   year    = {2023},
-  journal = {arXiv preprint arXiv: 2305.16307}
+  journal = {Transactions on Machine Learning Research},
+  url     = {https://openreview.net/forum?id=vfT4YuzAYA}
 }
 ```
