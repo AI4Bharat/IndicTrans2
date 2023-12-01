@@ -80,3 +80,13 @@ def transformer_xdeep(args):
     args.encoder_layers = getattr(args, "encoder_layers", 24)
     args.decoder_layers = getattr(args, "decoder_layers", 24)
     base_architecture(args)
+
+
+@register_model_architecture("transformer", "transformer_base18L")
+def transformer_base18L(args):
+    args.encoder_normalize_before = getattr(args, "encoder_normalize_before", True)
+    args.decoder_normalize_before = getattr(args, "decoder_normalize_before", True)
+    args.layernorm_embedding = getattr(args, "layernorm_embedding", True)
+    args.encoder_layers = getattr(args, "encoder_layers", 18)
+    args.decoder_layers = getattr(args, "decoder_layers", 18)
+    base_architecture(args)
