@@ -1,4 +1,4 @@
-import re
+import regex as re
 import os
 import sys
 from collections import defaultdict
