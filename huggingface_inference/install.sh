@@ -37,8 +37,9 @@ cd $root_dir
 # --------------------------------------------------------------
 #               Install additional utility packages
 # --------------------------------------------------------------
-python3 -m pip install sacremoses pandas regex mock transformers==4.33.2 urduhack[tf] mosestokenizer
+python3 -m pip install nltk sacremoses pandas regex mock transformers==4.33.2 urduhack[tf] mosestokenizer
 python3 -c "import urduhack; urduhack.download()"
+python3 -c "import nltk; nltk.download('punkt')"
 python3 -m pip install bitsandbytes scipy accelerate datasets
 
 
