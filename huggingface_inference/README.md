@@ -10,7 +10,7 @@ To get started, follow these steps to set up the environment:
 ```
 # Clone the github repository and navigate to the project directory.
 git clone https://github.com/AI4Bharat/IndicTrans2
-cd IndicTrans2
+cd IndicTrans2/huggingface_inference
 
 # Install all the dependencies and requirements associated with the project for running HF compatible models.
 source install.sh
