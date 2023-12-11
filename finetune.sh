@@ -1,5 +1,6 @@
 data_dir=$1
 restore_from_dir=$2
+wandb_project=${3:-"IT2_distillation"}
 
 fairseq-train ${data_dir}/final_bin \
     --task translation \
@@ -42,4 +43,4 @@ fairseq-train ${data_dir}/final_bin \
     --reset-dataloader \
     --reset-lr-scheduler \
     --reset-optimizer \
-    --wandb-project EAMT-runs
+    --wandb-project $wandb_project

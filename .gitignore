@@ -5,6 +5,8 @@ IndicTransTokenizer/
 fairseq
 devtest
 checkpoints
+hf_eval.py 
+hf_eval.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

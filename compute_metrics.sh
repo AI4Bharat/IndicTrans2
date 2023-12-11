@@ -4,18 +4,13 @@ pred_fname=$1
 ref_fname=$2
 tgt_lang=$3
 
-# we compute and report tokenized bleu scores.
-# For computing BLEU scores, systems should output detokenized outputs. Your MT system might be doing it out of the box if you are using SentencePiece - nothing to do in that case.
-# If you are using BPE then:
-# 1. For English, you can use MosesDetokenizer (either the scripts in moses or the sacremoses python package)
-# 2. For Indian languages, you can use the IndicNLP library detokenizer (note: please don't skip this step, since detok/tokenizer are not guaranteed to be reversible**.
-# ^ both 1. and 2. are scripts/postprocess_translate.py
+# This script compute the evaluation metrics such as BLEU, chrF, chrF++ using the 
+# detokenized predictions of the translation systems using sacrebleu (version 2.3.1).
+# If the target language is:
+#   English: directly use Moses tokenizer that is internally supported (`mteval-v13a`)
+#   Indic: use IndicNLP tokenizers and skip tokenization step in sacrebleu.
 
 
-# For computing BLEU, we use sacrebleu:
-# For English output: sacrebleu reffile < outputfile. This internally tokenizes using mteval-v13a
-# For Indian language output, we need tokenized output and reference since we don't know how well the sacrebleu tokenizer works for Indic input.
-# Hence we tokenize both preds and target files with IndicNLP tokenizer and then run: sacrebleu --tokenize none reffile < outputfile
 if [ $tgt_lang == 'eng_Latn' ]; then
     # indic to en models
     sacrebleu $ref_fname < $pred_fname -m bleu chrf --chrf-word-order 2

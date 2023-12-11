@@ -3,8 +3,8 @@
 echo `date`
 devtest_data_dir=$1
 ckpt_dir=$2
-model=$3
-system=$4
+model=${3:-"base18L"}
+system=${4:-"it2"}
 
 pairs=$(ls -rd $devtest_data_dir/*)
 
