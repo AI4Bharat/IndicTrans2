@@ -1388,7 +1388,7 @@ class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
             labels = labels.to(lm_logits.device)
             loss_fct = nn.CrossEntropyLoss()
             masked_lm_loss = loss_fct(
-                lm_logits.view(-1, self.config.vocab_size), labels.view(-1)
+                lm_logits.view(-1, self.config.decoder_vocab_size), labels.view(-1)
             )
 
         if not return_dict:

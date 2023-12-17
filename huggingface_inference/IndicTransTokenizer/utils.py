@@ -508,7 +508,7 @@ def preprocess(sents: List[str], lang: str):
     return processed_sents, placeholder_entity_map_sents
 
 
-def preprocess_batch(batch: List[str], src_lang: str, tgt_lang: str) -> List[str]:
+def preprocess_batch(batch: List[str], src_lang: str, tgt_lang: str, is_target: bool = False) -> List[str]:
     """
     Preprocess an array of sentences by normalizing, tokenization, and possibly transliterating it. It also tokenizes the
     normalized text sequences using sentence piece tokenizer and also adds language tags.
@@ -517,13 +517,17 @@ def preprocess_batch(batch: List[str], src_lang: str, tgt_lang: str) -> List[str
         batch (List[str]): input list of sentences to preprocess.
         src_lang (str): flores language code of the input text sentences.
         tgt_lang (str): flores language code of the output text sentences.
+        is_target (str): add language tags if false otherwise skip it.
 
     Returns:
         Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
             mapping placeholders to their original values.
     """
     preprocessed_sents, placeholder_entity_map_sents = preprocess(batch, lang=src_lang)
-    tagged_sents = apply_lang_tags(preprocessed_sents, src_lang, tgt_lang)
+    if not is_target:
+        tagged_sents = apply_lang_tags(preprocessed_sents, src_lang, tgt_lang)
+    else:
+        tagged_sents = list(preprocessed_sents)
     return tagged_sents, placeholder_entity_map_sents
 
 
