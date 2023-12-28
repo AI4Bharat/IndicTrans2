@@ -97,16 +97,19 @@ We also release a [blog](https://ai4bharat.iitm.ac.in/indictrans2-m2m/) with som
 # Citation
 Please cite the following two papers if you use our distilled models/codebase/procedure, or [fairseq](https://github.com/VarunGumma/fairseq) clone:
 
-```
-@article{gala2023indictrans2,
-  title   = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
-  author  = {Jay Gala and Pranjal A. Chitale and Raghavan AK and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
-  year    = {2023},
-  journal = {Transactions on Machine Learning Research},
-  url     = {https://openreview.net/forum?id=vfT4YuzAYA}
+```bibtex
+@article{
+  gala2023indictrans,
+  title={IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
+  author={Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
+  journal={Transactions on Machine Learning Research},
+  issn={2835-8856},
+  year={2023},
+  url={https://openreview.net/forum?id=vfT4YuzAYA},
+  note={}
 }
 ```
-```
+```bibtex
 @inproceedings{gumma-etal-2023-empirical,
     title = "An Empirical Study of Leveraging Knowledge Distillation for Compressing Multilingual Neural Machine Translation Models",
     author = "Gumma, Varun  and
