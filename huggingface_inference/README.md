@@ -54,14 +54,54 @@ python3 example.py
 
 Feel free to modify the `example.py` script to suit your translation needs.
 
-### Citation
+
+### Fine-tuning with LoRA
+
+Before starting with fine-tuning IndicTrans2 models, you will need to restructure the training data in the following format.
 
 ```
-@article{gala2023indictrans2,
-  title   = {IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
-  author  = {Jay Gala and Pranjal A. Chitale and Raghavan AK and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar and Janki Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M. Khapra and Raj Dabre and Anoop Kunchukuttan},
-  year    = {2023},
-  journal = {Transactions on Machine Learning Research},
-  url     = {https://openreview.net/forum?id=vfT4YuzAYA}
+en-indic-exp
+├── train
+│   ├── eng_Latn-asm_Beng
+│   │   ├── train.eng_Latn
+│   │   └── train.asm_Beng
+│   ├── eng_Latn-ben_Beng
+│   │   └── ...
+│   └── {src_lang}-{tgt_lang}
+│       ├── train.{src_lang}
+│       └── train.{tgt_lang}
+└── dev
+    ├── eng_Latn-asm_Beng
+    │   ├── dev.eng_Latn
+    │   └── dev.asm_Beng
+    ├── eng_Latn-ben_Beng
+    │   └── ...
+    └── {src_lang}-{tgt_lang}
+        ├── dev.{src_lang}
+        └── dev.{tgt_lang}
+```
+
+Once you have data ready in above specified format, use the following command.
+
+```bash
+bash train_lora.sh <data_dir> <model_name> <output_dir> <src_lang_list> <tgt_lang_list> 
+```
+
+We recommend you to refer to `train_lora.sh` for defaults arguments for fine-tuning. Please note that the specified hyperparameters may not be optimal and might require tuning for your use case.
+
+> Note: Please feel free to open issues on the GitHub repo in case of any queries/issues.
+
+
+### Citation
+
+```bibtex
+@article{gala2023indictrans,
+title={IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
+author={Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
+journal={Transactions on Machine Learning Research},
+issn={2835-8856},
+year={2023},
+url={https://openreview.net/forum?id=vfT4YuzAYA},
+note={}
 }
 ```

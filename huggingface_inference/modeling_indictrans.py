@@ -1298,6 +1298,7 @@ class IndicTransModel(IndicTransPreTrainedModel):
 class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
     base_model_prefix = "model"
     _tied_weights_keys = None
+    _label_smoothing = 0.0
 
     def __init__(self, config: IndicTransConfig):
         super().__init__(config)
@@ -1325,6 +1326,9 @@ class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
 
     def set_output_embeddings(self, new_embeddings):
         self.lm_head = new_embeddings
+    
+    def set_label_smoothing(self, label_smoothing):
+        self._label_smoothing = label_smoothing
 
     def forward(
         self,
@@ -1386,9 +1390,11 @@ class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
         if labels is not None:
             # move labels to the correct device to enable PP
             labels = labels.to(lm_logits.device)
-            loss_fct = nn.CrossEntropyLoss()
-            masked_lm_loss = loss_fct(
-                lm_logits.view(-1, self.config.decoder_vocab_size), labels.view(-1)
+            masked_lm_loss = F.cross_entropy(
+                input=lm_logits.view(-1, self.config.decoder_vocab_size),
+                target=labels.view(-1),
+                ignore_index=self.config.pad_token_id,
+                label_smoothing=self._label_smoothing,
             )
 
         if not return_dict:

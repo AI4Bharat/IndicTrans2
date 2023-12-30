@@ -1,12 +1,11 @@
 import sys
 import torch
 from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig
-from IndicTransTokenizer.utils import preprocess_batch, postprocess_batch
-from IndicTransTokenizer.tokenizer import IndicTransTokenizer
+from IndicTransTokenizer import IndicProcessor, IndicTransTokenizer
 
-en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B" # ai4bharat/indictrans2-en-indic-dist-200M
-indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B" # ai4bharat/indictrans2-indic-en-dist-200M
-indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-1B"   # ai4bharat/indictrans2-indic-indic-dist-320M
+en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
+indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"  # ai4bharat/indictrans2-indic-en-dist-200M
+indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-1B"  # ai4bharat/indictrans2-indic-indic-dist-320M
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -37,27 +36,25 @@ def initialize_model_and_tokenizer(ckpt_dir, direction, quantization):
         ckpt_dir,
         trust_remote_code=True,
         low_cpu_mem_usage=True,
-        quantization_config=qconfig
+        quantization_config=qconfig,
     )
-    
-    if qconfig==None:
+
+    if qconfig == None:
         model = model.to(DEVICE)
         model.half()
-    
+
     model.eval()
-    
+
     return tokenizer, model
 
 
-def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
+def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
     translations = []
     for i in range(0, len(input_sentences), BATCH_SIZE):
         batch = input_sentences[i : i + BATCH_SIZE]
 
         # Preprocess the batch and extract entity mappings
-        batch, entity_map = preprocess_batch(
-            batch, src_lang=src_lang, tgt_lang=tgt_lang
-        )
+        batch = ip.preprocess_batch(batch, src_lang=src_lang, tgt_lang=tgt_lang)
 
         # Tokenize the batch and generate input encodings
         inputs = tokenizer(
@@ -81,14 +78,10 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
             )
 
         # Decode the generated tokens into text
-        generated_tokens = tokenizer.batch_decode(
-            generated_tokens.detach().cpu().tolist(), src=False
-        )
+        generated_tokens = tokenizer.batch_decode(generated_tokens.detach().cpu().tolist(), src=False)
 
         # Postprocess the translations, including entity replacement
-        translations += postprocess_batch(
-            generated_tokens, lang=tgt_lang, placeholder_entity_map=entity_map
-        )
+        translations += ip.postprocess_batch(generated_tokens, lang=tgt_lang)
 
         del inputs
         torch.cuda.empty_cache()
@@ -96,15 +89,11 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer):
     return translations
 
 
-en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(
-    en_indic_ckpt_dir, "en-indic", quantization
-)
-indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(
-    indic_en_ckpt_dir, "indic-en", quantization
-)
-indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
-    indic_indic_ckpt_dir, "indic-indic", quantization
-)
+ip = IndicProcessor(inference=True)
+
+en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, "en-indic", quantization)
+indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, "indic-en", quantization)
+indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(indic_indic_ckpt_dir, "indic-indic", quantization)
 
 # ---------------------------------------------------------------------------
 #                              Hindi to English
@@ -122,9 +111,7 @@ hi_sents = [
     "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
 ]
 src_lang, tgt_lang = "hin_Deva", "eng_Latn"
-en_translations = batch_translate(
-    hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer
-)
+en_translations = batch_translate(hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, en_translations):
@@ -148,9 +135,7 @@ en_sents = [
     "My friend has invited me to his birthday party, and I will give him a gift.",
 ]
 src_lang, tgt_lang = "eng_Latn", "hin_Deva"
-hi_translations = batch_translate(
-    en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer
-)
+hi_translations = batch_translate(en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer, ip)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(en_sents, hi_translations):
@@ -174,9 +159,7 @@ hi_sents = [
     "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
 ]
 src_lang, tgt_lang = "hin_Deva", "mar_Deva"
-mr_translations = batch_translate(
-    hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer
-)
+mr_translations = batch_translate(hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer, ip)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, mr_translations):
