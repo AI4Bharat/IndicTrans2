@@ -63,8 +63,9 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 ## Updates
 
-- 🚨 Sep 9, 2023 - Added HF compatible IndicTrans2 models. Please refer to the [README](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_inference) for detailed example usage.
+- 🚨 Dec 30, 2023 - Migrated IndicTrans2 tokenizer for HF compatible IndicTrans2 models to [IndicTransTokenizer](https://github.com/VarunGumma/IndicTransTokenizer) and will be maintained separately there from now onwards. Add LoRA fine-tuning scripts for our IndicTrans2 models in [huggingface_inference](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_inference).
 - 🚨 Dec 1, 2023 - Release of Indic-Indic model and corresponding distilled variants for each base model. Please refer to the [Download section](https://github.com/AI4Bharat/IndicTrans2#multilingual-translation-models) for the checkpoints.
+- 🚨 Sep 9, 2023 - Added HF compatible IndicTrans2 models. Please refer to the [README](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_inference) for detailed example usage.
 
 ## Tables of Contents
 
@@ -512,7 +513,7 @@ The mined corpora collection (BPCC-Mined), existing seed corpora (NLLB-Seed, ILC
 
 ## Citation
 
-```bash
+```bibtex
 @article{gala2023indictrans,
 title={IndicTrans2: Towards High-Quality and Accessible Machine Translation Models for all 22 Scheduled Indian Languages},
 author={Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
