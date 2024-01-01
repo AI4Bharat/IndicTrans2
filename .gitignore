@@ -4,9 +4,8 @@ indic_nlp_resources
 IndicTransTokenizer/
 fairseq
 devtest
+eval_data/
 checkpoints
-hf_eval.py 
-hf_eval.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
