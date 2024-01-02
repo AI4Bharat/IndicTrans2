@@ -315,6 +315,13 @@ def main(args):
         trainer.train()
     except KeyboardInterrupt:
         print(f" | > Training interrupted ...")
+    
+    # this will only save the LoRA adapter weights
+    model.save_pretrained(args.output_dir)
+    
+    # However, if you wish to merge the LoRA adapters with the base model then you should 
+    # comment out the following lines below.
+    # model.merge_and_unload().save_pretrained(args.output_dir)
 
 
 if __name__ == "__main__":

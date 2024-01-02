@@ -89,6 +89,20 @@ bash train_lora.sh <data_dir> <model_name> <output_dir> <direction> <src_lang_li
 
 We recommend you to refer to `train_lora.sh` for defaults arguments for fine-tuning. Please note that the specified hyperparameters may not be optimal and might require tuning for your use case.
 
+
+### Inference with LoRA
+
+You can load the LoRA adapters with the base model for inference by modifying the model initialization in `example.py` script.
+
+```python
+from transformers import AutoModelForSeq2SeqLM
+from peft import PeftConfig, PeftModel
+
+base_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B" # you will need to change as per your use case
+base_model = AutoModelForSeq2SeqLM.from_pretrained(base_ckpt_dir, trust_remote_code=True)
+lora_model = PeftModel.from_pretrained(base_model, lora_ckpt_dir)
+```
+
 > Note: Please feel free to open issues on the GitHub repo in case of any queries/issues.
 
 
