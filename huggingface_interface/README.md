@@ -84,7 +84,7 @@ en-indic-exp
 Once you have data ready in above specified format, use the following command.
 
 ```bash
-bash train_lora.sh <data_dir> <model_name> <output_dir> <src_lang_list> <tgt_lang_list> 
+bash train_lora.sh <data_dir> <model_name> <output_dir> <direction> <src_lang_list> <tgt_lang_list> 
 ```
 
 We recommend you to refer to `train_lora.sh` for defaults arguments for fine-tuning. Please note that the specified hyperparameters may not be optimal and might require tuning for your use case.
