@@ -170,7 +170,7 @@ You can find the contribution from different sources in the following table:
     <td>18.5K</td>
   </tr>
   <tr>
-    <td>ICLI</td>
+    <td>ILCI</td>
     <td>1.3M</td>
   </tr>
   <tr>
