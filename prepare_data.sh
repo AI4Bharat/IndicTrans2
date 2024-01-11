@@ -107,7 +107,7 @@ for pair in ${pairs[@]}; do
     echo "Applying normalization and script conversion for dev"
     parallel --pipe --keep-order python scripts/preprocess_translate.py $src_lang $src_transliterate false < $dev_outfname_src.norm > $dev_outfname_src
     parallel --pipe --keep-order python scripts/preprocess_translate.py $tgt_lang $tgt_transliterate true < $dev_outfname_tgt.norm > $dev_outfname_tgt 
-    echo "Input size: $(grep -c '.' $train_outfname_src)"
+    echo "Input size: $(grep -c '.' $dev_outfname_src)"
 done
 
 
