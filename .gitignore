@@ -4,7 +4,6 @@ indic_nlp_resources
 IndicTransTokenizer/
 fairseq
 devtest
-eval_data/
 checkpoints
 
 # Byte-compiled / optimized / DLL files
@@ -150,5 +149,5 @@ cython_debug/
 wandb/
 
 # some temporary scripts
-flip_names.sh
 logs/
+eval_data/

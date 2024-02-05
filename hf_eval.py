@@ -18,6 +18,11 @@ system_names = {
 }
 
 
+def get_direction(model_name):
+    pieces = model_name.split("/")[-1].split("-")
+    return f"{pieces[1]}-{pieces[2]}"
+
+
 def get_arg_parser():
     parser = argparse.ArgumentParser(description="run HF MT models")
     parser.add_argument("-m", "--model", type=str, default="")
@@ -29,10 +34,7 @@ def get_arg_parser():
         default="none",
         choices=["none", "4bit", "8bit"],
     )
-    parser.add_argument(
-        "--direction", type=str, default="indic-en", choices=["indic-en", "en-indic"]
-    )
-    parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--batch_size", type=int, default=512)
     return parser
 
 
@@ -50,7 +52,15 @@ def main(args):
             bnb_4bit_compute_dtype=torch.float16,
         )
 
-    tokenizer = IndicTransTokenizer(direction=args.direction)
+    args.batch_size = {
+        "4bit": 256,
+        "8bit": 256,
+        "none": 128,
+    }[args.quantization]
+
+    direction = get_direction(args.model)
+
+    tokenizer = IndicTransTokenizer(direction=direction)
     ip = IndicProcessor(inference=True)
 
     model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -65,10 +75,10 @@ def main(args):
     for pair in sorted(os.listdir(args.devtest_dir)):
         l1, l2 = pair.split("-")
 
-        if args.direction == "indic-en":
+        if direction == "indic-en":
             src_lang = l1 if l1 != "eng_Latn" else l2
             tgt_lang = "eng_Latn"
-        elif args.direction == "en-indic":
+        elif direction == "en-indic":
             tgt_lang = l1 if l1 != "eng_Latn" else l2
             src_lang = "eng_Latn"
 
@@ -78,12 +88,21 @@ def main(args):
         )
 
         if not os.path.exists(infname):
+            print(f" | > Source file does not exist: {infname}")
             continue
 
         if os.path.exists(predfname):
+            print(f" | > Prediction file exists: {predfname}")
             continue
 
         predictions = []
+
+        print(f" | > Model: {args.model}")
+        print(f" | > Quantization: {args.quantization}")
+        print(f" | > Devtest dir: {args.devtest_dir}")
+        print(f" | > Source: {src_lang}")
+        print(f" | > Target: {tgt_lang}")
+        print(f" | > Batch size: {args.batch_size}")
 
         with open(infname, "r", encoding="utf-8") as f:
             src_lines = [x.strip() for x in f.readlines()]

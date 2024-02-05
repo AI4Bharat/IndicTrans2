@@ -1,20 +1,29 @@
 #!/bin/bash
 
-in_dir=${1:-"eval_data"}
+in_dir=$1
 
 for devtest_dir in "${in_dir}/IN22/conv" "${in_dir}/IN22/gen" "${in_dir}/flores22"; do 
-    for direction in "indic-en" "en-indic"; do
-        for model in in "ai4bharat/indictrans2-${direction}-1B" "ai4bharat/indictrans2-${direction}-dist-200M"; do
-            for quant in "4bit" "8bit" "none"; do
-                python hf_eval.py \
-                    --model ${model} \
-                    --quantization ${quant} \
-                    --direction ${direction} \
-                    --devtest_dir ${devtest_dir}
-                done 
-            done 
-        done 
-    done
+    for quant in "4bit" "8bit" "none"; do
+        python hf_eval.py \
+            --model "ai4bharat/indictrans2-indic-en-1B" \
+            --quantization ${quant} \
+            --devtest_dir ${devtest_dir}
+
+        python hf_eval.py \
+            --model "ai4bharat/indictrans2-indic-en-dist-200M" \
+            --quantization ${quant} \
+            --devtest_dir ${devtest_dir}
+
+        python hf_eval.py \
+            --model "ai4bharat/indictrans2-en-indic-1B" \
+            --quantization ${quant} \
+            --devtest_dir ${devtest_dir}
+
+        python hf_eval.py \
+            --model "ai4bharat/indictrans2-en-indic-dist-200M" \
+            --quantization ${quant} \
+            --devtest_dir ${devtest_dir}
+    done 
 done
 
 for devtest_dir in "${in_dir}/IN22/conv" "${in_dir}/IN22/gen" "${in_dir}/flores22"; do 
@@ -41,6 +50,7 @@ for devtest_dir in "${in_dir}/IN22/conv" "${in_dir}/IN22/gen" "${in_dir}/flores2
         done 
     done
 
-    python scripts/collate_multi_system_metrics.py ${devtest_data_dir} ${all_models}
-
+    python scripts/collate_multi_system_metrics.py \
+        --devtest_dir ${devtest_dir} \
+        --systems ${all_models}
 done 

@@ -13,7 +13,7 @@ def process_pair(devtest_dir, pair, systems):
             try:
                 with open(
                     os.path.join(
-                        devtest_dir, pair, f"{src}_{tgt}_{system}_scores.json"
+                        devtest_dir, pair, f"score.{system}.{pair}.json"
                     ),
                     "r",
                 ) as f:
@@ -21,6 +21,8 @@ def process_pair(devtest_dir, pair, systems):
                     system_lang_scores[system] = scores[1]["score"]
             except FileNotFoundError:
                 system_lang_scores[system] = -1.0
+            except Exception as e:
+                print(f"Error processing {devtest_dir}/{pair} for {system}: {e}")
 
         language = src if src != "eng_Latn" else tgt
         return language, system_lang_scores
