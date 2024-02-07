@@ -336,6 +336,8 @@ bash finetune.sh <exp_dir> <model_arch> <pretrained_ckpt>
 
 - `<exp_dir>`: path to the directory containing the binarized data
 - `<model_arch>`: custom transformer architecture used for model training
+  - `transformer_18_18` - For IT2 Base models
+  - `transformer_base18L` - For IT2 Distilled models
 - `<pretrained_ckpt>`: path to the fairseq model checkpoint to be loaded for further fine-tuning
 
 You can download the model artifacts released as a part of this work from the [following section](#download-models-and-other-artifacts).
