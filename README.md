@@ -248,10 +248,10 @@ python3 scripts/dedup_benchmark.py <in_data_dir> <out_data_dir> <benchmark_dir>
 
 Once you complete the deduplication of the training data with the available benchmarks, you can preprocess and binarize the data for training models. Please download our trained SPM model and learned Fairseq dictionary using the following links for your experiments.
 
-|                    | En-Indic                                                                                     | Indic-En                                                                                     |
-| ------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| SPM model          | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-spm.zip)          |
-| Fairseq dictionary | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-fairseq-dict.zip) |
+|                    | En-Indic                                                                                     | Indic-En                                                                                     | Indic-Indic                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| SPM model          | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-spm.zip)          |
+| Fairseq dictionary | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-fairseq-dict.zip) |
 
 To prepare the data for training En-Indic model, please do the following:
 
