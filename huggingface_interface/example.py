@@ -2,10 +2,14 @@ import sys
 import torch
 from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig
 from IndicTransTokenizer import IndicProcessor, IndicTransTokenizer
+from mosestokenizer import MosesSentenceSplitter
+from nltk import sent_tokenize
+from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
+
 
 en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
 indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"  # ai4bharat/indictrans2-indic-en-dist-200M
-indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-1B"  # ai4bharat/indictrans2-indic-indic-dist-320M
+indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-dist-320M"  # ai4bharat/indictrans2-indic-indic-dist-320M
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -13,6 +17,60 @@ if len(sys.argv) > 1:
     quantization = sys.argv[1]
 else:
     quantization = ""
+
+
+# FLORES language code mapping to 2 letter ISO language code for compatibility
+# with Indic NLP Library (https://github.com/anoopkunchukuttan/indic_nlp_library)
+flores_codes = {
+    "asm_Beng": "as",
+    "awa_Deva": "hi",
+    "ben_Beng": "bn",
+    "bho_Deva": "hi",
+    "brx_Deva": "hi",
+    "doi_Deva": "hi",
+    "eng_Latn": "en",
+    "gom_Deva": "kK",
+    "guj_Gujr": "gu",
+    "hin_Deva": "hi",
+    "hne_Deva": "hi",
+    "kan_Knda": "kn",
+    "kas_Arab": "ur",
+    "kas_Deva": "hi",
+    "kha_Latn": "en",
+    "lus_Latn": "en",
+    "mag_Deva": "hi",
+    "mai_Deva": "hi",
+    "mal_Mlym": "ml",
+    "mar_Deva": "mr",
+    "mni_Beng": "bn",
+    "mni_Mtei": "hi",
+    "npi_Deva": "ne",
+    "ory_Orya": "or",
+    "pan_Guru": "pa",
+    "san_Deva": "hi",
+    "sat_Olck": "or",
+    "snd_Arab": "ur",
+    "snd_Deva": "hi",
+    "tam_Taml": "ta",
+    "tel_Telu": "te",
+    "urd_Arab": "ur",
+}
+
+
+def split_sentences(input_text, lang):
+    if lang == "eng_Latn":
+        input_sentences = sent_tokenize(input_text)
+        with MosesSentenceSplitter(flores_codes[lang]) as splitter:
+            sents_moses = splitter([input_text])
+        sents_nltk = sent_tokenize(input_text)
+        if len(sents_nltk) < len(sents_moses):
+            input_sentences = sents_nltk
+        else:
+            input_sentences = sents_moses
+        input_sentences = [sent.replace("\xad", "") for sent in input_sentences]
+    else:
+        input_sentences = sentence_split(input_text, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA)
+    return input_sentences
 
 
 def initialize_model_and_tokenizer(ckpt_dir, direction, quantization):
@@ -89,11 +147,19 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
     return translations
 
 
+def translate_paragraph(input_text, src_lang, tgt_lang, model, tokenizer, ip):
+    input_sentences = split_sentences(input_text, src_lang)
+    translated_text = batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip)
+    return " ".join(translated_text)
+
+
 ip = IndicProcessor(inference=True)
 
 en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, "en-indic", quantization)
 indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, "indic-en", quantization)
-indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(indic_indic_ckpt_dir, "indic-indic", quantization)
+indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
+    indic_indic_ckpt_dir, "indic-indic", quantization
+)
 
 # ---------------------------------------------------------------------------
 #                              Hindi to English
@@ -165,3 +231,12 @@ print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, mr_translations):
     print(f"{src_lang}: {input_sentence}")
     print(f"{tgt_lang}: {translation}")
+
+
+# ---------------------------------------------------------------------------
+#                             Paragraph translation
+# ---------------------------------------------------------------------------
+hi_text = "यहाँ एक पाराग्राफ है जो हिंदी में लिखा गया है। हिंदी एक सुंदर भाषा है और भारत की राष्ट्रीय भाषा है। इसका विकास विभिन्न कालों में हुआ है और यह विशेषतः भारतीय उपमहाद्वीप में बोली जाती है। हिंदी भाषा का साहित्य, संस्कृति और इतिहास भी बहुत गर्वनीय है।"
+en_translated_text = translate_paragraph(hi_text, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip)
+print(f"{src_lang}: {hi_text}")
+print(f"{tgt_lang}: {en_translated_text}")
