@@ -126,6 +126,12 @@ source install.sh
 
 Note: We recommend creating a virtual environment with python>=3.7.
 
+### Additional notes about Installation
+The ``prepare_data_joint_finetuning.sh`` and ``prepare_data_joint_training.sh`` scripts expect that the sentencepiece commandline utility and GNU parallel are installed.
+1. To install the sentencepiece command line utility, please follow the instructions [here](https://github.com/google/sentencepiece?tab=readme-ov-file#build-and-install-sentencepiece-command-line-tools-from-c-source).
+2. Please check if GNU parallel is installed, if not please install the same or alternatively in case of installation issues, remove ``parallel --pipe --keep-order`` from the respective training / finetuning script as well as ``apply_sentence_piece.sh``.
+
+
 ## Data
 
 ### Training
