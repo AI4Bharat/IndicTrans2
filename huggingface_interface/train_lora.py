@@ -1,8 +1,9 @@
 import os
 import json
 import argparse
+from sacrebleu.metrics import BLEU, CHRF
 from peft import LoraConfig, get_peft_model
-from datasets import Dataset, concatenate_datasets, load_metric
+from datasets import Dataset, concatenate_datasets
 from IndicTransTokenizer import IndicTransTokenizer, IndicProcessor
 
 from transformers import (
@@ -13,9 +14,8 @@ from transformers import (
     EarlyStoppingCallback,
 )
 
-bleu_metric = load_metric("sacrebleu")
-chrf2_metric = load_metric("chrf", word_order=2)
-
+bleu_metric = BLEU()
+chrf_metric = CHRF()
 
 def get_arg_parse():
     parser = argparse.ArgumentParser()
@@ -53,10 +53,11 @@ def get_arg_parse():
     parser.add_argument("--data_dir", type=str, required=True)
     parser.add_argument("--output_dir", type=str, required=True)
     parser.add_argument("--save_steps", type=int, default=1000)
+    parser.add_argument("--eval_steps", type=int, default=1000)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--num_train_epochs", type=int, default=100)
     parser.add_argument("--max_steps", type=int, default=1000000)
-    parser.add_argument("--grad_accum_steps", type=int, default=1)
+    parser.add_argument("--grad_accum_steps", type=int, default=4)
     parser.add_argument("--warmup_steps", type=int, default=4000)
     parser.add_argument("--warmup_ratio", type=int, default=0.0)
     parser.add_argument("--max_grad_norm", type=float, default=1.0)
@@ -97,7 +98,7 @@ def get_arg_parse():
     parser.add_argument("--lora_target_modules", type=str, default="q_proj,k_proj,v_proj")
     parser.add_argument("--lora_dropout", type=float, default=0.05)
     parser.add_argument("--lora_r", type=int, default=8)
-    parser.add_argument("--lora_alpha", type=int, default=32)
+    parser.add_argument("--lora_alpha", type=int, default=16)
     parser.add_argument("--mixed_precision", type=str, default="none", choices=["fp16", "bf16", "none"])
     parser.add_argument(
         "--report_to",
@@ -176,10 +177,10 @@ def compute_metrics_factory(tokenizer, metric_dict=None):
     def compute_metrics(eval_preds):
         preds, labels = eval_preds
         preds = tokenizer.batch_decode(preds, src=False)
-        labels = [[x] for x in tokenizer.batch_decode(labels, src=False)]
+        labels = tokenizer.batch_decode(labels, src=False)
 
         return {
-            metric_name: metric.compute(predictions=preds, references=labels)["score"]
+            metric_name: metric.compute(predictions=preds, references=[labels]).score
             for (metric_name, metric) in metric_dict.items()
         }
 
@@ -253,10 +254,10 @@ def main(args):
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
 
-    print(f" | > Loading metrics factory with BLEU and chrF++ ...")
+    print(f" | > Loading metrics factory with BLEU and chrF ...")
     seq2seq_compute_metrics = compute_metrics_factory(
         tokenizer=tokenizer,
-        metric_dict={"BLEU": bleu_metric, "chrF++": chrf2_metric},
+        metric_dict={"BLEU": bleu_metric, "chrF": chrf_metric},
     )
 
     training_args = Seq2SeqTrainingArguments(
@@ -267,6 +268,7 @@ def main(args):
         evaluation_strategy="steps",
         save_strategy="steps",
         logging_steps=100,
+        save_total_limit=1,
         predict_with_generate=True,
         load_best_model_at_end=True,
         max_steps=args.max_steps,
@@ -284,6 +286,7 @@ def main(args):
         learning_rate=args.learning_rate,
         num_train_epochs=args.num_train_epochs,
         save_steps=args.save_steps,
+        eval_steps=args.eval_steps,
         dataloader_num_workers=args.num_workers,
         metric_for_best_model=args.metric_for_best_model,
         greater_is_better=args.greater_is_better,
