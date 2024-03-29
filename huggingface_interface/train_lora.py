@@ -178,9 +178,11 @@ def compute_metrics_factory(tokenizer, metric_dict=None):
         preds, labels = eval_preds
         preds = tokenizer.batch_decode(preds, src=False)
         labels = tokenizer.batch_decode(labels, src=False)
+        
+        assert len(preds) == len(labels), "Predictions and Labels have different lengths"
 
         return {
-            metric_name: metric.compute(predictions=preds, references=[labels]).score
+            metric_name: metric.corpus_score(preds, [labels]).score
             for (metric_name, metric) in metric_dict.items()
         }
 
