@@ -262,7 +262,7 @@ Once you complete the deduplication of the training data with the available benc
 To prepare the data for training En-Indic model, please do the following:
 
 1. Download the SPM model in the experiment directory and rename it as `vocab`.
-2. Download the Fairseq dictionary in the experiment directory and rename it as `final_dict`.
+2. Download the Fairseq dictionary in the experiment directory and rename it as `final_bin`.
 
 Here is the expected directory for training En-Indic model:
 
@@ -286,7 +286,7 @@ en-indic-exp
 │   ├── model.TGT
 │   ├── vocab.SRC
 │   └── vocab.TGT
-└── final_dict
+└── final_bin
     ├── dict.SRC.txt
     └── dict.TGT.txt
 ```
