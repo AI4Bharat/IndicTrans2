@@ -23,6 +23,14 @@ mkdir -p $train_processed_dir
 mkdir -p $devtest_processed_dir
 mkdir -p $out_data_dir
 
+parallel_installed=false
+
+# Check if GNU Parallel is installed
+if command -v parallel &> /dev/null; then
+    echo "GNU Parallel is installed. Version information:"
+    parallel --version
+    parallel_installed=true
+fi
 
 # get a list of language pairs in the `train_data_dir`
 pairs=$(ls -d $train_data_dir/* | sort)
@@ -66,8 +74,13 @@ for pair in ${pairs[@]}; do
 	train_outfname_tgt=$train_norm_dir/train.$tgt_lang
 
     echo "Normalizing punctuations for train"
-    parallel --pipe --keep-order bash $root/normalize_punctuation.sh $src_lang < $train_infname_src > $train_outfname_src._norm
-    parallel --pipe --keep-order bash $root/normalize_punctuation.sh $tgt_lang < $train_infname_tgt > $train_outfname_tgt._norm
+    if $parallel_installed; then
+        parallel --pipe --keep-order bash $root/normalize_punctuation.sh $src_lang < $train_infname_src > $train_outfname_src._norm
+        parallel --pipe --keep-order bash $root/normalize_punctuation.sh $tgt_lang < $train_infname_tgt > $train_outfname_tgt._norm
+    else
+        bash $root/normalize_punctuation.sh $src_lang < $train_infname_src > $train_outfname_src._norm
+        bash $root/normalize_punctuation.sh $tgt_lang < $train_infname_tgt > $train_outfname_tgt._norm
+    fi
 
 	# add do not translate tags to handle special failure cases
     echo "Applying do not translate tags for train"
@@ -89,8 +102,13 @@ for pair in ${pairs[@]}; do
 	dev_outfname_tgt=$devtest_norm_dir/dev.$tgt_lang
 
     echo "Normalizing punctuations for dev"
-    parallel --pipe --keep-order bash normalize_punctuation.sh $src_lang < $dev_infname_src > $dev_outfname_src._norm
-    parallel --pipe --keep-order bash normalize_punctuation.sh $tgt_lang < $dev_infname_tgt > $dev_outfname_tgt._norm
+    if $parallel_installed; then
+        parallel --pipe --keep-order bash normalize_punctuation.sh $src_lang < $dev_infname_src > $dev_outfname_src._norm
+        parallel --pipe --keep-order bash normalize_punctuation.sh $tgt_lang < $dev_infname_tgt > $dev_outfname_tgt._norm
+    else
+        bash normalize_punctuation.sh $src_lang < $dev_infname_src > $dev_outfname_src._norm
+        bash normalize_punctuation.sh $tgt_lang < $dev_infname_tgt > $dev_outfname_tgt._norm
+    fi
 
 	# add do not translate tags to handle special failure cases
     echo "Applying do not translate tags for dev"
@@ -122,7 +140,7 @@ mkdir -p $exp_dir/bpe
 splits=(train dev)
 for split in ${splits[@]}; do
 	echo "Applying sentence piece for $split"
-	bash apply_sentence_piece.sh $exp_dir $exp_dir/data $exp_dir/bpe SRC TGT $split
+	bash apply_sentence_piece.sh $exp_dir $exp_dir/data $exp_dir/bpe SRC TGT $split $parallel_installed
 done
 
 
@@ -137,7 +155,7 @@ python scripts/add_joint_tags_translate.py $exp_dir 'dev'
 
 
 # this is important step if you are training with tpu and using num_batch_buckets
-# the currnet implementation does not remove outliers before bucketing and hence
+# the current implementation does not remove outliers before bucketing and hence
 # removing these large sentences ourselves helps with getting better buckets
 # python scripts/remove_large_sentences.py $exp_dir/bpe/train.SRC $exp_dir/bpe/train.TGT $exp_dir/final/train.SRC $exp_dir/final/train.TGT
 # python scripts/remove_large_sentences.py $exp_dir/bpe/dev.SRC $exp_dir/bpe/dev.TGT $exp_dir/final/dev.SRC $exp_dir/final/dev.TGT
