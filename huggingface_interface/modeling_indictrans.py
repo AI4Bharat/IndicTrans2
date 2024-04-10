@@ -34,7 +34,7 @@ from transformers.modeling_outputs import (
 from transformers.utils import logging
 from transformers.modeling_utils import PreTrainedModel
 
-from configuration_indictrans import IndicTransConfig
+from .configuration_indictrans import IndicTransConfig
 
 
 logger = logging.get_logger(__name__)
@@ -779,7 +779,7 @@ class IndicTransEncoder(IndicTransPreTrainedModel):
 
         hidden_states = inputs_embeds + embed_pos
         if self.layernorm_embedding is not None:
-            x = self.layernorm_embedding(hidden_states)
+            hidden_states = self.layernorm_embedding(hidden_states)
         hidden_states = F.dropout(hidden_states, p=self.dropout, training=self.training)
 
         # expand attention_mask
