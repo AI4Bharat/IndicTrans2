@@ -1,7 +1,7 @@
 import sys
 import torch
-from transformers import AutoModelForSeq2SeqLM, BitsAndBytesConfig
-from IndicTransTokenizer import IndicProcessor, IndicTransTokenizer
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
+from IndicTransTokenizer import IndicProcessor
 from mosestokenizer import MosesSentenceSplitter
 from nltk import sent_tokenize
 from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
@@ -9,7 +9,9 @@ from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DAN
 
 en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
 indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"  # ai4bharat/indictrans2-indic-en-dist-200M
-indic_indic_ckpt_dir = "ai4bharat/indictrans2-indic-indic-dist-320M"  # ai4bharat/indictrans2-indic-indic-dist-320M
+indic_indic_ckpt_dir = (
+    "ai4bharat/indictrans2-indic-indic-dist-320M"  # ai4bharat/indictrans2-indic-indic-dist-320M
+)
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -69,11 +71,13 @@ def split_sentences(input_text, lang):
             input_sentences = sents_moses
         input_sentences = [sent.replace("\xad", "") for sent in input_sentences]
     else:
-        input_sentences = sentence_split(input_text, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA)
+        input_sentences = sentence_split(
+            input_text, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA
+        )
     return input_sentences
 
 
-def initialize_model_and_tokenizer(ckpt_dir, direction, quantization):
+def initialize_model_and_tokenizer(ckpt_dir, quantization):
     if quantization == "4-bit":
         qconfig = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -89,7 +93,7 @@ def initialize_model_and_tokenizer(ckpt_dir, direction, quantization):
     else:
         qconfig = None
 
-    tokenizer = IndicTransTokenizer(direction=direction)
+    tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=True)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         ckpt_dir,
         trust_remote_code=True,
@@ -117,7 +121,6 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
         # Tokenize the batch and generate input encodings
         inputs = tokenizer(
             batch,
-            src=True,
             truncation=True,
             padding="longest",
             return_tensors="pt",
@@ -136,7 +139,12 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
             )
 
         # Decode the generated tokens into text
-        generated_tokens = tokenizer.batch_decode(generated_tokens.detach().cpu().tolist(), src=False)
+        with tokenizer.as_target_tokenizer():
+            generated_tokens = tokenizer.batch_decode(
+                generated_tokens.detach().cpu().tolist(),
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=True,
+            )
 
         # Postprocess the translations, including entity replacement
         translations += ip.postprocess_batch(generated_tokens, lang=tgt_lang)
@@ -155,10 +163,10 @@ def translate_paragraph(input_text, src_lang, tgt_lang, model, tokenizer, ip):
 
 ip = IndicProcessor(inference=True)
 
-en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, "en-indic", quantization)
-indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, "indic-en", quantization)
+en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, quantization)
+indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, quantization)
 indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
-    indic_indic_ckpt_dir, "indic-indic", quantization
+    indic_indic_ckpt_dir, quantization
 )
 
 # ---------------------------------------------------------------------------
@@ -177,7 +185,9 @@ hi_sents = [
     "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
 ]
 src_lang, tgt_lang = "hin_Deva", "eng_Latn"
-en_translations = batch_translate(hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip)
+en_translations = batch_translate(
+    hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip
+)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, en_translations):
@@ -201,7 +211,9 @@ en_sents = [
     "My friend has invited me to his birthday party, and I will give him a gift.",
 ]
 src_lang, tgt_lang = "eng_Latn", "hin_Deva"
-hi_translations = batch_translate(en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer, ip)
+hi_translations = batch_translate(
+    en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer, ip
+)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(en_sents, hi_translations):
@@ -225,7 +237,9 @@ hi_sents = [
     "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
 ]
 src_lang, tgt_lang = "hin_Deva", "mar_Deva"
-mr_translations = batch_translate(hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer, ip)
+mr_translations = batch_translate(
+    hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer, ip
+)
 
 print(f"\n{src_lang} - {tgt_lang}")
 for input_sentence, translation in zip(hi_sents, mr_translations):
@@ -237,6 +251,8 @@ for input_sentence, translation in zip(hi_sents, mr_translations):
 #                             Paragraph translation
 # ---------------------------------------------------------------------------
 hi_text = "यहाँ एक पाराग्राफ है जो हिंदी में लिखा गया है। हिंदी एक सुंदर भाषा है और भारत की राष्ट्रीय भाषा है। इसका विकास विभिन्न कालों में हुआ है और यह विशेषतः भारतीय उपमहाद्वीप में बोली जाती है। हिंदी भाषा का साहित्य, संस्कृति और इतिहास भी बहुत गर्वनीय है।"
-en_translated_text = translate_paragraph(hi_text, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip)
+en_translated_text = translate_paragraph(
+    hi_text, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip
+)
 print(f"{src_lang}: {hi_text}")
 print(f"{tgt_lang}: {en_translated_text}")

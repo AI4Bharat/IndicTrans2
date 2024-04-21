@@ -1393,7 +1393,7 @@ class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
             masked_lm_loss = F.cross_entropy(
                 input=lm_logits.view(-1, self.config.decoder_vocab_size),
                 target=labels.view(-1),
-                ignore_index=self.config.pad_token_id,
+                ignore_index=-100,
                 label_smoothing=self._label_smoothing,
             )
 
