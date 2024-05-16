@@ -216,7 +216,10 @@ def preprocess_fn(example, tokenizer, **kwargs):
 def main(args):
     print(f" | > Loading {args.model} and tokenizer ...")
     model = AutoModelForSeq2SeqLM.from_pretrained(
-        args.model, trust_remote_code=True, dropout=args.dropout
+        args.model,
+        trust_remote_code=True,
+        attn_implementation="eager",
+        dropout=args.dropout
     )
 
     tokenizer = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)

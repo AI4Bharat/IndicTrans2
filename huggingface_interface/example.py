@@ -1,6 +1,7 @@
 import sys
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
+from transformers.utils import is_flash_attn_2_available, is_flash_attn_greater_or_equal_2_10
 from IndicTransTokenizer import IndicProcessor
 from mosestokenizer import MosesSentenceSplitter
 from nltk import sent_tokenize
@@ -17,8 +18,10 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 if len(sys.argv) > 1:
     quantization = sys.argv[1]
+    attn_implementation = sys.argv[2]
 else:
     quantization = ""
+    attn_implementation = "eager"
 
 
 # FLORES language code mapping to 2 letter ISO language code for compatibility
@@ -77,7 +80,7 @@ def split_sentences(input_text, lang):
     return input_sentences
 
 
-def initialize_model_and_tokenizer(ckpt_dir, quantization):
+def initialize_model_and_tokenizer(ckpt_dir, quantization, attn_implementation):
     if quantization == "4-bit":
         qconfig = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -91,12 +94,19 @@ def initialize_model_and_tokenizer(ckpt_dir, quantization):
             bnb_8bit_compute_dtype=torch.bfloat16,
         )
     else:
-        qconfig = None
+        qconfig = None 
+        
+    if attn_implementation == "flash_attention_2":
+        if is_flash_attn_2_available() and is_flash_attn_greater_or_equal_2_10():
+            attn_implementation == "flash_attention_2"
+        else:
+            attn_implementation == "eager"
 
     tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=True)
     model = AutoModelForSeq2SeqLM.from_pretrained(
         ckpt_dir,
         trust_remote_code=True,
+        attn_implementation=attn_implementation,
         low_cpu_mem_usage=True,
         quantization_config=qconfig,
     )
@@ -163,10 +173,16 @@ def translate_paragraph(input_text, src_lang, tgt_lang, model, tokenizer, ip):
 
 ip = IndicProcessor(inference=True)
 
-en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(en_indic_ckpt_dir, quantization)
-indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(indic_en_ckpt_dir, quantization)
+en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(
+    en_indic_ckpt_dir, quantization, attn_implementation
+)
+
+indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(
+    indic_en_ckpt_dir, quantization, attn_implementation
+)
+
 indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
-    indic_indic_ckpt_dir, quantization
+    indic_indic_ckpt_dir, quantization, attn_implementation
 )
 
 # ---------------------------------------------------------------------------
@@ -250,6 +266,7 @@ for input_sentence, translation in zip(hi_sents, mr_translations):
 # ---------------------------------------------------------------------------
 #                             Paragraph translation
 # ---------------------------------------------------------------------------
+src_lang, tgt_lang = "hin_Deva", "eng_Latn"
 hi_text = "यहाँ एक पाराग्राफ है जो हिंदी में लिखा गया है। हिंदी एक सुंदर भाषा है और भारत की राष्ट्रीय भाषा है। इसका विकास विभिन्न कालों में हुआ है और यह विशेषतः भारतीय उपमहाद्वीप में बोली जाती है। हिंदी भाषा का साहित्य, संस्कृति और इतिहास भी बहुत गर्वनीय है।"
 en_translated_text = translate_paragraph(
     hi_text, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip

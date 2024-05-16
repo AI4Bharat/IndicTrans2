@@ -118,6 +118,7 @@ class IndicTransConfig(PretrainedConfig):
         pad_token_id=1,
         bos_token_id=0,
         eos_token_id=2,
+        attn_implementation="eager",
         **kwargs,
     ):
         self.encoder_vocab_size = encoder_vocab_size
@@ -146,7 +147,8 @@ class IndicTransConfig(PretrainedConfig):
         self.num_hidden_layers = encoder_layers
         self.scale_embedding = scale_embedding
         self.share_decoder_input_output_embed = share_decoder_input_output_embed
-
+        self.attn_implementation = attn_implementation
+        
         super().__init__(
             pad_token_id=pad_token_id,
             bos_token_id=bos_token_id,
