@@ -54,9 +54,12 @@ logger = logging.get_logger(__name__)
 
 INDICTRANS_PRETRAINED_MODEL_ARCHIVE_LIST = [""]
 
-if is_flash_attn_2_available():
-    from flash_attn import flash_attn_func, flash_attn_varlen_func
-    from flash_attn.bert_padding import index_first_axis, pad_input, unpad_input  # noqa
+try:
+    if is_flash_attn_2_available():
+        from flash_attn import flash_attn_func, flash_attn_varlen_func
+        from flash_attn.bert_padding import index_first_axis, pad_input, unpad_input  # noqa    
+except:
+    pass
 
 
 # Copied from transformers.models.llama.modeling_llama._get_unpad_data

@@ -98,9 +98,9 @@ def initialize_model_and_tokenizer(ckpt_dir, quantization, attn_implementation):
         
     if attn_implementation == "flash_attention_2":
         if is_flash_attn_2_available() and is_flash_attn_greater_or_equal_2_10():
-            attn_implementation == "flash_attention_2"
+            attn_implementation = "flash_attention_2"
         else:
-            attn_implementation == "eager"
+            attn_implementation = "eager"
 
     tokenizer = AutoTokenizer.from_pretrained(ckpt_dir, trust_remote_code=True)
     model = AutoModelForSeq2SeqLM.from_pretrained(
