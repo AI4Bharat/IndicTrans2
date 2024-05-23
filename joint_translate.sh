@@ -41,15 +41,15 @@ parallel --pipe --keep-order bash scripts/add_tags_translate.sh $src_lang $tgt_l
 
 echo "Decoding"
 fairseq-interactive ${ckpt_dir}/final_bin \
+    --path ${ckpt_dir}/${model}/checkpoint_best.pt \
     --source-lang SRC \
     --target-lang TGT \
-    --path ${ckpt_dir}/${model}/checkpoint_best.pt \
-    --skip-invalid-size-inputs-valid-test \
     --batch-size 256 \
     --buffer-size 2500 \
     --beam 5 \
-    --fp16 \
+    --memory-efficient-fp16 \
     --num-workers 24 \
+    --force-override-max-positions "(4096, 4096)" \
     --input $outfname.bpe > $outfname.log 2>&1
 
 echo "Extracting translations, script conversion and detokenization"
@@ -61,5 +61,4 @@ python scripts/postprocess_translate.py $outfname.log $outfname $input_size $tgt
 echo "Purging intermediate files"
 rm $outfname.bpe $outfname.norm $outfname._bpe $outfname._norm
 
-echo "Translation completed"
-echo "============================================================="
+echo -e "Translation completed\n\n"

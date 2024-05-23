@@ -1,6 +1,6 @@
 data_dir=$1
 restore_from_dir=$2
-wandb_project=${3:-"IT2_distillation"}
+wandb_project=${3:-"fairseq"}
 
 fairseq-train ${data_dir}/final_bin \
     --task translation \
@@ -9,7 +9,7 @@ fairseq-train ${data_dir}/final_bin \
     --max-update 1000000 \
     --save-interval 1 \
     --save-interval-updates 1000 \
-    --arch transformer_base18L \
+    --arch transformer_IT2_dist \
     --criterion label_smoothed_cross_entropy \
     --share-decoder-input-output-embed \
     --source-lang SRC \

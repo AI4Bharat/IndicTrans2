@@ -1,6 +1,6 @@
 from typing import List
 
-import re
+import regex as re
 import sys
 from indic_num_map import INDIC_NUM_MAP
 

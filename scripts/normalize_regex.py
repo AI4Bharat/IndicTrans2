@@ -1,6 +1,6 @@
 from typing import Tuple, List
 
-import re
+import regex as re
 import sys
 from tqdm import tqdm
 from joblib import Parallel, delayed

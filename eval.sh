@@ -4,12 +4,12 @@ echo `date`
 devtest_data_dir=$1
 ckpt_dir=$2
 model=${3:-"base18L"}
-system=${2:-"it2"}
+system=${4:-"it2"}
 
-pairs=$(ls -rd $devtest_data_dir/*)
+pairs=$(ls -d $devtest_data_dir/*)
 
-echo "Removing old scores"
-rm $devtest_data_dir/*.csv
+# echo "Removing old scores"
+# rm $devtest_data_dir/*.csv
 
 for pair in ${pairs[@]}; do
     pair=$(basename $pair)
@@ -31,9 +31,10 @@ for pair in ${pairs[@]}; do
 
     if [[ -f "${tgt_fname}.pred.${system}" ]]; then
         echo "Computing Metrics"
-        bash compute_metrics.sh $tgt_fname.pred.$system $tgt_fname $tgt_lang > $devtest_data_dir/$src_lang-$tgt_lang/${src_lang}_${tgt_lang}_${system}_scores.json
+        bash compute_metrics.sh $tgt_fname.pred.$system $tgt_fname $tgt_lang > $tgt_fname.score.$system.json
+        cat $tgt_fname.score.$system.json
     fi
 done
 
-echo "Collating Metrics for ${system}"
-python scripts/collate_multi_system_metrics.py --devtest_dir $devtest_data_dir --systems $system
+# echo "Collating Metrics for ${system}"
+# python scripts/collate_multi_system_metrics.py --devtest_dir $devtest_data_dir --systems $system

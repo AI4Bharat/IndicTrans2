@@ -5,6 +5,8 @@ vocab_dir=$2
 train_data_dir=$3
 devtest_data_dir=$4
 benchmarks_dir=$5
+add_bt_tag=${6:-"false"}
+add_ft_tag=${7:-"false"}
 
 root=$(dirname $0)
 
@@ -19,9 +21,6 @@ python scripts/dedup_benchmark.py $train_data_dir ${train_data_dir}_benchmarks_d
 
 train_data_dir=${train_data_dir}_benchmarks_deduped
 echo "train_data_dir set to ${train_data_dir}"
-
-# bash temp_scripts/flip_names.sh $train_data_dir
-# bash temp_scripts/flip_names.sh $devtest_data_dir
 
 train_processed_dir=$exp_dir/data
 devtest_processed_dir=$exp_dir/data
@@ -132,7 +131,8 @@ for split in train dev; do
     #
     # if we are translating lang1 to lang2 then <lang1 line> will become __src__ <lang1> __tgt__ <lang2> <lang1 line>
     echo "Adding language tags"
-    python scripts/add_joint_tags_translate.py $exp_dir $split
+    python scripts/add_joint_tags_translate.py $exp_dir $split $add_bt_tag $add_ft_tag
+
 done
 
 echo `date`
@@ -141,6 +141,6 @@ echo "Binarizing data"
 bash scripts/fairseq_binarize.sh $exp_dir/final $exp_dir/final_bin
   
 echo -e "[INFO]\tcleaning unnecessary files from exp dir to save space"
-rm -rf $exp_dir/bpe $exp_dir/final $exp_dir/data $exp_dir/norm $train_data_dir
+rm -rf $exp_dir/bpe $exp_dir/data $exp_dir/norm $train_data_dir
 
 echo -e "[INFO]\tcompleted!"
