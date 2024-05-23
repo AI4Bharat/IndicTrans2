@@ -3,6 +3,7 @@ A dictionary mapping intended to normalize the numerals in Indic languages from
 native script to Roman script. This is done to ensure that the figures / numbers 
 mentioned in native script are perfectly preserved during translation.
 """
+
 INDIC_NUM_MAP = {
     "\u09e6": "0",
     "0": "0",

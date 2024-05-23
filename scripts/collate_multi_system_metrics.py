@@ -12,9 +12,7 @@ def process_pair(devtest_dir, pair, systems):
         for system in systems:
             try:
                 with open(
-                    os.path.join(
-                        devtest_dir, pair, f"score.{system}.{pair}.json"
-                    ),
+                    os.path.join(devtest_dir, pair, f"score.{system}.{pair}.json"),
                     "r",
                 ) as f:
                     scores = json.load(f)

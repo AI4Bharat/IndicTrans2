@@ -42,9 +42,9 @@ def postprocess(
     """
     if spm_model_path is None:
         raise Exception("Please provide sentence piece model path for decoding")
-    
+
     sp = spm.SentencePieceProcessor(model_file=spm_model_path)
-    
+
     iso_lang = flores_codes[lang]
 
     consolidated_testoutput = [(x, 0.0, "") for x in range(input_size)]
@@ -58,26 +58,37 @@ def postprocess(
         )
 
     temp_testoutput = list(
-        map(
-            lambda x: (int(x[0].split("-")[1]), float(x[1]), x[2]), temp_testoutput
-        )
+        map(lambda x: (int(x[0].split("-")[1]), float(x[1]), x[2]), temp_testoutput)
     )
-    
+
     for sid, score, hyp in temp_testoutput:
         consolidated_testoutput[sid] = (sid, score, hyp)
 
     consolidated_testoutput = [x[2] for x in consolidated_testoutput]
-    consolidated_testoutput = Parallel(n_jobs=-1)([delayed(sp.decode)(x.split(' ')) for x in consolidated_testoutput])
+    consolidated_testoutput = Parallel(n_jobs=-1)(
+        [delayed(sp.decode)(x.split(" ")) for x in consolidated_testoutput]
+    )
 
     if iso_lang == "en":
-        consolidated_testoutput = Parallel(n_jobs=-1)([delayed(en_detok.detokenize)(x.split(' ')) for x in consolidated_testoutput])
+        consolidated_testoutput = Parallel(n_jobs=-1)(
+            [
+                delayed(en_detok.detokenize)(x.split(" "))
+                for x in consolidated_testoutput
+            ]
+        )
     else:
-        f = lambda sent: xliterator.transliterate(sent, "hi", iso_lang) if transliterate else sent
-        consolidated_testoutput = Parallel(n_jobs=-1)([delayed(indic_detokenize.trivial_detokenize)(f(x), iso_lang) for x in consolidated_testoutput])
+        f = lambda sent: (
+            xliterator.transliterate(sent, "hi", iso_lang) if transliterate else sent
+        )
+        consolidated_testoutput = Parallel(n_jobs=-1)(
+            [
+                delayed(indic_detokenize.trivial_detokenize)(f(x), iso_lang)
+                for x in consolidated_testoutput
+            ]
+        )
 
     with open(outfname, "w", encoding="utf-8") as outfile:
-        outfile.write('\n'.join(consolidated_testoutput))
-
+        outfile.write("\n".join(consolidated_testoutput))
 
 
 if __name__ == "__main__":

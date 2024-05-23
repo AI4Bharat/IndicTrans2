@@ -2,6 +2,7 @@
 FLORES language code mapping to 2 letter ISO language code for compatibility 
 with Indic NLP Library (https://github.com/anoopkunchukuttan/indic_nlp_library)
 """
+
 flores_codes = {
     "asm_Beng": "as",
     "awa_Deva": "hi",

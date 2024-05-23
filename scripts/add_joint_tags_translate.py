@@ -65,8 +65,8 @@ if __name__ == "__main__":
     add_bt_tag = sys.argv[3]
     add_ft_tag = sys.argv[4]
 
-    add_bt_tag = (add_bt_tag.lower() == "true" and split == "train")
-    add_ft_tag = (add_ft_tag.lower() == "true" and split == "train")
+    add_bt_tag = add_bt_tag.lower() == "true" and split == "train"
+    add_ft_tag = add_ft_tag.lower() == "true" and split == "train"
 
     src_fname = os.path.join(expdir, "bpe", f"{split}.SRC")
     tgt_fname = os.path.join(expdir, "bpe", f"{split}.TGT")

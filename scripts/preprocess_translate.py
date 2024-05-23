@@ -23,7 +23,7 @@ def preprocess_line(
     normalizer: Union[MosesPunctNormalizer, indic_normalize.IndicNormalizerFactory],
     lang: str,
     transliterate: bool = False,
-    remove_tag: bool = True
+    remove_tag: bool = True,
 ) -> str:
     """
     Preprocess a line of text by normalizing, tokenization, and possibly transliterating it.
@@ -39,49 +39,59 @@ def preprocess_line(
         str: preprocessed line of text.
     """
     iso_lang = flores_codes[lang]
-    
-    pattern = r'<dnt>(.*?)</dnt>'
+
+    pattern = r"<dnt>(.*?)</dnt>"
     raw_matches = re.findall(pattern, line)
 
     if iso_lang == "en":
-        processed_line = " ".join(en_tok.tokenize(en_normalizer.normalize(line.strip()), escape=False))
+        processed_line = " ".join(
+            en_tok.tokenize(en_normalizer.normalize(line.strip()), escape=False)
+        )
     elif transliterate:
         # transliterates from the any specific language to devanagari
         # which is why we specify lang2_code as "hi".
         # line = indic_detokenize.trivial_detokenize(line.strip(), lang)
         processed_line = unicode_transliterate.UnicodeIndicTransliterator.transliterate(
-            " ".join(indic_tokenize.trivial_tokenize(normalizer.normalize(line.strip()), iso_lang)),
+            " ".join(
+                indic_tokenize.trivial_tokenize(
+                    normalizer.normalize(line.strip()), iso_lang
+                )
+            ),
             iso_lang,
             "hi",
         ).replace(" ् ", "्")
     else:
         # we only need to transliterate for joint training
         processed_line = " ".join(
-            indic_tokenize.trivial_tokenize(normalizer.normalize(line.strip()), iso_lang)
+            indic_tokenize.trivial_tokenize(
+                normalizer.normalize(line.strip()), iso_lang
+            )
         )
 
     processed_line = processed_line.replace("< dnt >", "<dnt>")
     processed_line = processed_line.replace("< / dnt >", "</dnt>")
-    
+
     processed_line_matches = re.findall(pattern, processed_line)
 
     processed_line_matches = [
-        processed_line.replace(processed_line_match, raw_match) 
-        for (raw_match, processed_line_match) in zip(raw_matches, processed_line_matches)
+        processed_line.replace(processed_line_match, raw_match)
+        for (raw_match, processed_line_match) in zip(
+            raw_matches, processed_line_matches
+        )
     ]
-    
-    if remove_tag:
-        processed_line = re.sub("\s+", " ", processed_line.replace("<dnt>", " ")).strip()
-        processed_line = re.sub("\s+", " ", processed_line.replace("</dnt>", " ")).strip()
-    
-    return processed_line
-    
 
-def preprocess(
-    lang: str, 
-    transliterate: bool = False, 
-    remove_tag: bool= True
-) -> int:
+    if remove_tag:
+        processed_line = re.sub(
+            "\s+", " ", processed_line.replace("<dnt>", " ")
+        ).strip()
+        processed_line = re.sub(
+            "\s+", " ", processed_line.replace("</dnt>", " ")
+        ).strip()
+
+    return processed_line
+
+
+def preprocess(lang: str, transliterate: bool = False, remove_tag: bool = True) -> int:
     """
     Preprocess the text in the input file by normalizing, tokenizing and
     script conversation and write the output to a new file.
@@ -95,18 +105,21 @@ def preprocess(
         int: number of sentences in the input file
     """
     iso_lang = flores_codes[lang]
-    normalizer = indic_normalize.IndicNormalizerFactory().get_normalizer(iso_lang) if iso_lang != 'en' else None
+    normalizer = (
+        indic_normalize.IndicNormalizerFactory().get_normalizer(iso_lang)
+        if iso_lang != "en"
+        else None
+    )
 
     for line in sys.stdin:
         print(preprocess_line(line, normalizer, lang, transliterate, remove_tag))
-
 
 
 if __name__ == "__main__":
     lang = sys.argv[1]
     transliterate = sys.argv[2]
     remove_tag = sys.argv[3]
-    
+
     transliterate = transliterate.lower() == "true"
     remove_tag = remove_tag.lower() == "true"
 
