@@ -94,7 +94,7 @@ def truncate_long_sentences(
     Returns:
         Tuple[List[str], List[Dict]]: tuple containing the list of sentences with truncation applied and the updated placeholder entity maps.
     """
-    MAX_SEQ_LEN = 64
+    MAX_SEQ_LEN = 256
     new_sents = []
     placeholders = []
 
