@@ -1,7 +1,7 @@
 import hashlib
 import os
 import uuid
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 import regex as re
 import sentencepiece as spm
