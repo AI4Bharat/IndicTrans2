@@ -1,7 +1,7 @@
 import hashlib
 import os
 import uuid
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 
 import regex as re
 import sentencepiece as spm
@@ -82,7 +82,7 @@ def apply_lang_tags(sents: List[str], src_lang: str, tgt_lang: str) -> List[str]
 
 
 def truncate_long_sentences(
-    sents: List[str], placeholder_entity_map_sents: List[dict]
+    sents: List[str], placeholder_entity_map_sents: List[Dict]
 ) -> Tuple[List[str], List[Dict]]:
     """
     Truncates the sentences that exceed the maximum sequence length.
@@ -307,7 +307,7 @@ class Model:
             tgt_lang (str): flores language code of the output text sentences.
 
         Returns:
-            Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
+            Tuple[List[str], List[Dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
                 mapping placeholders to their original values.
         """
         preprocessed_sents, placeholder_entity_map_sents = self.preprocess(batch, lang=src_lang)
@@ -335,7 +335,7 @@ class Model:
         sent: str,
         normalizer: Union[MosesPunctNormalizer, indic_normalize.IndicNormalizerFactory],
         lang: str,
-    ) -> str:
+    ) -> Tuple[str, Dict]:
         """
         Preprocess an input text sentence by normalizing, tokenization, and possibly transliterating it.
 
@@ -345,8 +345,8 @@ class Model:
             lang (str): flores language code of the input text sentence.
 
         Returns:
-            Tuple[str, dict]: a tuple of preprocessed input text sentence and also a corresponding dictionary
-                mapping placeholders to their original values.
+            Tuple[str, Dict]: A tuple containing the preprocessed input text sentence and a corresponding dictionary
+            mapping placeholders to their original values.
         """
         iso_lang = flores_codes[lang]
         sent = punc_norm(sent, iso_lang)
@@ -387,7 +387,7 @@ class Model:
             lang (str): flores language code of the input text sentences.
 
         Returns:
-            Tuple[List[str], List[dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
+            Tuple[List[str], List[Dict]]: a tuple of list of preprocessed input text sentences and also a corresponding list of dictionary
                 mapping placeholders to their original values.
         """
         processed_sents, placeholder_entity_map_sents = [], []
@@ -408,7 +408,7 @@ class Model:
     def postprocess(
         self,
         sents: List[str],
-        placeholder_entity_map: List[dict],
+        placeholder_entity_map: List[Dict],
         lang: str,
         common_lang: str = "hin_Deva",
     ) -> List[str]:
@@ -417,7 +417,7 @@ class Model:
 
         Args:
             sents (List[str]): batch of translated sentences to postprocess.
-            placeholder_entity_map (List[dict]): dictionary mapping placeholders to the original entity values.
+            placeholder_entity_map (List[Dict]): dictionary mapping placeholders to the original entity values.
             lang (str): flores language code of the input sentences.
             common_lang (str, optional): flores language code of the transliterated language (defaults: hin_Deva).
 
