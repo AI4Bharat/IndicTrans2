@@ -1,14 +1,15 @@
+%%writefile IndicTrans2/huggingface_interface/train_lora.sh
 export CUDA_VISIBLE_DEVICES=0
 
-data_dir=${1:-"en-indic-exp"}
-model_name=${2:-"ai4bharat/indictrans2-en-indic-dist-200M"}
-output_dir=${3:-"output"}
+data_dir=${1:-"/kaggle/input/english-santali-for-parameter-tuning/en-santali-exp"}
+model_name=${2:-"ai4bharat/indictrans2-en-indic-1B"}
+output_dir=${3:-"/kaggle/working/output"}
 src_lang_list=${4:-"eng_Latn"}
-tgt_lang_list=${5:-"asm_Beng,ben_Beng,guj_Gujr,hin_Deva,kan_Knda,mal_Mlym,mar_Deva,npi_Deva,ory_Orya,pan_Guru,tam_Taml,tel_Telu,urd_Arab"}
+tgt_lang_list=${5:-"sat_Olck"}
 
 python3 train_lora.py \
     --data_dir $data_dir \
-    --model_name $model_name \
+    --model $model_name \
     --output_dir $output_dir \
     --src_lang_list $src_lang_list \
     --tgt_lang_list $tgt_lang_list \
