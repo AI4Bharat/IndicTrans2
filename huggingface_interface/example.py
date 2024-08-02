@@ -1,4 +1,6 @@
+%%writefile IndicTrans2/huggingface_interface/example.py
 import sys
+import os
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
 from transformers.utils import is_flash_attn_2_available, is_flash_attn_greater_or_equal_2_10
@@ -6,13 +8,10 @@ from IndicTransTokenizer import IndicProcessor
 from mosestokenizer import MosesSentenceSplitter
 from nltk import sent_tokenize
 from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
+from peft import PeftModel
 
-
-en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # ai4bharat/indictrans2-en-indic-dist-200M
-indic_en_ckpt_dir = "ai4bharat/indictrans2-indic-en-1B"  # ai4bharat/indictrans2-indic-en-dist-200M
-indic_indic_ckpt_dir = (
-    "ai4bharat/indictrans2-indic-indic-dist-320M"  # ai4bharat/indictrans2-indic-indic-dist-320M
-)
+en_indic_ckpt_dir = "ai4bharat/indictrans2-en-indic-1B"  # Base model checkpoint directory
+lora_ckpt_dir = "/kaggle/working/output"  # Path to the fine-tuned LoRA checkpoint
 BATCH_SIZE = 4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -22,7 +21,6 @@ if len(sys.argv) > 1:
 else:
     quantization = ""
     attn_implementation = "eager"
-
 
 # FLORES language code mapping to 2 letter ISO language code for compatibility
 # with Indic NLP Library (https://github.com/anoopkunchukuttan/indic_nlp_library)
@@ -53,14 +51,13 @@ flores_codes = {
     "ory_Orya": "or",
     "pan_Guru": "pa",
     "san_Deva": "hi",
-    "sat_Olck": "or",
+    "sat_Olck": "sat",
     "snd_Arab": "ur",
     "snd_Deva": "hi",
     "tam_Taml": "ta",
     "tel_Telu": "te",
     "urd_Arab": "ur",
 }
-
 
 def split_sentences(input_text, lang):
     if lang == "eng_Latn":
@@ -78,7 +75,6 @@ def split_sentences(input_text, lang):
             input_text, lang=flores_codes[lang], delim_pat=DELIM_PAT_NO_DANDA
         )
     return input_sentences
-
 
 def initialize_model_and_tokenizer(ckpt_dir, quantization, attn_implementation):
     if quantization == "4-bit":
@@ -111,14 +107,13 @@ def initialize_model_and_tokenizer(ckpt_dir, quantization, attn_implementation):
         quantization_config=qconfig,
     )
 
-    if qconfig == None:
+    if qconfig is None:
         model = model.to(DEVICE)
         model.half()
 
     model.eval()
 
     return tokenizer, model
-
 
 def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
     translations = []
@@ -164,12 +159,26 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
 
     return translations
 
-
 def translate_paragraph(input_text, src_lang, tgt_lang, model, tokenizer, ip):
     input_sentences = split_sentences(input_text, src_lang)
     translated_text = batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip)
     return " ".join(translated_text)
 
+def translate_flores_dataset(input_file, output_file, src_lang, tgt_lang, model, tokenizer, ip):
+    with open(input_file, 'r', encoding='utf-8') as infile:
+        input_texts = infile.readlines()
+
+    translations = []
+    for input_text in input_texts:
+        input_text = input_text.strip()
+        if not input_text:
+            continue
+        translated_text = translate_paragraph(input_text, src_lang, tgt_lang, model, tokenizer, ip)
+        translations.append(translated_text)
+
+    with open(output_file, 'w', encoding='utf-8') as outfile:
+        for translation in translations:
+            outfile.write(translation + '\n')
 
 ip = IndicProcessor(inference=True)
 
@@ -177,99 +186,11 @@ en_indic_tokenizer, en_indic_model = initialize_model_and_tokenizer(
     en_indic_ckpt_dir, quantization, attn_implementation
 )
 
-indic_en_tokenizer, indic_en_model = initialize_model_and_tokenizer(
-    indic_en_ckpt_dir, quantization, attn_implementation
-)
+lora_model = PeftModel.from_pretrained(en_indic_model, lora_ckpt_dir)
 
-indic_indic_tokenizer, indic_indic_model = initialize_model_and_tokenizer(
-    indic_indic_ckpt_dir, quantization, attn_implementation
-)
+src_lang, tgt_lang = "eng_Latn", "sat_Olck"
+input_file = "/kaggle/input/flores-santali-test/dev.eng_Latn"
+output_file = "/kaggle/working/dev.sat_Olck"
 
-# ---------------------------------------------------------------------------
-#                              Hindi to English
-# ---------------------------------------------------------------------------
-hi_sents = [
-    "जब मैं छोटा था, मैं हर रोज़ पार्क जाता था।",
-    "उसके पास बहुत सारी पुरानी किताबें हैं, जिन्हें उसने अपने दादा-परदादा से विरासत में पाया।",
-    "मुझे समझ में नहीं आ रहा कि मैं अपनी समस्या का समाधान कैसे ढूंढूं।",
-    "वह बहुत मेहनती और समझदार है, इसलिए उसे सभी अच्छे मार्क्स मिले।",
-    "हमने पिछले सप्ताह एक नई फिल्म देखी जो कि बहुत प्रेरणादायक थी।",
-    "अगर तुम मुझे उस समय पास मिलते, तो हम बाहर खाना खाने चलते।",
-    "वह अपनी दीदी के साथ बाजार गयी थी ताकि वह नई साड़ी खरीद सके।",
-    "राज ने मुझसे कहा कि वह अगले महीने अपनी नानी के घर जा रहा है।",
-    "सभी बच्चे पार्टी में मज़ा कर रहे थे और खूब सारी मिठाइयाँ खा रहे थे।",
-    "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
-]
-src_lang, tgt_lang = "hin_Deva", "eng_Latn"
-en_translations = batch_translate(
-    hi_sents, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip
-)
-
-print(f"\n{src_lang} - {tgt_lang}")
-for input_sentence, translation in zip(hi_sents, en_translations):
-    print(f"{src_lang}: {input_sentence}")
-    print(f"{tgt_lang}: {translation}")
-
-
-# ---------------------------------------------------------------------------
-#                              English to Hindi
-# ---------------------------------------------------------------------------
-en_sents = [
-    "When I was young, I used to go to the park every day.",
-    "He has many old books, which he inherited from his ancestors.",
-    "I can't figure out how to solve my problem.",
-    "She is very hardworking and intelligent, which is why she got all the good marks.",
-    "We watched a new movie last week, which was very inspiring.",
-    "If you had met me at that time, we would have gone out to eat.",
-    "She went to the market with her sister to buy a new sari.",
-    "Raj told me that he is going to his grandmother's house next month.",
-    "All the kids were having fun at the party and were eating lots of sweets.",
-    "My friend has invited me to his birthday party, and I will give him a gift.",
-]
-src_lang, tgt_lang = "eng_Latn", "hin_Deva"
-hi_translations = batch_translate(
-    en_sents, src_lang, tgt_lang, en_indic_model, en_indic_tokenizer, ip
-)
-
-print(f"\n{src_lang} - {tgt_lang}")
-for input_sentence, translation in zip(en_sents, hi_translations):
-    print(f"{src_lang}: {input_sentence}")
-    print(f"{tgt_lang}: {translation}")
-
-
-# ---------------------------------------------------------------------------
-#                              Hindi to Marathi
-# ---------------------------------------------------------------------------
-hi_sents = [
-    "जब मैं छोटा था, मैं हर रोज़ पार्क जाता था।",
-    "उसके पास बहुत सारी पुरानी किताबें हैं, जिन्हें उसने अपने दादा-परदादा से विरासत में पाया।",
-    "मुझे समझ में नहीं आ रहा कि मैं अपनी समस्या का समाधान कैसे ढूंढूं।",
-    "वह बहुत मेहनती और समझदार है, इसलिए उसे सभी अच्छे मार्क्स मिले।",
-    "हमने पिछले सप्ताह एक नई फिल्म देखी जो कि बहुत प्रेरणादायक थी।",
-    "अगर तुम मुझे उस समय पास मिलते, तो हम बाहर खाना खाने चलते।",
-    "वह अपनी दीदी के साथ बाजार गयी थी ताकि वह नई साड़ी खरीद सके।",
-    "राज ने मुझसे कहा कि वह अगले महीने अपनी नानी के घर जा रहा है।",
-    "सभी बच्चे पार्टी में मज़ा कर रहे थे और खूब सारी मिठाइयाँ खा रहे थे।",
-    "मेरे मित्र ने मुझे उसके जन्मदिन की पार्टी में बुलाया है, और मैं उसे एक तोहफा दूंगा।",
-]
-src_lang, tgt_lang = "hin_Deva", "mar_Deva"
-mr_translations = batch_translate(
-    hi_sents, src_lang, tgt_lang, indic_indic_model, indic_indic_tokenizer, ip
-)
-
-print(f"\n{src_lang} - {tgt_lang}")
-for input_sentence, translation in zip(hi_sents, mr_translations):
-    print(f"{src_lang}: {input_sentence}")
-    print(f"{tgt_lang}: {translation}")
-
-
-# ---------------------------------------------------------------------------
-#                             Paragraph translation
-# ---------------------------------------------------------------------------
-src_lang, tgt_lang = "hin_Deva", "eng_Latn"
-hi_text = "यहाँ एक पाराग्राफ है जो हिंदी में लिखा गया है। हिंदी एक सुंदर भाषा है और भारत की राष्ट्रीय भाषा है। इसका विकास विभिन्न कालों में हुआ है और यह विशेषतः भारतीय उपमहाद्वीप में बोली जाती है। हिंदी भाषा का साहित्य, संस्कृति और इतिहास भी बहुत गर्वनीय है।"
-en_translated_text = translate_paragraph(
-    hi_text, src_lang, tgt_lang, indic_en_model, indic_en_tokenizer, ip
-)
-print(f"{src_lang}: {hi_text}")
-print(f"{tgt_lang}: {en_translated_text}")
+translate_flores_dataset(input_file, output_file, src_lang, tgt_lang, lora_model, en_indic_tokenizer, ip)
+print(f"Translation complete. Translated text saved to {output_file}")
