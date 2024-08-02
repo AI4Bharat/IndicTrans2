@@ -1,3 +1,4 @@
+%%writefile IndicTrans2/huggingface_interface/train_lora.py
 import os
 import argparse
 import pandas as pd
@@ -5,7 +6,6 @@ from datasets import Dataset
 from sacrebleu.metrics import BLEU, CHRF
 from peft import LoraConfig, get_peft_model
 from IndicTransTokenizer import IndicProcessor, IndicDataCollator
-
 from transformers import (
     Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
@@ -17,23 +17,11 @@ from transformers import (
 bleu_metric = BLEU()
 chrf_metric = CHRF()
 
-
 def get_arg_parse():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model",
-        type=str,
-    )
-    parser.add_argument(
-        "--src_lang_list",
-        type=str,
-        help="comma separated list of source languages",
-    )
-    parser.add_argument(
-        "--tgt_lang_list",
-        type=str,
-        help="comma separated list of target languages",
-    )
+    parser.add_argument("--model", type=str)
+    parser.add_argument("--src_lang_list", type=str, help="comma separated list of source languages")
+    parser.add_argument("--tgt_lang_list", type=str, help="comma separated list of target languages")
     parser.add_argument("--data_dir", type=str)
     parser.add_argument("--output_dir", type=str)
     parser.add_argument("--save_steps", type=int, default=1000)
@@ -51,31 +39,8 @@ def get_arg_parse():
     parser.add_argument("--adam_beta2", type=float, default=0.98)
     parser.add_argument("--dropout", type=float, default=0.0)
     parser.add_argument("--print_samples", action="store_true")
-    parser.add_argument(
-        "--optimizer",
-        type=str,
-        default="adamw_torch",
-        choices=[
-            "adam_hf",
-            "adamw_torch",
-            "adamw_torch_fused",
-            "adamw_apex_fused",
-            "adafactor",
-        ],
-    )
-    parser.add_argument(
-        "--lr_scheduler",
-        type=str,
-        default="inverse_sqrt",
-        choices=[
-            "inverse_sqrt",
-            "linear",
-            "polynomial",
-            "cosine",
-            "constant",
-            "constant_with_warmup",
-        ],
-    )
+    parser.add_argument("--optimizer", type=str, default="adamw_torch", choices=["adam_hf", "adamw_torch", "adamw_torch_fused", "adamw_apex_fused", "adafactor"])
+    parser.add_argument("--lr_scheduler", type=str, default="inverse_sqrt", choices=["inverse_sqrt", "linear", "polynomial", "cosine", "constant", "constant_with_warmup"])
     parser.add_argument("--label_smoothing", type=float, default=0.0)
     parser.add_argument("--num_workers", type=int, default=8)
     parser.add_argument("--metric_for_best_model", type=str, default="eval_loss")
@@ -84,27 +49,12 @@ def get_arg_parse():
     parser.add_argument("--lora_dropout", type=float, default=0.1)
     parser.add_argument("--lora_r", type=int, default=16)
     parser.add_argument("--lora_alpha", type=int, default=32)
-    parser.add_argument(
-        "--report_to",
-        type=str,
-        default="none",
-        choices=["wandb", "tensorboard", "azure_ml", "none"],
-    )
-    parser.add_argument("--patience", type=int, default=5),
+    parser.add_argument("--report_to", type.str, default="none", choices=["wandb", "tensorboard", "azure_ml", "none"])
+    parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--threshold", type=float, default=1e-3)
     return parser
 
-
-def load_and_process_translation_dataset(
-    data_dir,
-    split="train",
-    tokenizer=None,
-    processor=None,
-    src_lang_list=None,
-    tgt_lang_list=None,
-    num_proc=8,
-    seed=42
-):
+def load_and_process_translation_dataset(data_dir, split="train", tokenizer=None, processor=None, src_lang_list=None, tgt_lang_list=None, num_proc=8, seed=42):
     complete_dataset = {
         "sentence_SRC": [],
         "sentence_TGT": [],
@@ -114,50 +64,25 @@ def load_and_process_translation_dataset(
         for tgt_lang in tgt_lang_list:
             if src_lang == tgt_lang:
                 continue
-            src_path = os.path.join(
-                data_dir, split, f"{src_lang}-{tgt_lang}", f"{split}.{src_lang}"
-            )
-            tgt_path = os.path.join(
-                data_dir, split, f"{src_lang}-{tgt_lang}", f"{split}.{tgt_lang}"
-            )
+            src_path = os.path.join(data_dir, split, f"{src_lang}-{tgt_lang}", f"{split}.{src_lang}")
+            tgt_path = os.path.join(data_dir, split, f"{src_lang}-{tgt_lang}", f"{split}.{tgt_lang}")
             if not os.path.exists(src_path) or not os.path.exists(tgt_path):
-                raise FileNotFoundError(
-                    f"Source ({split}.{src_lang}) or Target ({split}.{tgt_lang}) file not found in {data_dir}"
-                )
-            with open(src_path, encoding="utf-8") as src_file, open(
-                tgt_path, encoding="utf-8"
-            ) as tgt_file:
+                raise FileNotFoundError(f"Source ({split}.{src_lang}) or Target ({split}.{tgt_lang}) file not found in {data_dir}")
+            with open(src_path, encoding="utf-8") as src_file, open(tgt_path, encoding="utf-8") as tgt_file:
                 src_lines = src_file.readlines()
                 tgt_lines = tgt_file.readlines()
 
             # Ensure both files have the same number of lines
-            assert len(src_lines) == len(
-                tgt_lines
-            ), f"Source and Target files have different number of lines for {split}.{src_lang} and {split}.{tgt_lang}"
+            assert len(src_lines) == len(tgt_lines), f"Source and Target files have different number of lines for {split}.{src_lang} and {split}.{tgt_lang}"
 
-            complete_dataset["sentence_SRC"] += processor.preprocess_batch(
-                src_lines, src_lang=src_lang, tgt_lang=tgt_lang, is_target=False
-            )
-
-            complete_dataset["sentence_TGT"] += processor.preprocess_batch(
-                tgt_lines, src_lang=tgt_lang, tgt_lang=src_lang, is_target=True
-            )
+            complete_dataset["sentence_SRC"] += processor.preprocess_batch(src_lines, src_lang=src_lang, tgt_lang=tgt_lang, is_target=False)
+            complete_dataset["sentence_TGT"] += processor.preprocess_batch(tgt_lines, src_lang=tgt_lang, tgt_lang=src_lang, is_target=True)
 
     complete_dataset = Dataset.from_dict(complete_dataset).shuffle(seed=seed)
 
-    return complete_dataset.map(
-        lambda example: preprocess_fn(
-            example,
-            tokenizer=tokenizer
-        ),
-        batched=True,
-        num_proc=num_proc,
-    )
+    return complete_dataset.map(lambda example: preprocess_fn(example, tokenizer=tokenizer), batched=True, num_proc=num_proc)
 
-
-def compute_metrics_factory(
-    tokenizer, metric_dict=None, print_samples=False, n_samples=10
-):
+def compute_metrics_factory(tokenizer, metric_dict=None, print_samples=False, n_samples=10):
     def compute_metrics(eval_preds):
         preds, labels = eval_preds
 
@@ -165,26 +90,12 @@ def compute_metrics_factory(
         preds[preds == -100] = tokenizer.pad_token_id
 
         with tokenizer.as_target_tokenizer():
-            preds = [
-                x.strip()
-                for x in tokenizer.batch_decode(
-                    preds, skip_special_tokens=True, clean_up_tokenization_spaces=True
-                )
-            ]
-            labels = [
-                x.strip()
-                for x in tokenizer.batch_decode(
-                    labels, skip_special_tokens=True, clean_up_tokenization_spaces=True
-                )
-            ]
+            preds = [x.strip() for x in tokenizer.batch_decode(preds, skip_special_tokens=True, clean_up_tokenization_spaces=True)]
+            labels = [x.strip() for x in tokenizer.batch_decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=True)]
 
-        assert len(preds) == len(
-            labels
-        ), "Predictions and Labels have different lengths"
+        assert len(preds) == len(labels), "Predictions and Labels have different lengths"
 
-        df = pd.DataFrame({"Predictions": preds, "References": labels}).sample(
-            n=n_samples
-        )
+        df = pd.DataFrame({"Predictions": preds, "References": labels}).sample(n=n_samples)
 
         if print_samples:
             for pred, label in zip(df["Predictions"].values, df["References"].values):
@@ -198,38 +109,27 @@ def compute_metrics_factory(
 
     return compute_metrics
 
-
 def preprocess_fn(example, tokenizer, **kwargs):
-    model_inputs = tokenizer(
-        example["sentence_SRC"], truncation=True, padding=False, max_length=256
-    )
+    model_inputs = tokenizer(example["sentence_SRC"], truncation=True, padding=False, max_length=256)
 
     with tokenizer.as_target_tokenizer():
-        labels = tokenizer(
-            example["sentence_TGT"], truncation=True, padding=False, max_length=256
-        )
+        labels = tokenizer(example["sentence_TGT"], truncation=True, padding=False, max_length=256)
 
     model_inputs["labels"] = labels["input_ids"]
     return model_inputs
 
-
 def main(args):
     print(f" | > Loading {args.model} and tokenizer ...")
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        args.model,
-        trust_remote_code=True,
-        attn_implementation="eager",
-        dropout=args.dropout
-    )
+    model = AutoModelForSeq2SeqLM.from_pretrained(args.model, trust_remote_code=True, attn_implementation="eager", dropout=args.dropout)
 
     tokenizer = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
-    processor = IndicProcessor(inference=False) # pre-process before tokenization
-    
+    processor = IndicProcessor(inference=False)  # pre-process before tokenization
+
     data_collator = IndicDataCollator(
         tokenizer=tokenizer,
         model=model,
-        padding="longest", # saves padding tokens
-        pad_to_multiple_of=8, # better to have it as 8 when using fp16
+        padding="longest",  # saves padding tokens
+        pad_to_multiple_of=8,  # better to have it as 8 when using fp16
         label_pad_token_id=-100
     )
 
@@ -282,7 +182,7 @@ def main(args):
         output_dir=args.output_dir,
         do_train=True,
         do_eval=True,
-        fp16=True, # use fp16 for faster training
+        fp16=True,  # use fp16 for faster training
         logging_strategy="steps",
         evaluation_strategy="steps",
         save_strategy="steps",
@@ -290,7 +190,7 @@ def main(args):
         save_total_limit=1,
         predict_with_generate=True,
         load_best_model_at_end=True,
-        max_steps=args.max_steps, # max_steps overrides num_train_epochs
+        max_steps=args.max_steps,  # max_steps overrides num_train_epochs
         per_device_train_batch_size=args.batch_size,
         per_device_eval_batch_size=args.batch_size,
         gradient_accumulation_steps=args.grad_accum_steps,
@@ -345,8 +245,6 @@ def main(args):
 
     # this will only save the LoRA adapter weights
     model.save_pretrained(args.output_dir)
-
-
 
 if __name__ == "__main__":
     parser = get_arg_parse()
