@@ -2,7 +2,7 @@ import sys
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
 from transformers.utils import is_flash_attn_2_available, is_flash_attn_greater_or_equal_2_10
-from IndicTransTokenizer import IndicProcessor
+from IndicTransToolkit import IndicProcessor
 from mosestokenizer import MosesSentenceSplitter
 from nltk import sent_tokenize
 from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA

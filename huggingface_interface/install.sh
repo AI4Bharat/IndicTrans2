@@ -40,8 +40,8 @@ python3 -m pip install sentencepiece
 # -----------------------------------------------------------------
 #       Install IndicTrans2 tokenizer and its dependencies
 # -----------------------------------------------------------------
-git clone https://github.com/VarunGumma/IndicTransTokenizer
-cd IndicTransTokenizer
+git clone https://github.com/VarunGumma/IndicTransToolkit
+cd IndicTransToolkit
 python3 -m pip install --editable ./
 cd $root_dir
 
