@@ -12,7 +12,7 @@ conda activate itv2
 
 echo "Installing all the dependencies"
 conda install pip
-python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade pip==24.0
 
 
 # --------------------------------------------------------------
