@@ -2,9 +2,9 @@
 
 [📜 Paper](https://arxiv.org/abs/2305.16307) | [🌐 Website](https://ai4bharat.iitm.ac.in/indic-trans2) | [▶️ Demo](https://models.ai4bharat.org/#/nmt/v2) | [🤗 HF Interface](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_interface) | [![colab link](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AI4Bharat/IndicTrans2/blob/main/huggingface_interface/colab_inference.ipynb)
 
-IndicTrans2 is the first open-source transformer-based multilingual NMT model that supports high-quality translations across all the 22 scheduled Indic languages — including multiple scripts for low-resouce languages like Kashmiri, Manipuri and Sindhi. It adopts script unification wherever feasible to leverage transfer learning by lexical sharing between languages. Overall, the model supports five scripts Perso-Arabic (Kashmiri, Sindhi, Urdu), Ol Chiki (Santali), Meitei (Manipuri), Latin (English), and Devanagari (used for all the remaining languages).
+IndicTrans2 is the first open-source transformer-based multilingual NMT model that supports high-quality translations across all the 22 scheduled Indic languages — including multiple scripts for low-resource languages like Kashmiri, Manipuri and Sindhi. It adopts script unification wherever feasible to leverage transfer learning by lexical sharing between languages. Overall, the model supports five scripts Perso-Arabic (Kashmiri, Sindhi, Urdu), Ol Chiki (Santali), Meitei (Manipuri), Latin (English), and Devanagari (used for all the remaining languages).
 
-We open-souce all our training dataset (BPCC), back-translation data (BPCC-BT), final IndicTrans2 models, evaluation benchmarks (IN22, which includes IN22-Gen and IN22-Conv) and training and inference scripts for easier use and adoption within the research community. We hope that this will foster even more research in low-resource Indic languages, leading to further improvements in the quality of low-resource translation through contributions from the research community.
+We open-source all our training dataset (BPCC), back-translation data (BPCC-BT), final IndicTrans2 models, evaluation benchmarks (IN22, which includes IN22-Gen and IN22-Conv) and training and inference scripts for easier use and adoption within the research community. We hope that this will foster even more research in low-resource Indic languages, leading to further improvements in the quality of low-resource translation through contributions from the research community.
 
 This code repository contains instructions for downloading the artifacts associated with IndicTrans2, as well as the code for training/fine-tuning the multilingual NMT models.
 
@@ -68,48 +68,60 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 ## Tables of Contents
 
-- [Download Models and Other Artifacts](#download-models-and-other-artifacts)
-  - [Multilingual Translation Models](#multilingual-translation-models)
-  - [Training Data](#training-data)
-  - [Evaluation Data](#evaluation-data)
-- [Installation](#installation)
-- [Data](#data)
-  - [Training](#training)
-  - [Evaluation](#evaluation)
-- [Preparing Data for Training](#preparing-data-for-training)
-  - [Using our SPM model and Fairseq dictionary](#using-our-spm-model-and-fairseq-dictionary)
-  - [Training your own SPM models and learning Fairseq dictionary](#training-your-own-spm-models-and-learning-fairseq-dictionary)
-- [Training / Fine-tuning](#training--fine-tuning)
-- [Inference](#inference)
-  - [Fairseq Inference](#fairseq-inference)
-  - [CT2 Inference](#ct2-inference)
-- [Evaluations](#evaluations)
-  - [Baseline Evaluation](#baseline-evaluation)
-- [LICENSE](#license)
-- [Citation](#citation)
+- [IndicTrans2](#indictrans2)
+  - [Updates](#updates)
+  - [Tables of Contents](#tables-of-contents)
+  - [Download Models and Other Artifacts](#download-models-and-other-artifacts)
+    - [Multilingual Translation Models](#multilingual-translation-models)
+    - [Training Data](#training-data)
+    - [Evaluation Data](#evaluation-data)
+  - [Installation](#installation)
+    - [Additional notes about Installation](#additional-notes-about-installation)
+  - [Data](#data)
+    - [Training](#training)
+    - [Evaluation](#evaluation)
+  - [Preparing Data for Training](#preparing-data-for-training)
+    - [Using our SPM model and Fairseq dictionary](#using-our-spm-model-and-fairseq-dictionary)
+    - [Training your own SPM models and learning Fairseq dictionary](#training-your-own-spm-models-and-learning-fairseq-dictionary)
+  - [Training / Fine-tuning](#training--fine-tuning)
+  - [Inference](#inference)
+    - [Fairseq Inference](#fairseq-inference)
+    - [CT2 Inference](#ct2-inference)
+  - [Evaluations](#evaluations)
+    - [Baseline Evaluation](#baseline-evaluation)
+  - [LICENSE](#license)
+  - [Citation](#citation)
 
 ## Download Models and Other Artifacts
 
 ### Multilingual Translation Models
 
-| Model                        | En-Indic                                                                                                    | Indic-En                                                                                                    | Indic-Indic                                                                                            | Evaluations                                                                                                                                                                                                          |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Base (used for benchmarking) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-indic.zip)  | [translations](https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
-| Distilled                    | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/en-indic.zip)         | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-en.zip)         | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-indic.zip) |
+Click to download zip of model
+
+| Model                        | En-Indic                 | Indic-En                    | Indic-Indic                   | Evaluations  |
+| ---------------------------- | ------------------------ | --------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
+| Base (used for benchmarking) | [base-en-indic :arrow_down:][base-en-indic]  | [base-indic-en :arrow_down:][base-indic-en] | [base-indic-indic :arrow_down:][base-indic-indic]  | [base-translations :arrow_down:][base-translation] (as of May 10, 2023), [base-metrics ::arrow_down:][base-metric] |
+| Distilled                    | [distilled-en-indic :arrow_down:][distilled-en-indic] | [distilled-indic-en :arrow_down:][distilled-indic-en]  | [distilled-indic-indic :arrow_down:][distilled-indic-indic] | |
 
 ### Training Data
 
-| Data                                     | URL                                                                            |
-| ---------------------------------------- | ------------------------------------------------------------------------------ |
-| Bharat Parallel Corpus Collection (BPCC) | [download](https://indictrans2-public.objectstore.e2enetworks.net/BPCC.zip)    |
-| Back-translation (BPCC-BT)               | [download](https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip) |
+| Data                                     | URL                              |
+| ---------------------------------------- | -------------------------------- |
+| Bharat Parallel Corpus Collection (BPCC) | [BPCC :arrow_down:][BPCC]        |
+| Back-translation (BPCC-BT)               | [BPCC-BT :arrow_down:][BPCC-BT] |
+
+[BPCC]: https://indictrans2-public.objectstore.e2enetworks.net/BPCC.zip
+[BPCC-BT]: https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip
 
 ### Evaluation Data
 
 | Data                    | URL                                                                                  |
 | ----------------------- | ------------------------------------------------------------------------------------ |
-| IN22 test set           | [download](https://indictrans2-public.objectstore.e2enetworks.net/IN22_testset.zip)  |
-| FLORES-22 Indic dev set | [download](https://indictrans2-public.objectstore.e2enetworks.net/flores-22_dev.zip) |
+| IN22 test set           | [IN22 Test Set :arrow_down:][IN22-TEST-SET]  |
+| FLORES-22 Indic dev set | [FLORES 22 Test Set :arrow_down:][FLORES22-TEST-SET] |
+
+[IN22-TEST-SET]: https://indictrans2-public.objectstore.e2enetworks.net/IN22_testset.zip
+[FLORES22-TEST-SET]:https://indictrans2-public.objectstore.e2enetworks.net/flores-22_dev.zip
 
 ## Installation
 
@@ -124,13 +136,14 @@ cd IndicTrans2
 source install.sh
 ```
 
-Note: We recommend creating a virtual environment with python>=3.7.
+Note: We recommend creating a virtual environment with *python>=3.7.x*
 
 ### Additional notes about Installation
-The ``prepare_data_joint_finetuning.sh`` and ``prepare_data_joint_training.sh`` scripts expect that the sentencepiece commandline utility and GNU parallel are installed.
-1. To install the sentencepiece command line utility, please follow the instructions [here](https://github.com/google/sentencepiece?tab=readme-ov-file#build-and-install-sentencepiece-command-line-tools-from-c-source).
-2. Please check if GNU parallel is installed, if not please install the same or alternatively in case of installation issues, remove ``parallel --pipe --keep-order`` from the respective training / finetuning script as well as ``apply_sentence_piece.sh``.
 
+The `prepare_data_joint_finetuning.sh` and `prepare_data_joint_training.sh` scripts expect that the sentencepiece command line utility and GNU parallel are installed.
+
+1. To install the sentencepiece command line utility, please follow the instructions [here](https://github.com/google/sentencepiece?tab=readme-ov-file#build-and-install-sentencepiece-command-line-tools-from-c-source).
+2. Please check if GNU parallel is installed, if not please install the same or alternatively in case of installation issues, remove `parallel --pipe --keep-order` from the respective training / finetuning script as well as `apply_sentence_piece.sh`.
 
 ## Data
 
@@ -202,7 +215,7 @@ Additionally, we provide augmented back-translation data generated by our interm
 </tbody>
 </table>
 
-<br>
+---
 
 ### Evaluation
 
@@ -254,7 +267,7 @@ python3 scripts/dedup_benchmark.py <in_data_dir> <out_data_dir> <benchmark_dir>
 
 Once you complete the deduplication of the training data with the available benchmarks, you can preprocess and binarize the data for training models. Please download our trained SPM model and learned Fairseq dictionary using the following links for your experiments.
 
-|                    | En-Indic                                                                                     | Indic-En                                                                                     | Indic-Indic                                                                                     |
+| #                  | En-Indic                                                                                     | Indic-En                                                                                     | Indic-Indic                                                                                     |
 | ------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | SPM model          | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-spm.zip)          |
 | Fairseq dictionary | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-fairseq-dict.zip) |
@@ -311,15 +324,15 @@ If you want to train your own SPM model and learn Fairseq dictionary, then pleas
 2. Perform script unification for Indic languages wherever possible using `scripts/preprocess_translate.py` and concatenate all Indic data into a single file.
 3. Train two SPM models, one for English and other for Indic side using the following:
 
-```bash
-spm_train --input=train.indic --model_prefix=<model_name> --vocab_size=<vocab_size> --character_coverage=1.0 --model_type=BPE
-```
+    ```bash
+    spm_train --input=train.indic --model_prefix=<model_name> --vocab_size=<vocab_size> --character_coverage=1.0 --model_type=BPE
+    ```
 
 4. Copy the trained SPM models in the experiment directory mentioned earlier and learn the Fairseq dictionary using the following:
 
-```bash
-bash prepare_data_joint_training.sh <exp_dir>
-```
+    ```bash
+    bash prepare_data_joint_training.sh <exp_dir>
+    ```
 
 5. You will need to use the same Fairseq dictionary for any subsequent fine-tuning experiments and refer to the steps described above ([link](#using-our-spm-model-and-fairseq-dictionary)).
 
@@ -344,11 +357,11 @@ bash finetune.sh <exp_dir> <model_arch> <pretrained_ckpt>
 - `<model_arch>`: custom transformer architecture used for model training
   - `transformer_18_18` - For IT2 Base models
   - `transformer_base18L` - For IT2 Distilled models
-- `<pretrained_ckpt>`: path to the fairseq model checkpoint to be loaded for further fine-tuning
+- `<pre-trained_ckpt>`: path to the fairseq model checkpoint to be loaded for further fine-tuning
 
 You can download the model artifacts released as a part of this work from the [following section](#download-models-and-other-artifacts).
 
-The pretrained checkpoints have 3 directories, a fairseq model directory and 2 CT-ported model directories. Please note that the CT2 models are provided only for efficient inference. For fine-tuning purposes you should use the `fairseq_model`. Post that you can use the [fairseq-ct2-converter](https://opennmt.net/CTranslate2/guides/fairseq.html) to port your fine-tuned checkpoints to CT2 for faster inference.
+The pre-trained checkpoints have 3 directories, a fairseq model directory and 2 CT-ported model directories. Please note that the CT2 models are provided only for efficient inference. For fine-tuning purposes you should use the `fairseq_model`. Post that you can use the [fairseq-ct2-converter](https://opennmt.net/CTranslate2/guides/fairseq.html) to port your fine-tuned checkpoints to CT2 for faster inference.
 
 ## Inference
 
@@ -449,7 +462,7 @@ bash eval_rev.sh  <devtest_data_dir> <ckpt_dir> <system>
 - `<ckpt_dir>`: path to the fairseq model checkpoint directory
 - `<system>`: system name suffix to store the predictions in the format `test.{lang}.pred.{system}`
 
-**_Note: You don’t need to reverse the test set directions for each language pair._**
+***Note: You don’t need to reverse the test set directions for each language pair.***
 
 In case of Indic-Indic evaluation, please use the following command:
 
@@ -521,3 +534,13 @@ url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }
 ```
+<!-- Reference -->
+
+[base-en-indic]: https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip  
+[base-indic-en]: https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip
+[base-indic-indic]: https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-indic.zip
+[base-translation]: https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip
+[base-metric]: https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing
+[distilled-en-indic]: https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/en-indic.zip
+[distilled-indic-en]: https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-en.zip
+[distilled-indic-indic]: https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-indic.zip
