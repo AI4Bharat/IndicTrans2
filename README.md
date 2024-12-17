@@ -101,7 +101,7 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 | Data                                     | URL                                                                            |
 | ---------------------------------------- | ------------------------------------------------------------------------------ |
-| Bharat Parallel Corpus Collection (BPCC) | [download](https://indictrans2-public.objectstore.e2enetworks.net/BPCC.zip)    |
+| Bharat Parallel Corpus Collection (BPCC) | [download](https://ai4bharat.iitm.ac.in/datasets/bpcc)    |
 | Back-translation (BPCC-BT)               | [download](https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip) |
 
 ### Evaluation Data
