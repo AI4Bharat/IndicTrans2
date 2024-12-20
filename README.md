@@ -62,6 +62,7 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 ## Updates
 
+- 🚨 Dec 20, 2024 - The latest releases of the high-quality human-annotated BPCC-Seed dataset would henceforth be made available on the [AI4Bharat Website](https://ai4bharat.iitm.ac.in/datasets/bpcc).
 - 🚨 Dec 30, 2023 - Migrated IndicTrans2 tokenizer for HF compatible IndicTrans2 models to [IndicTransTokenizer](https://github.com/VarunGumma/IndicTransTokenizer) and will be maintained separately there from now onwards. Add LoRA fine-tuning scripts for our IndicTrans2 models in [huggingface_interface](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_interface).
 - 🚨 Dec 1, 2023 - Release of Indic-Indic model and corresponding distilled variants for each base model. Please refer to the [Download section](https://github.com/AI4Bharat/IndicTrans2#multilingual-translation-models) for the checkpoints.
 - 🚨 Sep 9, 2023 - Added HF compatible IndicTrans2 models. Please refer to the [README](https://github.com/AI4Bharat/IndicTrans2/tree/main/huggingface_interface) for detailed example usage.
@@ -99,10 +100,13 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 ### Training Data
 
-| Data                                     | URL                                                                            |
-| ---------------------------------------- | ------------------------------------------------------------------------------ |
-| Bharat Parallel Corpus Collection (BPCC) | [download](https://ai4bharat.iitm.ac.in/datasets/bpcc)    |
-| Back-translation (BPCC-BT)               | [download](https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip) |
+|Data                                  | URL                                                                                          |
+|-------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Bharat Parallel Corpus Collection  *(Complete BPCC dataset - includes BPCC-Seed V1 dataset)*   | [Download](https://indictrans2-public.objectstore.e2enetworks.net/BPCC.zip)                      |
+| Back-translation (BPCC-BT)            | [Download](https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip)                   |
+| ✨ BPCC-Seed Latest Release           | [Download](https://ai4bharat.iitm.ac.in/datasets/bpcc)                                           |
+
+
 
 ### Evaluation Data
 
