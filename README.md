@@ -95,15 +95,15 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 | Model                        | En-Indic                                                                                                    | Indic-En                                                                                                    | Indic-Indic                                                                                            | Evaluations                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Base (used for benchmarking) | [fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-1B) | [fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-1B) | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-1B)  | [translations](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/translation_outputs.tar.gz) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
-| Distilled                    | [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-dist-200M)         | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-dist-200M)         | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-dist-320M) |
+| Base (used for benchmarking) | [Fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-1B) | [fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-1B) | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-1B)  | [translations](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/translation_outputs.tar.gz) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
+| Distilled                    | [Fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-dist.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-dist-200M)         | [Fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-dist.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-dist-200M)         | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-dist-320M) |
 
 ### Training Data
 
 |Data                                  | URL                                                                                          |
 |-------------------------------------------|--------------------------------------------------------------------------------------------------|
 | ✨ BPCC-Seed Latest Release           | [HF Config: bpcc-seed-latest](https://huggingface.co/datasets/ai4bharat/BPCC)                                           |
-| BPCC (Used in Paper)    | [HF Config: bpcc-seed-v1](https://huggingface.co/datasets/ai4bharat/BPCC)                      |
+| BPCC (*Used in Paper - utilizes the BPCC-Seed V1 dataset*)    | [HF Config: bpcc-seed-v1](https://huggingface.co/datasets/ai4bharat/BPCC)                      |
 | Back-translation (BPCC-BT)            | Will be updated                   |
 
 
@@ -406,7 +406,7 @@ model.translate_paragraph(text, src_lang, tgt_lang)
 
 ## Evaluations
 
-We consider the chrF++ as our primary metric. Additionally, we also report the BLEU and Comet scores.
+We consider the chrF++ score as our primary metric. Additionally, we also report the BLEU and Comet scores.
 We also perform statistical significance tests for each metric to ascertain whether the differences are statistically significant.
 
 In order to run our evaluation scripts, you will need to organize the evaluation test sets into the following directory structure:
