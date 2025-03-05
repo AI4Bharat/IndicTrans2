@@ -95,16 +95,16 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 | Model                        | En-Indic                                                                                                    | Indic-En                                                                                                    | Indic-Indic                                                                                            | Evaluations                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Base (used for benchmarking) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/en-indic-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-en-preprint.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_preprint_ckpts/indic-indic.zip)  | [translations](https://indictrans2-public.objectstore.e2enetworks.net/translation_outputs.zip) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
-| Distilled                    | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/en-indic.zip)         | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-en.zip)         | [download](https://indictrans2-public.objectstore.e2enetworks.net/it2_distilled_ckpts/indic-indic.zip) |
+| Base (used for benchmarking) | [fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-1B) | [fairseq](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-preprint.tar.gz) & [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-1B) | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-1B)  | [translations](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/translation_outputs.tar.gz) (as of May 10, 2023), [metrics](https://drive.google.com/drive/folders/1lOOdaU0VdRSBgJEsNav5zC7wwLBis9NI?usp=sharing) |
+| Distilled                    | [HF](https://huggingface.co/ai4bharat/indictrans2-en-indic-dist-200M)         | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-en-dist-200M)         | [HF](https://huggingface.co/ai4bharat/indictrans2-indic-indic-dist-320M) |
 
 ### Training Data
 
 |Data                                  | URL                                                                                          |
 |-------------------------------------------|--------------------------------------------------------------------------------------------------|
-| Bharat Parallel Corpus Collection  *(Complete BPCC dataset - includes BPCC-Seed V1 dataset)*   | [Download](https://indictrans2-public.objectstore.e2enetworks.net/BPCC.zip)                      |
-| Back-translation (BPCC-BT)            | [Download](https://indictrans2-public.objectstore.e2enetworks.net/BT_data.zip)                   |
-| ✨ BPCC-Seed Latest Release           | [Download](https://ai4bharat.iitm.ac.in/datasets/bpcc)                                           |
+| ✨ BPCC-Seed Latest Release           | [HF Config: bpcc-seed-latest](https://huggingface.co/datasets/ai4bharat/BPCC)                                           |
+| BPCC (Used in Paper)    | [HF Config: bpcc-seed-v1](https://huggingface.co/datasets/ai4bharat/BPCC)                      |
+| Back-translation (BPCC-BT)            | Will be updated                   |
 
 
 
@@ -112,8 +112,8 @@ Here is the list of languages supported by the IndicTrans2 models:
 
 | Data                    | URL                                                                                  |
 | ----------------------- | ------------------------------------------------------------------------------------ |
-| IN22 test set           | [download](https://indictrans2-public.objectstore.e2enetworks.net/IN22_testset.zip)  |
-| FLORES-22 Indic dev set | [download](https://indictrans2-public.objectstore.e2enetworks.net/flores-22_dev.zip) |
+| IN22 test set           | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/IN22_testset.zip)  |
+| FLORES-22 Indic dev set | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/flores-22_dev.zip) |
 
 ## Installation
 
@@ -260,8 +260,8 @@ Once you complete the deduplication of the training data with the available benc
 
 |                    | En-Indic                                                                                     | Indic-En                                                                                     | Indic-Indic                                                                                     |
 | ------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| SPM model          | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-spm.zip)          | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-spm.zip)          |
-| Fairseq dictionary | [download](https://indictrans2-public.objectstore.e2enetworks.net/en-indic-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-en-fairseq-dict.zip) | [download](https://indictrans2-public.objectstore.e2enetworks.net/indic-indic-fairseq-dict.zip) |
+| SPM model          | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-spm.zip)          | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-spm.zip)          | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-indic-spm.zip)          |
+| Fairseq dictionary | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/en-indic-fairseq-dict.zip) | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-en-fairseq-dict.zip) | [download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/indic-indic-fairseq-dict.zip) |
 
 To prepare the data for training En-Indic model, please do the following:
 
