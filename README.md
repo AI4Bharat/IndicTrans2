@@ -105,6 +105,7 @@ Here is the list of languages supported by the IndicTrans2 models:
 | ✨ BPCC-Seed Latest Release           | [HF Config: bpcc-seed-latest](https://huggingface.co/datasets/ai4bharat/BPCC)                                           |
 | BPCC (*Used in Paper - utilizes the BPCC-Seed V1 dataset*)    | [HF Config: bpcc-seed-v1](https://huggingface.co/datasets/ai4bharat/BPCC)                      |
 | Back-translation (BPCC-BT)            | Will be updated                   |
+| Full Data Split            | [Download](https://huggingface.co/datasets/ai4bharat/BPCC/resolve/main/additional/BPCC.zip)                   |
 
 
 
