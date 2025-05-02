@@ -2,7 +2,7 @@ import sys
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, BitsAndBytesConfig
 from transformers.utils import is_flash_attn_2_available, is_flash_attn_greater_or_equal_2_10
-from IndicTransToolkit import IndicProcessor
+from IndicTransToolkit.processor import IndicProcessor
 from mosestokenizer import MosesSentenceSplitter
 from nltk import sent_tokenize
 from indicnlp.tokenize.sentence_tokenize import sentence_split, DELIM_PAT_NO_DANDA
@@ -149,12 +149,11 @@ def batch_translate(input_sentences, src_lang, tgt_lang, model, tokenizer, ip):
             )
 
         # Decode the generated tokens into text
-        with tokenizer.as_target_tokenizer():
-            generated_tokens = tokenizer.batch_decode(
-                generated_tokens.detach().cpu().tolist(),
-                skip_special_tokens=True,
-                clean_up_tokenization_spaces=True,
-            )
+        generated_tokens = tokenizer.batch_decode(
+            generated_tokens,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=True,
+        )
 
         # Postprocess the translations, including entity replacement
         translations += ip.postprocess_batch(generated_tokens, lang=tgt_lang)
