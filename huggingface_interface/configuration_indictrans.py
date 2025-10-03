@@ -20,8 +20,17 @@ from typing import Any, Mapping, Optional
 
 from transformers import PreTrainedTokenizer
 from transformers.configuration_utils import PretrainedConfig
-from transformers.onnx import OnnxConfig, OnnxSeq2SeqConfigWithPast
-from transformers.onnx.utils import compute_effective_axis_dimension
+# Resolving dependency errors with a try-except block
+try:
+    from transformers.onnx import OnnxConfig, OnnxSeq2SeqConfigWithPast
+    from transformers.onnx.utils import compute_effective_axis_dimension
+except ImportError:
+    class OnnxConfig:
+        pass
+    class OnnxSeq2SeqConfigWithPast:
+        pass
+    def compute_effective_axis_dimension(*args, **kwargs):
+        pass
 from transformers.utils import TensorType, is_torch_available
 
 
