@@ -20,8 +20,15 @@ from typing import Any, Mapping, Optional
 
 from transformers import PreTrainedTokenizer
 from transformers.configuration_utils import PretrainedConfig
-from transformers.onnx import OnnxConfig, OnnxSeq2SeqConfigWithPast
-from transformers.onnx.utils import compute_effective_axis_dimension
+try:
+    from transformers.onnx import OnnxConfig, OnnxSeq2SeqConfigWithPast
+    from transformers.onnx.utils import compute_effective_axis_dimension
+except ImportError:
+    # transformers.onnx was removed in transformers 5.x
+    OnnxConfig = object
+    OnnxSeq2SeqConfigWithPast = object
+    def compute_effective_axis_dimension(dimension, fixed_dimension=0, num_token_to_add=0):  # noqa: ARG001, ARG002
+        return dimension
 from transformers.utils import TensorType, is_torch_available
 
 

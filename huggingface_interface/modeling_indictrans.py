@@ -1658,7 +1658,13 @@ class IndicTransForConditionalGeneration(IndicTransPreTrainedModel):
 
         self.post_init()
 
-    def tie_weights(self):
+    @classmethod
+    def _supports_default_dynamic_cache(cls) -> bool:
+        # Opt out of transformers 4.57+ EncoderDecoderCache wrapping; this model
+        # manages its own legacy tuple-of-tuples past_key_values internally.
+        return False
+
+    def tie_weights(self, **kwargs):  # accept recompute_mapping kwarg added in transformers 5.x
         pass
 
     def get_encoder(self):
