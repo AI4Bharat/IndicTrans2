@@ -18,6 +18,30 @@ from .flores_codes_map_indic import flores_codes, iso_to_flores
 from .normalize_punctuation import punc_norm
 from .normalize_regex_inference import EMAIL_PATTERN, normalize
 
+DEFAULT_CT2_REPETITION_PENALTY = 1.0
+DEFAULT_CT2_NO_REPEAT_NGRAM_SIZE = 0
+
+
+def _validate_repetition_penalty(repetition_penalty: float) -> float:
+    if isinstance(repetition_penalty, bool) or not isinstance(repetition_penalty, (int, float)):
+        raise TypeError("repetition_penalty must be a positive float")
+
+    repetition_penalty = float(repetition_penalty)
+    if repetition_penalty <= 0:
+        raise ValueError("repetition_penalty must be greater than 0")
+
+    return repetition_penalty
+
+
+def _validate_no_repeat_ngram_size(no_repeat_ngram_size: int) -> int:
+    if isinstance(no_repeat_ngram_size, bool) or not isinstance(no_repeat_ngram_size, int):
+        raise TypeError("no_repeat_ngram_size must be a non-negative integer")
+
+    if no_repeat_ngram_size < 0:
+        raise ValueError("no_repeat_ngram_size must be greater than or equal to 0")
+
+    return no_repeat_ngram_size
+
 
 def split_sentences(paragraph: str, lang: str) -> List[str]:
     """
@@ -126,6 +150,8 @@ class Model:
         device: str = "cuda",
         input_lang_code_format: str = "flores",
         model_type: str = "ctranslate2",
+        repetition_penalty: float = DEFAULT_CT2_REPETITION_PENALTY,
+        no_repeat_ngram_size: int = DEFAULT_CT2_NO_REPEAT_NGRAM_SIZE,
     ):
         """
         Initialize the model class.
@@ -133,12 +159,30 @@ class Model:
         Args:
             ckpt_dir (str): path of the model checkpoint directory.
             device (str, optional): where to load the model (defaults: cuda).
+            repetition_penalty (float, optional): repetition penalty forwarded to CTranslate2 decoding.
+            no_repeat_ngram_size (int, optional): n-gram repetition size blocked during CTranslate2 decoding.
         """
         self.ckpt_dir = ckpt_dir
         self.en_tok = MosesTokenizer(lang="en")
         self.en_normalizer = MosesPunctNormalizer()
         self.en_detok = MosesDetokenizer(lang="en")
         self.xliterator = unicode_transliterate.UnicodeIndicTransliterator()
+
+        validated_repetition_penalty = None
+        validated_no_repeat_ngram_size = None
+        if model_type == "ctranslate2":
+            validated_repetition_penalty = _validate_repetition_penalty(repetition_penalty)
+            validated_no_repeat_ngram_size = _validate_no_repeat_ngram_size(no_repeat_ngram_size)
+        elif model_type == "fairseq":
+            if (
+                repetition_penalty != DEFAULT_CT2_REPETITION_PENALTY
+                or no_repeat_ngram_size != DEFAULT_CT2_NO_REPEAT_NGRAM_SIZE
+            ):
+                raise ValueError(
+                    "repetition_penalty and no_repeat_ngram_size are only supported when model_type='ctranslate2'"
+                )
+        else:
+            raise NotImplementedError(f"Unknown model_type: {model_type}")
 
         print("Initializing sentencepiece model for SRC and TGT")
         self.sp_src = spm.SentencePieceProcessor(
@@ -153,13 +197,24 @@ class Model:
         print("Initializing model for translation")
         # initialize the model
         if model_type == "ctranslate2":
+            self.repetition_penalty = validated_repetition_penalty
+            self.no_repeat_ngram_size = validated_no_repeat_ngram_size
+            self.ctranslate2_translate_kwargs = {
+                "max_batch_size": 9216,
+                "batch_type": "tokens",
+                "max_input_length": 160,
+                "max_decoding_length": 256,
+                "beam_size": 5,
+                "repetition_penalty": self.repetition_penalty,
+                "no_repeat_ngram_size": self.no_repeat_ngram_size,
+            }
             import ctranslate2
 
             self.translator = ctranslate2.Translator(
                 self.ckpt_dir, device=device
             )  # , compute_type="auto")
             self.translate_lines = self.ctranslate2_translate_lines
-        elif model_type == "fairseq":
+        else:
             from .custom_interactive import Translator
 
             self.translator = Translator(
@@ -168,19 +223,10 @@ class Model:
                 batch_size=100,
             )
             self.translate_lines = self.fairseq_translate_lines
-        else:
-            raise NotImplementedError(f"Unknown model_type: {model_type}")
 
     def ctranslate2_translate_lines(self, lines: List[str]) -> List[str]:
         tokenized_sents = [x.strip().split(" ") for x in lines]
-        translations = self.translator.translate_batch(
-            tokenized_sents,
-            max_batch_size=9216,
-            batch_type="tokens",
-            max_input_length=160,
-            max_decoding_length=256,
-            beam_size=5,
-        )
+        translations = self.translator.translate_batch(tokenized_sents, **self.ctranslate2_translate_kwargs)
         translations = [" ".join(x.hypotheses[0]) for x in translations]
         return translations
 
