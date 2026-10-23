@@ -16,6 +16,7 @@ from tqdm import tqdm
 
 from .flores_codes_map_indic import flores_codes, iso_to_flores
 from .normalize_punctuation import punc_norm
+from .text_chunking import truncate_long_sentences
 from .normalize_regex_inference import EMAIL_PATTERN, normalize
 
 
@@ -79,40 +80,6 @@ def apply_lang_tags(sents: List[str], src_lang: str, tgt_lang: str) -> List[str]
         tagged_sent = add_token(sent.strip(), src_lang, tgt_lang)
         tagged_sents.append(tagged_sent)
     return tagged_sents
-
-
-def truncate_long_sentences(
-    sents: List[str], placeholder_entity_map_sents: List[Dict]
-) -> Tuple[List[str], List[Dict]]:
-    """
-    Truncates the sentences that exceed the maximum sequence length.
-    The maximum sequence for the IndicTrans2 model is limited to 256 tokens.
-
-    Args:
-        sents (List[str]): list of input sentences to truncate.
-
-    Returns:
-        Tuple[List[str], List[Dict]]: tuple containing the list of sentences with truncation applied and the updated placeholder entity maps.
-    """
-    MAX_SEQ_LEN = 256
-    new_sents = []
-    placeholders = []
-
-    for j, sent in enumerate(sents):
-        words = sent.split()
-        num_words = len(words)
-        if num_words > MAX_SEQ_LEN:
-            sents = []
-            i = 0
-            while i <= len(words):
-                sents.append(" ".join(words[i : i + MAX_SEQ_LEN]))
-                i += MAX_SEQ_LEN
-            placeholders.extend([placeholder_entity_map_sents[j]] * (len(sents)))
-            new_sents.extend(sents)
-        else:
-            placeholders.append(placeholder_entity_map_sents[j])
-            new_sents.append(sent)
-    return new_sents, placeholders
 
 
 class Model:
